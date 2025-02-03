@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+
+    <!-- Navigation Links -->
+    <nav>
+        <a href="login.html">Login</a> |
+        <a href="profile.html">Profile</a> |
+        <a href="users.html">Users</a> |
+        <a href="view-challenges.html">View My Challenges</a>
+    </nav>
+
+    <!-- Challenges Section -->
+    <h2>My Challenges</h2>
+    <ul id="challengesList"></ul>
+
+    <!-- File Upload Section -->
+    <div id="fileUploadSection" style="display: none;">
+        <h3>Submit Your Response</h3>
+        <p id="selectedChallengeTitle"></p>
+        <input type="file" id="responseFile">
+        <button onclick="submitResponse()">Submit File</button>
+        <p id="uploadStatus"></p>
+    </div>
+
+    <script type="module" src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Your Profile</h2>
+    <img id="profileImage" src="default-avatar.png" width="150">
+    <input type="file" id="profilePic" accept="image/*">
+    <input type="text" id="displayName" placeholder="Display Name">
+    <textarea id="bio" placeholder="Bio"></textarea>
+    <button onclick="saveProfile()">Save</button>
+    <button id="logoutBtn">Logout</button>
+    <p id="status"></p>
+
+    <script type="module" src="profile.js"></script>
+</body>
+</html>
