@@ -1,0 +1,51 @@
+<!-- user-profile.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>User Profile</h1>
+
+    <div>
+        <button onclick="window.location.href='answer-me.html'">Answer Me</button>
+        <button onclick="window.location.href='persona-cards.html'">Persona Cards</button>
+        <button onclick="window.location.href='challenges.html'">Challenges</button>
+    </div>
+
+    <!-- User Information Section -->
+    <div id="user-info">
+        <h2 id="profile-title">User Information</h2>
+        <p><strong>Display Name:</strong> <span id="display-name">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+        <p><strong>Bio:</strong> <span id="bio">Loading...</span></p>
+        <p><strong>Interests:</strong> <span id="interests">Loading...</span></p>
+    </div>
+
+    <!-- Edit Profile Section (Only for Logged-in User) -->
+    <div id="edit-section" style="display: none;">
+        <button id="edit-profile-btn">Edit Profile</button>
+        <div id="edit-profile-form" style="display:none;">
+            <h3>Edit Profile</h3>
+            <form id="edit-form">
+                <label for="new-display-name">Display Name:</label>
+                <input type="text" id="new-display-name" name="new-display-name">
+                <br>
+                <label for="new-bio">Bio:</label>
+                <textarea id="new-bio" name="new-bio"></textarea>
+                <br>
+                <label for="new-interests">Interests:</label>
+                <textarea id="new-interests" name="new-interests"></textarea>
+                <br>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="user-profile.js"></script>
+</body>
+</html>

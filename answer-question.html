@@ -1,0 +1,25 @@
+<!-- answer-question.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Answer Question</title>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="answer-question.js"></script>
+</head>
+<body>
+  <h1>Answer the Question</h1>
+  <div id="question-text"></div>
+  <form id="answer-form">
+    <label for="answer">Your Answer:</label>
+    <textarea id="answer" required></textarea>
+    <br>
+    <button type="submit">Submit Answer</button>
+  </form>
+  <br>
+  <a href="view-questions.html">Back to Questions</a>
+</body>
+</html>

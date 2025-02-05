@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Me</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Ask a Question</h1>
+    
+    <form id="questionForm">
+        <label for="askerName">Your Name:</label>
+        <input type="text" id="askerName" required>
+        
+        <label for="questionText">Your Question:</label>
+        <textarea id="questionText" required></textarea>
+        
+        <label for="assignedUser">Ask:</label>
+        <select id="assignedUser"></select> <!-- Dropdown populated dynamically -->
+
+        <button type="submit">Ask Question</button>
+    </form>
+
+    <a href="index.html">Back to Home</a>
+
+    <script type="module" src="answer-me.js"></script>
+</body>
+</html>

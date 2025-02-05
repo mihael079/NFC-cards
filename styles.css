@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+input, textarea, select {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 80%;
+    max-width: 300px;
+}
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+img {
+    border-radius: 50%;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.persona-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.persona-card:hover {
+    transform: scale(1.05);
+}
+
+.persona-card h2 {
+    margin: 0;
+    color: #007bff;
+}
+
+.tagline {
+    font-style: italic;
+    color: #555;
+}
+
+blockquote {
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+    border-left: 4px solid #007bff;
+    padding-left: 10px;
+}
