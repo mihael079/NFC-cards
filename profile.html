@@ -1,21 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8e1;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    #profile-container {
+      width: 100%;
+      max-width: 400px;
+      background: #fffbe6;
+      border: 2px solid #f0c14b;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #8d6e63;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-photo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid #fbc02d;
+      object-fit: cover;
+    }
+
+    .input-field, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    #saveBtn {
+      background-color: #fbc02d;
+      color: #4e342e;
+    }
+
+    #logoutBtn {
+      background-color: #a1887f;
+      color: #ffffff;
+    }
+
+    #homeBtn {
+      background-color: #fff176;
+      color: #4e342e;
+      margin-top: 20px;
+    }
+
+    #status {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      color: #d84315;
+    }
+  </style>
 </head>
 <body>
-    <h2>Your Profile</h2>
-    <img id="profileImage" src="default-avatar.png" width="150">
-    <input type="file" id="profilePic" accept="image/*">
-    <input type="text" id="displayName" placeholder="Display Name">
-    <textarea id="bio" placeholder="Bio"></textarea>
-    <button onclick="saveProfile()">Save</button>
+  <div id="profile-container">
+    <h1>Your Profile</h1>
+
+    <img id="profileImage" src="avatar1.jpg" alt="Profile Photo" class="profile-photo" />
+
+    <label for="avatarSelect">Choose Profile Photo</label>
+    <select id="avatarSelect" class="input-field">
+      <option value="avatar1.jpg">Avatar 1</option>
+      <option value="avatar2.jpg">Avatar 2</option>
+      <option value="avatar3.jpg">Avatar 3</option>
+      <option value="avatar4.jpg">Avatar 4</option>
+      <option value="avatar5.jpg">Avatar 5</option>
+      <option value="avatar6.jpg">Avatar 6</option>
+    </select>
+
+    <input type="text" id="displayName" placeholder="Display Name" class="input-field" />
+    <textarea id="bio" placeholder="Bio" class="input-field"></textarea>
+
+    <button id="saveBtn">Save</button>
     <button id="logoutBtn">Logout</button>
     <p id="status"></p>
 
-    <script type="module" src="profile.js"></script>
+    <a href="index.html">
+      <button id="homeBtn">⬅️ Back to Home</button>
+    </a>
+  </div>
+
+  <script type="module" src="profile.js"></script>
 </body>
 </html>
