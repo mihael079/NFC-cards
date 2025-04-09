@@ -5,20 +5,21 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/fir
 // Get user ID from URL
 const urlParams = new URLSearchParams(window.location.search);
 const userId = urlParams.get("uid");
+
 if (!userId) {
   window.location.href = "users.html";
 }
 
 // Elements
 const displayNameEl = document.getElementById("display-name");
-const emailEl = document.getElementById("email");
+const talentsEl = document.getElementById("talents");
 const bioEl = document.getElementById("bio");
 const interestsEl = document.getElementById("interests");
 const profilePhotoEl = document.getElementById("profile-photo");
 const editSection = document.getElementById("edit-section");
 const editProfileBtn = document.getElementById("edit-profile-btn");
 
-// Load user profile data
+// Load user data
 function loadUserProfile(uid) {
   const userRef = ref(db, `users/${uid}`);
   get(userRef)
@@ -26,7 +27,7 @@ function loadUserProfile(uid) {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         displayNameEl.textContent = userData.displayName || "No Name";
-        emailEl.textContent = userData.email || "No Email";
+        talentsEl.textContent = userData.talents ?? 0;
         bioEl.textContent = userData.bio || "No Bio";
         interestsEl.textContent = userData.interests || "No Interests";
         profilePhotoEl.src = userData.profilePic || "avatar1.jpg";
@@ -37,7 +38,7 @@ function loadUserProfile(uid) {
     .catch((error) => console.error("Error fetching user data:", error));
 }
 
-// Handle auth + load + enable edit if self
+// Handle auth + show edit button if it's the owner
 onAuthStateChanged(auth, (user) => {
   if (user) {
     if (user.uid === userId) {
@@ -47,7 +48,7 @@ onAuthStateChanged(auth, (user) => {
   loadUserProfile(userId);
 });
 
-// Redirect to profile editor
+// Redirect to profile.html on edit
 editProfileBtn?.addEventListener("click", () => {
   window.location.href = "profile.html";
 });
