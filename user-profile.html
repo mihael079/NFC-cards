@@ -1,92 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .card {
-            background-color: #fff;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border-top: 5px solid #ffb800;
-        }
-        button {
-            padding: 10px 20px;
-            margin-right: 10px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffb800;
-        }
-        button:hover {
-            opacity: 0.8;
-        }
-        i {
-            margin-right: 8px;
-        }
-        #edit-profile-form input, #edit-profile-form textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        #edit-profile-form button {
-            background-color: #4CAF50;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TAP TAP...</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+      color: #5d4037;
+    }
+
+    .card {
+      background-color: #fffbe6;
+      border: 2px solid #ffb800;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 10px 0 0;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      background-color: #ffb800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    i {
+      margin-right: 8px;
+    }
+
+    #profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #ffb800;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto 15px auto;
+    }
+
+    .button-group {
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <h1>User Profile</h1>
-    <div class="card">
-        <button id="answer-me" onclick="window.location.href='answer-me.html'"><i class="fa-solid fa-comment"></i> Answer Me</button>
-        <button id="persona-cards" onclick="window.location.href='persona-cards.html'"><i class="fa-regular fa-id-card"></i> Persona Cards</button>
-        <button id="challenges" onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
-    </div>
-    <!-- User Information Section -->
-    <div class="card" id="user-info">
-        <h2>User Information</h2>
-        <p><strong>Display Name:</strong> <span id="display-name">Loading...</span></p>
-        <p><strong>Email:</strong> <span id="email">Loading...</span></p>
-        <p><strong>Bio:</strong> <span id="bio">Loading...</span></p>
-        <p><strong>Interests:</strong> <span id="interests">Loading...</span></p>
-    </div>
-    <!-- Edit Profile Section (Only for Logged-in User) -->
-    <div class="card" id="edit-section" style="display: none;">
-        <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i>Edit Profile</button>
-        <div id="edit-profile-form">
-            <h3>Edit Profile</h3>
-            <form id="edit-form">
-                <label for="new-display-name">Display Name:</label>
-                <input type="text" id="new-display-name" name="new-display-name">
-                <label for="new-bio">Bio:</label>
-                <textarea id="new-bio" name="new-bio"></textarea>
-                <label for="new-interests">Interests:</label>
-                <textarea id="new-interests" name="new-interests"></textarea>
-                <button type="submit"><i class="fa-solid fa-check"></i> Save Changes</button>
-            </form>
-        </div>
-    </div>
-    <script type="module" src="user-profile.js"></script>
+
+  <h1>User Profile</h1>
+
+  <!-- Top Button Set -->
+  <div class="card button-group">
+    <button onclick="window.location.href='answer-me.html'"><i class="fa-solid fa-comment"></i> Answer Me</button>
+    <button onclick="window.location.href='persona-cards.html'"><i class="fa-regular fa-id-card"></i> Persona Cards</button>
+    <button onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
+  </div>
+
+  <!-- User Info -->
+  <div class="card" id="user-info">
+    <h2 style="text-align:center;">User Information</h2>
+    <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" />
+    <p><strong>Display Name:</strong> <span id="display-name">Loading...</span></p>
+    <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+    <p><strong>Bio:</strong> <span id="bio">Loading...</span></p>
+    <p><strong>Interests:</strong> <span id="interests">Loading...</span></p>
+  </div>
+
+  <!-- Edit Button (only for owner) -->
+  <div class="card" id="edit-section" style="display: none; text-align: center;">
+    <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i> Edit My Profile</button>
+  </div>
+
+  <!-- Back to Home -->
+  <div class="card button-group">
+    <a href="index.html">
+      <button><i class="fa-solid fa-house"></i> Back to Home</button>
+    </a>
+  </div>
+
+  <script type="module" src="user-profile.js"></script>
 </body>
 </html>
