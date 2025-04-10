@@ -3,102 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TAP TAP...</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
+      background-color: #fff8e1;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    #profile-container {
+      width: 100%;
+      max-width: 400px;
+      background: #fffbe6;
+      border: 2px solid #f0c14b;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     h1 {
+      color: #8d6e63;
       text-align: center;
-      color: #5d4037;
+      margin-bottom: 20px;
     }
 
-    .card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
+    .profile-photo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 3px solid #fbc02d;
+      object-fit: cover;
+    }
+
+    .input-field, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
 
     button {
-      padding: 10px 20px;
-      margin: 10px 10px 0 0;
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
       border: none;
-      border-radius: 5px;
-      color: white;
-      font-size: 15px;
+      border-radius: 6px;
       font-weight: bold;
-      background-color: #ffb800;
+      font-size: 15px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    button:hover {
-      opacity: 0.85;
+    #saveBtn {
+      background-color: #fbc02d;
+      color: #4e342e;
     }
 
-    i {
-      margin-right: 8px;
+    #logoutBtn {
+      background-color: #a1887f;
+      color: #ffffff;
     }
 
-    #profile-photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid #ffb800;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 15px auto;
+    #homeBtn {
+      background-color: #fff176;
+      color: #4e342e;
+      margin-top: 20px;
     }
 
-    .button-group {
+    #status {
+      margin-top: 15px;
       text-align: center;
+      font-weight: bold;
+      color: #d84315;
     }
   </style>
 </head>
 <body>
+  <div id="profile-container">
+    <h1>Your Profile</h1>
 
-  <h1>TAP TAP</h1>
+    <img id="profileImage" src="avatar1.jpg" alt="Profile Photo" class="profile-photo" />
 
-  <!-- Top Buttons -->
-  <div class="card button-group">
-    <button onclick="window.location.href='answer-me.html'"><i class="fa-solid fa-comment"></i> Answer Me</button>
-    <button onclick="window.location.href='persona-cards.html'"><i class="fa-regular fa-id-card"></i> Persona Cards</button>
-    <button onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
-  </div>
+    <label for="avatarSelect">Choose Profile Photo</label>
+    <select id="avatarSelect" class="input-field">
+      <option value="avatar1.jpg">Avatar 1</option>
+      <option value="avatar2.jpg">Avatar 2</option>
+      <option value="avatar3.jpg">Avatar 3</option>
+      <option value="avatar4.jpg">Avatar 4</option>
+      <option value="avatar5.jpg">Avatar 5</option>
+      <option value="avatar6.jpg">Avatar 6</option>
+    </select>
 
-  <!-- User Info -->
-  <div class="card" id="user-info">
-    <h2 style="text-align:center;">User Information</h2>
-    <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" />
-    <p><strong>Display Name:</strong> <span id="display-name">Loading...</span></p>
-    <p><strong>Talents:</strong> <span id="talents">Loading...</span></p>
-    <p><strong>Brief:</strong> <span id="bio">Loading...</span></p>
-    <p><strong>Interests:</strong> <span id="interests">Loading...</span></p>
-  </div>
+    <input type="text" id="displayName" placeholder="Display Name" class="input-field" />
+    <textarea id="bio" placeholder="Bio" class="input-field"></textarea>
+    <textarea id="interests" placeholder="Interests" class="input-field"></textarea>
 
-  <!-- Edit Button (Only for Owner) -->
-  <div class="card" id="edit-section" style="display: none; text-align: center;">
-    <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i> Edit My Profile</button>
-  </div>
+    <button id="saveBtn">Save</button>
+    <button id="logoutBtn">Logout</button>
+    <p id="status"></p>
 
-  <!-- Back to Home -->
-  <div class="card button-group">
     <a href="index.html">
-      <button><i class="fa-solid fa-house"></i> Back to Home</button>
+      <button id="homeBtn">⬅️ Back to Home</button>
     </a>
   </div>
 
-  <script type="module" src="user-profile.js"></script>
+  <script type="module" src="profile.js"></script>
 </body>
 </html>
