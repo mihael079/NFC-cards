@@ -1,29 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answer Me</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Answer Me</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8e1;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #5d4037;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: #fffbe6;
+      border: 2px solid #ffb800;
+      border-radius: 10px;
+      padding: 25px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #4e342e;
+    }
+
+    form input,
+    form textarea,
+    form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    form button {
+      background-color: #ffb800;
+      color: #4e342e;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    form button i {
+      margin-right: 8px;
+    }
+
+    form button:hover {
+      opacity: 0.85;
+    }
+
+    .back-home {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .back-home a {
+      text-decoration: none;
+    }
+
+    .back-home button {
+      background-color: #ffb800;
+      color: #4e342e;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .back-home button i {
+      margin-right: 8px;
+    }
+
+    .back-home button:hover {
+      opacity: 0.85;
+    }
+  </style>
 </head>
 <body>
-    <h1>Ask a Question</h1>
-    
+
+  <h1><i class="fa-solid fa-question-circle"></i> Ask a Question</h1>
+
+  <div class="card">
     <form id="questionForm">
-        <label for="askerName">Your Name:</label>
-        <input type="text" id="askerName" required>
-        
-        <label for="questionText">Your Question:</label>
-        <textarea id="questionText" required></textarea>
-        
-        <label for="assignedUser">Ask:</label>
-        <select id="assignedUser"></select> <!-- Dropdown populated dynamically -->
+      <label for="askerName">Your Name:</label>
+      <input type="text" id="askerName" required>
 
-        <button type="submit">Ask Question</button>
+      <label for="questionText">Your Question:</label>
+      <textarea id="questionText" required></textarea>
+
+      <label for="assignedUser">Ask:</label>
+      <select id="assignedUser" required></select>
+
+      <button type="submit"><i class="fa-solid fa-paper-plane"></i> Ask Question</button>
     </form>
+  </div>
 
-    <a href="index.html">Back to Home</a>
+  <div class="back-home">
+    <a href="index.html">
+      <button><i class="fa-solid fa-house"></i> Back to Home</button>
+    </a>
+  </div>
 
-    <script type="module" src="answer-me.js"></script>
+  <script type="module" src="answer-me.js"></script>
 </body>
 </html>
