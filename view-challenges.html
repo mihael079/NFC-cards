@@ -1,17 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Challenges</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Challenges</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8e1;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #5d4037;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: #fffbe6;
+      border: 2px solid #ffb800;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+    }
+
+    ul#challengeList {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul#challengeList li {
+      background-color: #ffecb3;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-left: 5px solid #ffb800;
+      border-radius: 5px;
+      color: #4e342e;
+    }
+
+    .back-home {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .back-home a {
+      text-decoration: none;
+    }
+
+    .back-home button {
+      background-color: #ffb800;
+      color: #4e342e;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .back-home button i {
+      margin-right: 8px;
+    }
+
+    .back-home button:hover {
+      opacity: 0.85;
+    }
+  </style>
 </head>
 <body>
-    <h1>Challenges Assigned to Me</h1>
+
+  <h1><i class="fa-solid fa-broom"></i> Challenges Assigned to Me</h1>
+
+  <div class="card">
     <ul id="challengeList">Loading...</ul>
-    
-    <a href="index.html">Back to Home</a>
-    
-    <script type="module" src="view-challenges.js"></script>
+  </div>
+
+  <div class="back-home">
+    <a href="index.html">
+      <button><i class="fa-solid fa-house"></i> Back to Home</button>
+    </a>
+  </div>
+
+  <script type="module" src="view-challenges.js"></script>
 </body>
 </html>
