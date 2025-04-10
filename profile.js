@@ -7,6 +7,7 @@ const profileImage = document.getElementById("profileImage");
 const avatarSelect = document.getElementById("avatarSelect");
 const displayNameInput = document.getElementById("displayName");
 const bioInput = document.getElementById("bio");
+const interestsInput = document.getElementById("interests");
 const statusMsg = document.getElementById("status");
 const saveBtn = document.getElementById("saveBtn");
 const logoutBtn = document.getElementById("logoutBtn");
@@ -39,6 +40,7 @@ async function loadProfile() {
       avatarSelect.value = profilePic;
       displayNameInput.value = data.displayName || "";
       bioInput.value = data.bio || "";
+      interestsInput.value = data.interests || "";
     } else {
       profileImage.src = "avatar1.jpg";
       avatarSelect.value = "avatar1.jpg";
@@ -55,6 +57,7 @@ saveBtn.addEventListener("click", async () => {
     profilePic: avatarSelect.value,
     displayName: displayNameInput.value,
     bio: bioInput.value,
+    interests: interestsInput.value
   };
 
   try {
