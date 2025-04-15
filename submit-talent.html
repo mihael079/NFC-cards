@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Talent</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff8e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #5d4037;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background-color: #ffffff;
+      border: 2px solid #fbc02d;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    select, input[type="number"], button {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #ffb800;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f57f17;
+    }
+
+    .message {
+      margin-top: 10px;
+      color: #4e342e;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .back-button {
+      margin-top: 30px;
+      text-decoration: none;
+      background-color: #ffb800;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .back-button:hover {
+      background-color: #f57f17;
+    }
+  </style>
+</head>
+<body>
+  <h1>Submit Talent</h1>
+
+  <div class="form-container">
+    <label for="userSelect">Select User:</label>
+    <select id="userSelect"></select>
+
+    <label for="typeSelect">Talent Type:</label>
+    <select id="typeSelect">
+      <option value="plus">+ Talent</option>
+      <option value="minus">- Talent</option>
+    </select>
+
+    <label for="talentValue">Value:</label>
+    <input type="number" id="talentValue" placeholder="Enter number of points" min="1">
+
+    <button id="submitTalent">Submit</button>
+    <div class="message" id="status"></div>
+  </div>
+
+  <a href="index.html" class="back-button"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+
+  <script type="module" src="submit-talent.js"></script>
+</body>
+</html>
