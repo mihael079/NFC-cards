@@ -7,98 +7,104 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     body {
-      background-color: #fff8e1;
       font-family: Arial, sans-serif;
+      background-color: #fff8e1;
       padding: 30px;
     }
 
-    .form-container {
-      background: #fffbe6;
-      border: 2px solid #ffb800;
-      border-radius: 10px;
-      padding: 25px;
-      max-width: 600px;
-      margin: auto;
+    h1 {
+      color: #5d4037;
+      text-align: center;
     }
 
-    h2 {
-      text-align: center;
-      color: #5d4037;
+    .card {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border: 2px solid #ffb800;
+      border-radius: 10px;
+      padding: 20px;
     }
 
     label {
       display: block;
-      margin-top: 15px;
+      margin: 10px 0 5px;
       font-weight: bold;
     }
 
     input, textarea, select {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
+      margin-bottom: 15px;
       border-radius: 5px;
-      font-size: 14px;
+      border: 1px solid #ccc;
     }
 
     button {
-      margin-top: 20px;
       width: 100%;
       padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
       background-color: #ffb800;
       color: #4e342e;
       border: none;
       border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
     }
 
     button:hover {
-      opacity: 0.9;
+      opacity: 0.85;
     }
 
-    .home-btn {
-      display: block;
-      margin: 30px auto 0;
+    .status {
       text-align: center;
-      text-decoration: none;
+      margin-top: 15px;
       font-weight: bold;
-      color: #4e342e;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
+  <h1>Submit Persona Card</h1>
 
-  <div class="form-container">
-    <h2>Submit Persona Card</h2>
+  <div class="card">
     <form id="personaForm">
-      <label for="userSelect">Assign to (Username)</label>
+      <label for="userSelect">Assign to User:</label>
       <select id="userSelect" required>
-        <option value="">-- Select User --</option>
+        <option value="">Loading users...</option>
       </select>
 
-      <label for="name">Card Title</label>
+      <label for="name">Card Title:</label>
       <input type="text" id="name" required>
 
-      <label for="challenge">Challenge</label>
+      <label for="challenge">Challenge:</label>
       <input type="text" id="challenge" required>
 
-      <label for="program">Program / Series</label>
-      <input type="text" id="program">
+      <label for="program">Program:</label>
+      <input type="text" id="program" required>
 
-      <label for="positives">+ Points</label>
-      <textarea id="positives"></textarea>
+      <label for="positives">+ Points:</label>
+      <textarea id="positives" required></textarea>
 
-      <label for="negatives">- Points</label>
-      <textarea id="negatives"></textarea>
+      <label for="negatives">- Points:</label>
+      <textarea id="negatives" required></textarea>
 
-      <label for="quote">Reflection / Quote</label>
-      <textarea id="quote"></textarea>
+      <label for="quote">Quote:</label>
+      <textarea id="quote" required></textarea>
 
-      <button type="submit">Submit Persona</button>
+      <button type="submit">Submit Persona Card</button>
     </form>
-    <a href="index.html" class="home-btn">⬅️ Back to Home</a>
+
+    <p class="status" id="statusMsg"></p>
+  </div>
+
+  <div class="back">
+    <a href="index.html">⬅️ Back to Home</a>
   </div>
 
   <script type="module" src="submit-persona.js"></script>
