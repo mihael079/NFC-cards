@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Persona Card</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      background-color: #fff8e1;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+
+    .form-container {
+      background: #fffbe6;
+      border: 2px solid #ffb800;
+      border-radius: 10px;
+      padding: 25px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #5d4037;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #ffb800;
+      color: #4e342e;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .home-btn {
+      display: block;
+      margin: 30px auto 0;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
+      color: #4e342e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Submit Persona Card</h2>
+    <form id="personaForm">
+      <label for="userSelect">Assign to (Username)</label>
+      <select id="userSelect" required>
+        <option value="">-- Select User --</option>
+      </select>
+
+      <label for="name">Card Title</label>
+      <input type="text" id="name" required>
+
+      <label for="challenge">Challenge</label>
+      <input type="text" id="challenge" required>
+
+      <label for="program">Program / Series</label>
+      <input type="text" id="program">
+
+      <label for="positives">+ Points</label>
+      <textarea id="positives"></textarea>
+
+      <label for="negatives">- Points</label>
+      <textarea id="negatives"></textarea>
+
+      <label for="quote">Reflection / Quote</label>
+      <textarea id="quote"></textarea>
+
+      <button type="submit">Submit Persona</button>
+    </form>
+    <a href="index.html" class="home-btn">⬅️ Back to Home</a>
+  </div>
+
+  <script type="module" src="submit-persona.js"></script>
+</body>
+</html>
