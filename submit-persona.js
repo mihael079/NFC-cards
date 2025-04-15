@@ -1,45 +1,45 @@
 import { db } from "./firebase-config.js";
-import { ref, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import {
+  ref,
+  get,
+  push,
+  child
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-const form = document.getElementById("personaForm");
+// Elements
 const userSelect = document.getElementById("userSelect");
+const form = document.getElementById("personaForm");
+const statusMsg = document.getElementById("statusMsg");
 
-let uidMap = {};
-
-// 🔄 Load usernames into dropdown
+// 1. Populate User Dropdown from /users
 async function loadUsers() {
-  try {
-    const snapshot = await get(ref(db, "users"));
-    if (snapshot.exists()) {
-      const users = snapshot.val();
+  const usersRef = ref(db, "users");
+  const snapshot = await get(usersRef);
 
-      Object.keys(users).forEach(uid => {
-        const displayName = users[uid].displayName || uid;
-        uidMap[displayName] = uid;
+  userSelect.innerHTML = ""; // clear default
 
-        const option = document.createElement("option");
-        option.value = displayName;
-        option.textContent = displayName;
-        userSelect.appendChild(option);
-      });
-    } else {
-      alert("No users found in database.");
-    }
-  } catch (err) {
-    console.error("Error loading users:", err);
-    alert("Failed to load users.");
+  if (snapshot.exists()) {
+    const users = snapshot.val();
+    Object.entries(users).forEach(([uid, data]) => {
+      const option = document.createElement("option");
+      option.value = uid;
+      option.textContent = data.displayName || `Unnamed (${uid})`;
+      userSelect.appendChild(option);
+    });
+  } else {
+    userSelect.innerHTML = `<option value="">No users found</option>`;
   }
 }
 
-// 📨 Handle form submission
+loadUsers();
+
+// 2. Submit persona card
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const selectedName = userSelect.value;
-  const uid = uidMap[selectedName];
-
+  const uid = userSelect.value;
   if (!uid) {
-    alert("Please select a valid user.");
+    statusMsg.textContent = "❌ Please select a user.";
     return;
   }
 
@@ -50,18 +50,16 @@ form.addEventListener("submit", async (e) => {
     positives: document.getElementById("positives").value.trim(),
     negatives: document.getElementById("negatives").value.trim(),
     quote: document.getElementById("quote").value.trim(),
-    submittedAt: new Date().toISOString()
+    timestamp: new Date().toISOString()
   };
 
   try {
-    await set(ref(db, `personaSubmissions/${uid}`), personaData);
-    alert("Persona Card submitted successfully!");
+    const personaRef = child(ref(db), `personaSubmissions/${uid}`);
+    await push(personaRef, personaData);
+    statusMsg.textContent = "✅ Persona Card submitted successfully!";
     form.reset();
-  } catch (error) {
-    console.error("Error saving persona:", error);
-    alert("Failed to submit persona card.");
+  } catch (err) {
+    console.error("Error submitting card:", err);
+    statusMsg.textContent = "❌ Error submitting card.";
   }
 });
-
-// 🔃 Load usernames when page loads
-loadUsers();
