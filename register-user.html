@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff8e1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #5d4037;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      border: 2px solid #fbc02d;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #ffb800;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f57f17;
+    }
+
+    .message {
+      margin-top: 10px;
+      color: #4e342e;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Register</h1>
+  <div class="form-container">
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Enter email" required />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter password" required />
+
+    <label for="displayName">SOURCE CODE:</label>
+    <input type="text" id="displayName" placeholder="Your Source code" required />
+
+    <button id="registerBtn">Register</button>
+    <div id="status" class="message"></div>
+  </div>
+
+  <script type="module" src="register-user.js"></script>
+</body>
+</html>
