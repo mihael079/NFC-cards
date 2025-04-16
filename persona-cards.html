@@ -2,39 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Persona Card</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Persona Cards</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
-      font-family: 'Fredoka', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #fff8e1;
-      margin: 0;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 30px;
+      text-align: center;
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.2rem;
       color: #5d4037;
-      background-color: #f3e5ab;
+      margin-bottom: 25px;
+      background-color: #ffeb9c;
+      display: inline-block;
       padding: 10px 30px;
-      border-radius: 12px;
+      border-radius: 10px;
     }
 
     .card-container {
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       gap: 30px;
-      margin-top: 40px;
     }
 
     .flip-card {
       background-color: transparent;
-      width: 400px;
-      height: 550px;
+      width: 250px;
+      height: 350px;
       perspective: 1000px;
     }
 
@@ -42,6 +41,7 @@
       position: relative;
       width: 100%;
       height: 100%;
+      text-align: center;
       transition: transform 0.8s;
       transform-style: preserve-3d;
     }
@@ -50,109 +50,80 @@
       transform: rotateY(180deg);
     }
 
-    .flip-card-front, .flip-card-back {
+    .flip-card-front,
+    .flip-card-back {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      padding: 25px;
-      box-sizing: border-box;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .flip-card-front {
-      background-color: #ffffff;
-      color: #4e342e;
-      border: 2px solid #fbc02d;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .flip-card-front img,
+    .flip-card-back img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .flip-card-back {
-      background-color: #fff3cd;
       transform: rotateY(180deg);
-      background-image: url('quote-bubble.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
+    }
+
+    .button-group {
+      margin-top: 40px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      text-align: center;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
-      color: #4e342e;
-      padding: 40px;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
-    .card-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #7b3f00;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .card-label {
-      font-weight: 600;
-      margin-top: 10px;
-      color: #3e2723;
-    }
-
-    .positive {
-      color: #2e7d32;
-      font-size: 0.95rem;
-      margin: 4px 0;
-      line-height: 1.4;
-    }
-
-    .negative {
-      color: #d32f2f;
-      font-size: 0.95rem;
-      margin: 4px 0;
-      line-height: 1.4;
-    }
-
-    .quote {
-      white-space: pre-wrap;
-      line-height: 1.5;
-      padding: 10px 20px;
-      font-size: 1.1rem;
-    }
-
-    .date {
-      font-size: 0.85rem;
-      color: #888;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .back-button {
-      margin-top: 40px;
+    .action-button {
       background-color: #ffb800;
       color: #4e342e;
-      padding: 10px 20px;
+      font-weight: bold;
+      padding: 12px 24px;
       border: none;
       border-radius: 8px;
-      font-weight: 600;
       text-decoration: none;
       font-size: 1rem;
-      transition: background-color 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
     }
 
-    .back-button:hover {
+    .action-button:hover {
       background-color: #f57f17;
+      color: white;
+    }
+
+    .error {
+      color: #c62828;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Persona Card</h1>
+  <h1>Persona Cards</h1>
+
   <div id="personaContainer" class="card-container">
-    <!-- Cards injected by JS -->
+    <p>Loading...</p>
   </div>
-  <a href="index.html" class="back-button">⬅ Back to Home</a>
+
+  <div class="button-group">
+    <a href="index.html" class="action-button">
+      <i class="fa-solid fa-arrow-left"></i> Back to Home
+    </a>
+    <a href="challenges.html" class="action-button">
+      <i class="fa-solid fa-bolt"></i> Challenge Me
+    </a>
+  </div>
+
   <script type="module" src="persona-cards.js"></script>
 </body>
 </html>
