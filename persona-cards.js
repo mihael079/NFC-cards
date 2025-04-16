@@ -1,52 +1,74 @@
 import { db } from "./firebase-config.js";
 import { ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
+// Get UID from URL
+const uid = new URLSearchParams(window.location.search).get("uid");
 const container = document.getElementById("personaContainer");
 
-// ✅ Wrap everything in an IIFE so return statements work safely
-(async function loadPersonaCards() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const uid = urlParams.get("uid");
+if (!uid) {
+  container.innerHTML = "<p class='error'>❌ No UID provided in URL.</p>";
+  throw new Error("No UID");
+}
 
-  if (!uid) {
-    container.innerHTML = `<p class="no-cards">❌ Error: No UID provided in the URL.</p>`;
-    return;
-  }
+// Fetch display name from Firebase
+get(ref(db, `users/${uid}`))
+  .then(snapshot => {
+    if (!snapshot.exists()) throw new Error("User not found.");
+    const displayName = snapshot.val().displayName;
+    if (!displayName) throw new Error("Missing display name.");
+    loadPersonaImages(displayName);
+  })
+  .catch(err => {
+    container.innerHTML = `<p class="error">❌ ${err.message}</p>`;
+  });
 
-  try {
-    const cardRef = ref(db, `personaSubmissions/${uid}`);
-    const snapshot = await get(cardRef);
-    container.innerHTML = ""; // Clear loading text
+function loadPersonaImages(folder) {
+  container.innerHTML = "";
+  const maxCards = 30;
+  let loaded = 0;
+  let checked = 0;
 
-    if (!snapshot.exists()) {
-      container.innerHTML = `<p class="no-cards">No Persona Cards assigned yet.</p>`;
-      return;
-    }
+  for (let i = 1; i <= maxCards; i++) {
+    const frontPath = `persona-cards/${folder}/card${i}front.png`;
+    const backPath = `persona-cards/${folder}/card${i}back.png`;
 
-    const data = snapshot.val();
-    Object.entries(data).forEach(([cardId, card]) => {
-      const cardElement = document.createElement("div");
-      cardElement.className = "flip-card";
-      cardElement.innerHTML = `
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div class="card-title">${card.name || "Untitled Persona Card"}</div>
-            <div class="card-section"><strong>Challenge:</strong> ${card.challenge || "N/A"}</div>
-            <div class="card-section"><strong>Program:</strong> ${card.program || "N/A"}</div>
-            <div class="points"><b>+ Points:</b> ${card.positives || "None"}</div>
-            <div class="points"><b>- Points:</b> ${card.negatives || "None"}</div>
-            <span class="date">📅 ${card.timestamp ? new Date(card.timestamp).toLocaleDateString() : "Unknown date"}</span>
-          </div>
-          <div class="flip-card-back">
-            <div>${card.quote || "No quote provided."}</div>
-          </div>
-        </div>
-      `;
-      container.appendChild(cardElement);
+    checkImage(frontPath, (frontExists) => {
+      checkImage(backPath, (backExists) => {
+        checked++;
+        if (frontExists && backExists) {
+          const card = createFlipCard(frontPath, backPath);
+          container.appendChild(card);
+          loaded++;
+        }
+        if (checked === maxCards && loaded === 0) {
+          container.innerHTML = "<p>No persona cards found for this user.</p>";
+        }
+      });
     });
-
-  } catch (err) {
-    console.error("Error fetching persona cards:", err);
-    container.innerHTML = `<p class="no-cards">❌ Error loading persona card.</p>`;
   }
-})();
+}
+
+function checkImage(url, callback) {
+  const img = new Image();
+  img.onload = () => callback(true);
+  img.onerror = () => callback(false);
+  img.src = url;
+}
+
+function createFlipCard(front, back) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "flip-card";
+
+  wrapper.innerHTML = `
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="${front}" alt="Front of Card">
+      </div>
+      <div class="flip-card-back">
+        <img src="${back}" alt="Back of Card">
+      </div>
+    </div>
+  `;
+
+  return wrapper;
+}
