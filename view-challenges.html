@@ -1,52 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Challenges</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Challenges - Fundamental Decisions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #ffb800;
+      --secondary: #fff8e1;
+      --accent: #4e342e;
+      --card-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8e1;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--secondary);
       margin: 0;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
-      color: #5d4037;
-      margin-bottom: 30px;
+      color: var(--accent);
+      margin-bottom: 40px;
+      font-size: 2.2rem;
     }
 
-    .card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      border-radius: 10px;
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .challenge-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 15px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .challenge-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow);
+    }
+
+    .card-header {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    .card-header i {
+      font-size: 1.6rem;
+      margin-right: 12px;
+    }
+
+    .card-header h3 {
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .card-body {
       padding: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
-      margin: 0 auto 20px auto;
+      color: var(--text-dark);
+      font-size: 1rem;
+      line-height: 1.5;
     }
 
-    ul#challengeList {
-      list-style: none;
-      padding: 0;
+    .card-body p {
+      margin: 8px 0;
     }
 
-    ul#challengeList li {
-      background-color: #ffecb3;
-      margin-bottom: 10px;
-      padding: 12px;
-      border-left: 5px solid #ffb800;
-      border-radius: 5px;
-      color: #4e342e;
+    .progress-bar {
+      background-color: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      margin: 10px 0 15px 0;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .progress-fill {
+      background-color: #4caf50;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      height: 100%;
+      line-height: 20px;
+      font-size: 0.85rem;
+      transition: width 0.4s ease;
+    }
+
+    .card-action {
+      padding: 15px 20px;
+      text-align: right;
+      border-top: 1px solid #eee;
+    }
+
+    .card-action button {
+      background-color: var(--primary);
+      color: var(--accent);
+      border: none;
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .card-action button:hover {
+      background-color: #ffa000;
     }
 
     .back-home {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
+      text-align: center;
+      margin-top: 50px;
     }
 
     .back-home a {
@@ -54,16 +136,15 @@
     }
 
     .back-home button {
-      background-color: #ffb800;
-      color: #4e342e;
+      background-color: var(--accent);
+      color: #fff;
       border: none;
-      padding: 12px 20px;
+      padding: 12px 25px;
       font-size: 16px;
       font-weight: bold;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
+      transition: background-color 0.3s ease;
     }
 
     .back-home button i {
@@ -71,16 +152,31 @@
     }
 
     .back-home button:hover {
-      opacity: 0.85;
+      background-color: #3e2723;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .card-header h3 {
+        font-size: 1.1rem;
+      }
+      .card-body, .card-response {
+        font-size: 0.9rem;
+      }
+      .back-home button {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <h1><i class="fa-solid fa-dumbbell"></i> My Challenges</h1>
 
-  <h1><i class="fa-solid fa-broom"></i> Challenges Assigned to Me</h1>
-
-  <div class="card">
-    <ul id="challengeList">Loading...</ul>
+  <div class="card-container" id="challengeList">
+    <p>Loading challenges...</p>
   </div>
 
   <div class="back-home">
@@ -89,6 +185,88 @@
     </a>
   </div>
 
-  <script type="module" src="view-challenges.js"></script>
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import { ref, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const challengeList = document.getElementById("challengeList");
+
+    async function loadChallenges(userId) {
+      const challengesRef = ref(db, "challenges/");
+      
+      try {
+        const snapshot = await get(challengesRef);
+        challengeList.innerHTML = ""; // Clear previous content
+
+        if (snapshot.exists()) {
+          snapshot.forEach(challenge => {
+            const challengeData = challenge.val();
+            const progressPercent = challengeData.submitted ? 100 : 0;
+
+            if (challengeData.assignedUser === userId) {
+              const card = document.createElement("div");
+              card.className = "challenge-card";
+              
+              card.innerHTML = `
+                <div class="card-header">
+                  <i class="fa-solid fa-flag-checkered"></i>
+                  <h3>${challengeData.challengeTitle}</h3>
+                </div>
+                <div class="card-body">
+                  <p><strong>Creator:</strong> ${challengeData.creatorName}</p>
+                  <p><strong>Description:</strong> ${challengeData.challengeDescription}</p>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progressPercent}%;">
+                      ${progressPercent}%
+                    </div>
+                  </div>
+                  <p><strong>Status:</strong> ${challengeData.submitted ? "✅ Submitted" : "⏳ Not Submitted"}</p>
+                  <p><strong>Your Response:</strong><br> ${challengeData.response ? challengeData.response : "<em>No response yet.</em>"}</p>
+                </div>
+                <div class="card-action">
+                  <button onclick="submitResponse('${challenge.key}')">Submit / Update Response</button>
+                </div>
+              `;
+              
+              challengeList.appendChild(card);
+            }
+          });
+
+          if (challengeList.children.length === 0) {
+            challengeList.innerHTML = "<p>No challenges assigned to you.</p>";
+          }
+        } else {
+          challengeList.innerHTML = "<p>No challenges found.</p>";
+        }
+      } catch (error) {
+        console.error("Error loading challenges:", error);
+        challengeList.innerHTML = "<p>Error loading challenges.</p>";
+      }
+    }
+
+    window.submitResponse = async (challengeId) => {
+      const responseText = prompt("Enter your response:");
+      if (!responseText) return;
+
+      try {
+        const challengeRef = ref(db, `challenges/${challengeId}`);
+        await update(challengeRef, { submitted: true, response: responseText });
+        alert("Response submitted successfully!");
+        loadChallenges(auth.currentUser.uid); // Refresh the card list
+      } catch (error) {
+        console.error("Error submitting response:", error);
+        alert("Error submitting response.");
+      }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loadChallenges(user.uid);
+      } else {
+        challengeList.innerHTML = "<p>You must be logged in to view challenges.</p>";
+      }
+    });
+  </script>
 </body>
 </html>
