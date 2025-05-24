@@ -6,65 +6,101 @@
   <title>All Questions & Answers</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
+    :root {
+      --primary: #ffb800;
+      --accent: #4e342e;
+      --background: #fff8e1;
+      --card-bg: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8e1;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--background);
       margin: 0;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
-      color: #5d4037;
-      margin-bottom: 30px;
+      color: var(--accent);
+      margin-bottom: 40px;
+      font-size: 2.2rem;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .qa-card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      border-radius: 10px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 15px var(--shadow);
       padding: 20px;
-      margin: 20px auto;
-      max-width: 700px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .question {
-      font-weight: bold;
-      color: #4e342e;
+    .qa-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow);
+    }
+
+    .qa-section {
       margin-bottom: 10px;
+      font-size: 1rem;
     }
 
-    .answer {
+    .qa-section strong {
+      color: var(--accent);
+    }
+
+    .qa-status {
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .qa-status.answered {
+      color: #4caf50;
+    }
+
+    .qa-status.pending {
+      color: #f57c00;
+    }
+
+    .answer-box {
       background-color: #ffecb3;
-      border-left: 5px solid #ffb800;
+      border-left: 5px solid var(--primary);
       padding: 12px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-style: italic;
-      color: #4e342e;
+      color: var(--accent);
+      margin-top: 10px;
     }
 
     .back-home {
-      display: flex;
-      justify-content: center;
-      margin-top: 40px;
-    }
-
-    .back-home a {
-      text-decoration: none;
+      text-align: center;
+      margin-top: 50px;
     }
 
     .back-home button {
-      background-color: #ffb800;
-      color: #4e342e;
+      background-color: var(--primary);
+      color: var(--accent);
       border: none;
-      padding: 12px 24px;
-      font-size: 16px;
+      padding: 12px 25px;
+      font-size: 1rem;
       font-weight: bold;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      transition: background-color 0.3s ease;
     }
 
     .back-home button i {
@@ -72,7 +108,7 @@
     }
 
     .back-home button:hover {
-      opacity: 0.85;
+      background-color: #ffa000;
     }
   </style>
 </head>
@@ -80,8 +116,7 @@
 
   <h1><i class="fa-solid fa-comments"></i> All Questions & Answers</h1>
 
-  <div id="questionsList">
-    <!-- JS will insert .qa-card elements here -->
+  <div class="card-container" id="questionsList">
     <p style="text-align:center;">Loading...</p>
   </div>
 
@@ -91,6 +126,87 @@
     </a>
   </div>
 
-  <script type="module" src="all-questions.js"></script>
+  <script type="module">
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { app } from "./firebase-config.js";
+
+    const db = getDatabase(app);
+    const questionsList = document.getElementById("questionsList");
+
+    async function getUserNameById(userId) {
+      if (!userId) return "Unassigned";
+      try {
+        const userSnapshot = await get(ref(db, `users/${userId}`));
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.val();
+          return userData.displayName || userData.name || "Unnamed User";
+        } else {
+          return "Unknown User";
+        }
+      } catch (error) {
+        console.error("Error fetching user name:", error);
+        return "Unknown User";
+      }
+    }
+
+    async function loadAllQuestions() {
+      const questionsRef = ref(db, "questions/");
+      try {
+        const snapshot = await get(questionsRef);
+        questionsList.innerHTML = "";
+
+        if (snapshot.exists()) {
+          const promises = [];
+
+          snapshot.forEach((childSnapshot) => {
+            const q = childSnapshot.val();
+            const statusClass = q.answer ? "answered" : "pending";
+            const statusText = q.answer ? "✅ Answered" : "⏳ Awaiting Answer";
+
+            let assignedToPromise;
+            if (q.assignedUserName) {
+              assignedToPromise = Promise.resolve(q.assignedUserName);
+            } else if (q.assignedUser) {
+              assignedToPromise = getUserNameById(q.assignedUser);
+            } else {
+              assignedToPromise = Promise.resolve("Unassigned");
+            }
+
+            promises.push(
+              assignedToPromise.then((assignedTo) => {
+                const card = document.createElement("div");
+                card.className = "qa-card";
+
+                card.innerHTML = `
+                  <div class="qa-section"><strong>From:</strong> ${q.askerName}</div>
+                  <div class="qa-section"><strong>Assigned To:</strong> ${assignedTo}</div>
+                  <div class="qa-section"><strong>Question:</strong> ${q.questionText}</div>
+                  <div class="answer-box">
+                    ${q.answer ? q.answer : "<em>No answer yet.</em>"}
+                  </div>
+                  <div class="qa-status ${statusClass}">${statusText}</div>
+                `;
+
+                questionsList.appendChild(card);
+              })
+            );
+          });
+
+          await Promise.all(promises);
+
+          if (questionsList.innerHTML.trim() === "") {
+            questionsList.innerHTML = "<p style='text-align:center;'>No public questions available.</p>";
+          }
+        } else {
+          questionsList.innerHTML = "<p style='text-align:center;'>No public questions available.</p>";
+        }
+      } catch (error) {
+        console.error("Error loading public questions:", error);
+        questionsList.innerHTML = "<p style='text-align:center; color:red;'>Error loading questions.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadAllQuestions);
+  </script>
 </body>
 </html>
