@@ -3,62 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>View My Questions</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title>My Questions - Fundamental Decisions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #ffb800;
+      --secondary: #fff8e1;
+      --accent: #4e342e;
+      --card-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #666666;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8e1;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--secondary);
       margin: 0;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
-      color: #5d4037;
-      margin-bottom: 30px;
+      color: var(--accent);
+      margin-bottom: 40px;
+      font-size: 2.2rem;
     }
 
-    .card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      max-width: 650px;
-      margin: 0 auto 30px auto;
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
     }
 
-    .question-item {
-      background-color: #ffecb3;
-      margin-bottom: 12px;
-      padding: 14px 16px;
-      border-left: 6px solid #ffb800;
-      border-radius: 6px;
-      color: #4e342e;
+    .question-card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 15px var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .question-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px var(--shadow);
+    }
+
+    .card-header {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 15px 20px;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      font-size: 1.2rem;
       font-weight: bold;
     }
 
-    .back-home {
-      display: flex;
-      justify-content: center;
+    .card-body {
+      padding: 20px;
+      color: var(--text-dark);
     }
 
-    .back-home a {
-      text-decoration: none;
+    .card-body p {
+      margin: 8px 0;
     }
 
-    .back-home button {
-      background-color: #ffb800;
-      color: #4e342e;
+    .card-body textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      resize: vertical;
+    }
+
+    .card-action {
+      padding: 15px 20px;
+      text-align: right;
+      border-top: 1px solid #eee;
+    }
+
+    .card-action button {
+      background-color: var(--primary);
+      color: var(--accent);
       border: none;
-      padding: 12px 24px;
-      font-size: 16px;
+      padding: 10px 16px;
+      font-size: 0.95rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .card-action button:hover {
+      background-color: #ffa000;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .back-home button {
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
     .back-home button i {
@@ -66,7 +126,7 @@
     }
 
     .back-home button:hover {
-      opacity: 0.85;
+      background-color: #3e2723;
     }
   </style>
 </head>
@@ -74,9 +134,8 @@
 
   <h1><i class="fa-solid fa-question"></i> My Questions</h1>
 
-  <div class="card" id="questionsList">
-    <!-- Dynamically injected questions will appear here -->
-    <p>Loading...</p>
+  <div class="card-container" id="questionsList">
+    <p>Loading questions...</p>
   </div>
 
   <div class="back-home">
@@ -85,6 +144,83 @@
     </a>
   </div>
 
-  <script type="module" src="view-questions.js"></script>
+  <script type="module">
+    import { db, auth } from "./firebase-config.js";
+    import { ref, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const questionsList = document.getElementById("questionsList");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loadAssignedQuestions(user.uid);
+      } else {
+        questionsList.innerHTML = "<p>Please log in to see your assigned questions.</p>";
+      }
+    });
+
+    async function loadAssignedQuestions(userId) {
+      const questionsRef = ref(db, "questions/");
+      try {
+        const snapshot = await get(questionsRef);
+        questionsList.innerHTML = "";
+
+        if (snapshot.exists()) {
+          snapshot.forEach((childSnapshot) => {
+            const questionData = childSnapshot.val();
+            const questionId = childSnapshot.key;
+
+            if (questionData.assignedUser === userId) {
+              const card = document.createElement("div");
+              card.className = "question-card";
+
+              card.innerHTML = `
+                <div class="card-header">
+                  ${questionData.questionText}
+                </div>
+                <div class="card-body">
+                  <p><strong>From:</strong> ${questionData.askerName}</p>
+                  <p><strong>Status:</strong> ${questionData.answer ? "✅ Answered" : "⏳ Awaiting Answer"}</p>
+                  <textarea id="answer-${questionId}" placeholder="Enter your answer here...">${questionData.answer || ""}</textarea>
+                </div>
+                <div class="card-action">
+                  <button onclick="submitAnswer('${questionId}')">Submit / Update Answer</button>
+                </div>
+              `;
+
+              questionsList.appendChild(card);
+            }
+          });
+
+          if (questionsList.innerHTML === "") {
+            questionsList.innerHTML = "<p>No questions assigned to you.</p>";
+          }
+        } else {
+          questionsList.innerHTML = "<p>No questions assigned to you.</p>";
+        }
+      } catch (error) {
+        console.error("Error loading questions:", error);
+        questionsList.innerHTML = "<p>Error loading questions.</p>";
+      }
+    }
+
+    window.submitAnswer = async function (questionId) {
+      const answerField = document.getElementById(`answer-${questionId}`);
+      const answer = answerField.value.trim();
+      if (!answer) {
+        alert("Please enter an answer before submitting.");
+        return;
+      }
+
+      try {
+        await update(ref(db, `questions/${questionId}`), { answer });
+        alert("Answer submitted successfully!");
+        loadAssignedQuestions(auth.currentUser.uid); // Refresh cards
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+        alert("Failed to submit answer. Please try again.");
+      }
+    };
+  </script>
 </body>
 </html>
