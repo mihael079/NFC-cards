@@ -4,7 +4,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/fi
 
 const challengeList = document.getElementById("challengeList");
 
-// Load challenges assigned to logged-in user
 async function loadChallenges(userId) {
     const challengesRef = ref(db, "challenges/");
     
@@ -15,31 +14,49 @@ async function loadChallenges(userId) {
         if (snapshot.exists()) {
             snapshot.forEach(challenge => {
                 const challengeData = challenge.val();
+                const progressPercent = challengeData.submitted ? 100 : 0;
+
                 if (challengeData.assignedUser === userId) {
-                    const li = document.createElement("li");
-                    li.innerHTML = `
-                        <strong>${challengeData.challengeTitle}</strong><br>
-                        <em>${challengeData.creatorName}</em><br>
-                        ${challengeData.challengeDescription}<br>
-                        <button onclick="submitResponse('${challenge.key}')">Submit Response</button>
+                    const card = document.createElement("div");
+                    card.className = "challenge-card";
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <i class="fa-solid fa-flag-checkered"></i>
+                            <h3>${challengeData.challengeTitle}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Creator:</strong> ${challengeData.creatorName}</p>
+                            <p><strong>Description:</strong> ${challengeData.challengeDescription}</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progressPercent}%;">
+                                    ${progressPercent}%
+                                </div>
+                            </div>
+                            <p><strong>Status:</strong> ${challengeData.submitted ? "✅ Submitted" : "⏳ Not Submitted"}</p>
+                            <p><strong>Your Response:</strong><br> ${challengeData.response ? challengeData.response : "<em>No response yet.</em>"}</p>
+                        </div>
+                        <div class="card-action">
+                            <button onclick="submitResponse('${challenge.key}')">Submit / Update Response</button>
+                        </div>
                     `;
-                    challengeList.appendChild(li);
+                    
+                    challengeList.appendChild(card);
                 }
             });
 
             if (challengeList.children.length === 0) {
-                challengeList.innerHTML = "<li>No challenges assigned to you.</li>";
+                challengeList.innerHTML = "<p>No challenges assigned to you.</p>";
             }
         } else {
-            challengeList.innerHTML = "<li>No challenges found.</li>";
+            challengeList.innerHTML = "<p>No challenges found.</p>";
         }
     } catch (error) {
         console.error("Error loading challenges:", error);
-        challengeList.innerHTML = "<li>Error loading challenges.</li>";
+        challengeList.innerHTML = "<p>Error loading challenges.</p>";
     }
 }
 
-// Submit a response
 window.submitResponse = async (challengeId) => {
     const responseText = prompt("Enter your response:");
     if (!responseText) return;
@@ -48,18 +65,17 @@ window.submitResponse = async (challengeId) => {
         const challengeRef = ref(db, `challenges/${challengeId}`);
         await update(challengeRef, { submitted: true, response: responseText });
         alert("Response submitted successfully!");
-        loadChallenges(auth.currentUser.uid);
+        loadChallenges(auth.currentUser.uid); // Refresh the card list
     } catch (error) {
         console.error("Error submitting response:", error);
         alert("Error submitting response.");
     }
 };
 
-// Authenticate and load challenges
 onAuthStateChanged(auth, (user) => {
     if (user) {
         loadChallenges(user.uid);
     } else {
-        challengeList.innerHTML = "<li>You must be logged in to view challenges.</li>";
+        challengeList.innerHTML = "<p>You must be logged in to view challenges.</p>";
     }
 });
