@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Fundamental Decisions</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -13,57 +13,98 @@
       --cream: #fff8e1;
       --orange: #f57f17;
       --hover-gold: #ffc107;
+      --soft-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--cream);
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
       margin: 0;
-      padding: 30px 20px;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--cream), #fbe9e7);
     }
 
-    h1 {
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid var(--gold);
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    header {
       text-align: center;
-      font-size: 2.5rem;
-      color: var(--dark-brown);
+      padding: 50px 20px 30px;
       background-color: var(--gold);
-      padding: 15px 30px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 90%;
-      margin: 0 auto 40px;
+      color: var(--dark-brown);
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      box-shadow: var(--soft-shadow);
     }
 
-    .card {
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
       background-color: #ffffff;
-      border-radius: 12px;
-      padding: 30px;
-      max-width: 1000px;
-      margin: 0 auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      border-top: 5px solid var(--gold);
+      border-radius: 20px;
+      box-shadow: var(--soft-shadow);
     }
 
     nav ul {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
     nav li {
-      background: linear-gradient(135deg, var(--gold), var(--hover-gold));
-      border-radius: 8px;
+      background: linear-gradient(145deg, var(--gold), var(--hover-gold));
+      border-radius: 15px;
       text-align: center;
-      padding: 15px 10px;
+      padding: 25px 10px;
       transition: transform 0.2s ease, box-shadow 0.3s ease;
+      cursor: pointer;
     }
 
     nav li:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transform: translateY(-8px);
+      box-shadow: var(--soft-shadow);
       background: var(--orange);
     }
 
@@ -71,40 +112,61 @@
       text-decoration: none;
       color: var(--dark-brown);
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 1.1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
     nav i {
-      font-size: 1.6rem;
-      margin-bottom: 8px;
+      font-size: 2rem;
+      margin-bottom: 10px;
     }
 
     .website-button {
-      display: block;
-      text-align: center;
-      margin: 40px auto 0;
-      padding: 12px 20px;
+      display: inline-block;
+      margin: 50px auto 0;
+      padding: 15px 30px;
       font-weight: bold;
-      font-size: 1rem;
+      font-size: 1.1rem;
       background-color: var(--light-brown);
       color: white;
       text-decoration: none;
-      border-radius: 6px;
-      width: fit-content;
+      border-radius: 10px;
+      transition: background-color 0.3s ease;
     }
 
     .website-button:hover {
       background-color: var(--dark-brown);
     }
+
+    footer {
+      text-align: center;
+      margin: 50px 0 20px;
+      font-size: 0.9rem;
+      color: var(--light-brown);
+    }
   </style>
+  <script>
+    window.addEventListener('load', () => {
+      const loader = document.querySelector('.loader');
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none';
+      setTimeout(() => loader.style.display = 'none', 500);
+    });
+  </script>
 </head>
 <body>
-  <h1>Welcome to Fundamental Decisions</h1>
+  <div class="loader">
+    <div class="spinner"></div>
+  </div>
 
-  <div class="card">
+  <header>
+    <h1>Welcome to Fundamental Decisions</h1>
+    <p>Empowering individuals, teams, and organizations to make purposeful, impactful choices.</p>
+  </header>
+
+  <main>
     <nav>
       <ul>
         <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>
@@ -116,11 +178,16 @@
         <li><a href="view-questions.html"><i class="fa-solid fa-question"></i>My Questions</a></li>
         <li><a href="all-questions.html"><i class="fa-solid fa-globe"></i>All Q&A</a></li>
         <li><a href="submit-talent.html"><i class="fa-solid fa-star"></i>Submit Talent</a></li>
-        <li><a href="submit-persona.html"><i class="fa-regular fa-id-card"></i>Submit Persona</a></li>
       </ul>
     </nav>
 
-    <a href="https://www.fundamentaldecisions.com/" class="website-button">🌐 Visit Our Website</a>
-  </div>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="https://www.fundamentaldecisions.com/" class="website-button">🌐 Visit Our Official Website</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Fundamental Decisions. All rights reserved.
+  </footer>
 </body>
 </html>
