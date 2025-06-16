@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Persona Card</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body{
+      font-family:'Segoe UI',sans-serif;
+      background:#fff8e1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin:0;
+      padding:40px 20px;
+    }
+    h1{color:#5d4037;font-size:2.1rem;margin-bottom:25px}
+    .persona-card{
+      width:340px;max-width:90vw;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 8px 20px rgba(0,0,0,.2);
+      margin-bottom:25px;
+    }
+    .persona-card img{width:100%;display:block}
+    form{width:340px;max-width:90vw;display:flex;flex-direction:column;gap:15px}
+    label{font-weight:bold;color:#5d4037}
+    textarea,select{
+      padding:10px;border:1px solid #ccc;border-radius:6px;font-size:1rem
+    }
+    button{
+      padding:12px;background:#ffb800;color:#4e342e;
+      font-weight:bold;border:none;border-radius:8px;cursor:pointer
+    }
+    button:hover{background:#f57f17;color:#fff}
+    .status{margin-top:10px;font-weight:bold;text-align:center}
+    .nav{
+      margin-top:30px;
+      font-weight:bold;
+      color:#4e342e;
+      text-decoration:none;
+    }
+    .nav:hover{color:#f57f17}
+  </style>
+</head>
+<body>
+  <h1>Review Persona Card</h1>
+
+  <!-- Card front -->
+  <div class="persona-card">
+    <img id="cardImage" src="" alt="Persona Card Front">
+  </div>
+
+  <!-- Feedback form -->
+  <form id="feedbackForm">
+    <label for="impression">Your Impression of the Host:</label>
+    <textarea id="impression" rows="4" required></textarea>
+
+    <label for="intensity">Intensity Level:</label>
+    <select id="intensity" required>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+
+    <label for="performance">Host's Performance Feedback:</label>
+    <textarea id="performance" rows="3" required></textarea>
+
+    <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Feedback</button>
+    <div id="status" class="status"></div>
+  </form>
+
+  <!-- Back link populated by JS -->
+  <a id="backLink" class="nav" href="#"><i class="fa-solid fa-arrow-left"></i> Back to Cards</a>
+
+  <script type="module" src="persona-view.js"></script>
+</body>
+</html>
