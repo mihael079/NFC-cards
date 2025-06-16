@@ -2,127 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Persona Cards</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fff8e1;
-      padding: 30px;
+      background: #fffce8;
+      margin: 0;
+      padding: 40px 20px;
       text-align: center;
     }
 
     h1 {
-      font-size: 2.2rem;
       color: #5d4037;
-      margin-bottom: 25px;
-      background-color: #ffeb9c;
-      display: inline-block;
-      padding: 10px 30px;
-      border-radius: 10px;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
     }
 
-    .card-container {
+    #deck {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-
-    .flip-card {
-      background-color: transparent;
-      width: 250px;
-      height: 350px;
-      perspective: 1000px;
-    }
-
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
-
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-
-    .flip-card-front,
-    .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .flip-card-front img,
-    .flip-card-back img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .flip-card-back {
-      transform: rotateY(180deg);
-    }
-
-    .button-group {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
       gap: 20px;
-      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
     }
 
-    .action-button {
-      background-color: #ffb800;
-      color: #4e342e;
-      font-weight: bold;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: background-color 0.3s ease;
+    .card-back {
+      width: 180px;
+      height: 260px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      object-fit: cover;
+      transition: transform 0.2s ease;
+      cursor: pointer;
     }
 
-    .action-button:hover {
-      background-color: #f57f17;
-      color: white;
+    .card-back:hover {
+      transform: scale(1.05);
     }
 
     .error {
       color: #c62828;
       font-weight: bold;
-      margin-top: 20px;
+    }
+
+    .back-home {
+      margin-top: 40px;
+      display: inline-block;
+      background: #fbc02d;
+      color: #4e342e;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .back-home:hover {
+      background-color: #f57f17;
     }
   </style>
 </head>
 <body>
   <h1>Persona Cards</h1>
-
-  <div id="personaContainer" class="card-container">
-    <p>Loading...</p>
-  </div>
-
-  <div class="button-group">
-    <a href="index.html" class="action-button">
-      <i class="fa-solid fa-arrow-left"></i> Back to Home
-    </a>
-    <a href="challenges.html" class="action-button">
-      <i class="fa-solid fa-bolt"></i> Challenge Me
-    </a>
-  </div>
+  <div id="deck"><p>Loading...</p></div>
+  <a class="back-home" href="index.html">⬅ Back to Home</a>
 
   <script type="module" src="persona-cards.js"></script>
 </body>
