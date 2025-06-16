@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Persona Feedback</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body{
+      font-family:'Segoe UI',sans-serif;
+      background:#fff8e1;
+      margin:0;
+      padding:40px 20px;
+      text-align:center;
+    }
+
+    h1{
+      color:#5d4037;font-size:2.3rem;margin-bottom:25px;
+    }
+
+    #list{
+      display:flex;flex-direction:column;gap:20px;align-items:center;
+    }
+
+    .fb-card{
+      background:#fff;
+      border-left:6px solid #ffb800;
+      border-radius:8px;
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
+      padding:20px;
+      width:420px;max-width:90vw;
+      text-align:left;
+    }
+
+    .fb-card h3{margin:0 0 8px;color:#4e342e}
+    .fb-card small{color:#777}
+    .fb-card p{margin:5px 0}
+
+    .nav{
+      display:inline-block;margin-top:35px;
+      background:#ffb800;
+      color:#4e342e;padding:10px 22px;
+      border-radius:8px;font-weight:bold;
+      text-decoration:none;
+    }
+    .nav:hover{background:#f57f17;color:#fff}
+  </style>
+</head>
+<body>
+  <h1>My Persona Feedback</h1>
+
+  <div id="list"><p>Loading…</p></div>
+
+  <a class="nav" href="index.html"><i class="fa-solid fa-arrow-left"></i> Home</a>
+
+  <script type="module" src="my-feedback.js"></script>
+</body>
+</html>
