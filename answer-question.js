@@ -1,54 +1,35 @@
-// answer-question.js
-import { db, auth } from './firebase-config.js';
-import { ref, set, get, child } from 'firebase/database';
+import { db, auth } from "./firebase-config.js";
+import { onAuthStateChanged } from
+  "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { ref, push } from
+  "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-const urlParams = new URLSearchParams(window.location.search);
-const questionId = urlParams.get('questionId');
-const questionTextDiv = document.getElementById('question-text');
-const answerForm = document.getElementById('answer-form');
-const answerInput = document.getElementById('answer');
+const qText = document.getElementById("questionText");
+const btn   = document.getElementById("submitQ");
+const msgEl = document.getElementById("msg");
 
-// Fetch the question from Firebase using the questionId
-get(child(ref(db), 'questions/' + questionId)).then((snapshot) => {
-  if (snapshot.exists()) {
-    const question = snapshot.val();
-    questionTextDiv.innerHTML = `<p><strong>Question:</strong> ${question.question}</p>`;
-  } else {
-    questionTextDiv.innerHTML = '<p>Question not found.</p>';
-  }
-}).catch((error) => {
-  console.error('Error fetching question:', error);
+let uid = null;
+
+onAuthStateChanged(auth, user => {
+  if (!user){ msgEl.textContent="Log in first"; btn.disabled=true; return;}
+  uid = user.uid;
 });
 
-// Handle answer submission
-answerForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+btn.addEventListener("click", async ()=>{
+  const txt = qText.value.trim();
+  if (!txt){ msgEl.textContent="Write something first"; return; }
 
-  const answerText = answerInput.value.trim();
-  const userId = auth.currentUser ? auth.currentUser.uid : null;
-
-  if (answerText === '') {
-    alert('Please enter an answer.');
-    return;
+  try{
+    await push(ref(db, `users/${uid}/questions`), {
+      text: txt,
+      createdAt: Date.now()
+    });
+    qText.value="";
+    msgEl.style.color="green";
+    msgEl.textContent="Question saved!";
+  }catch(err){
+    console.error(err);
+    msgEl.style.color="red";
+    msgEl.textContent="Error saving question.";
   }
-
-  if (!userId) {
-    alert('You must be logged in to submit an answer.');
-    return;
-  }
-
-  // Create a reference for the answer in Firebase
-  const answerRef = ref(db, 'answers/' + questionId);
-  set(answerRef, {
-    answer: answerText,
-    userId: userId,
-    answeredAt: new Date().toISOString(),
-  })
-  .then(() => {
-    alert('Your answer has been submitted!');
-    answerInput.value = '';  // Clear the input field
-  })
-  .catch((error) => {
-    alert('Error submitting your answer: ' + error.message);
-  });
 });
