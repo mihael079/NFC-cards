@@ -2,133 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Answer Me</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Answer & Evaluate</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8e1;
-      margin: 0;
-      padding: 20px;
+    :root{
+      --gold:#ffb800; --orange:#f57f17; --cream:#fff8e1; --brown:#4e342e;
+    }
+    body{
+      font-family:'Segoe UI',sans-serif;background:var(--cream);
+      margin:0;padding:40px 20px;text-align:center;
+    }
+    h1{color:var(--brown);font-size:2.3rem;margin-bottom:25px}
+
+    #list{display:flex;flex-direction:column;gap:25px;align-items:center}
+
+    .q-card{
+      width:460px;max-width:95vw;padding:22px;
+      background:#fff;border-left:6px solid var(--gold);
+      border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.13);
+      text-align:left;
+    }
+    .q-card h3{margin:0 0 12px;color:var(--brown)}
+    textarea,select,input[type=range]{
+      width:100%;padding:8px;margin-top:6px;font-size:1rem;
+      border-radius:6px;border:1px solid #ccc;box-sizing:border-box;
+      resize:vertical;
+    }
+    /* lighting: update track color via inline style in JS */
+    input[type=range]{height:8px;background:#ddd;outline:none}
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+      background:var(--orange);cursor:pointer;border:none;
     }
 
-    h1 {
-      text-align: center;
-      color: #5d4037;
-      margin-bottom: 30px;
-    }
+    .slideVal{text-align:right;font-weight:bold;margin-top:4px}
 
-    .card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      border-radius: 10px;
-      padding: 25px;
-      max-width: 600px;
-      margin: 0 auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    .submitBtn{
+      display:inline-block;margin-top:12px;padding:9px 20px;
+      background:var(--gold);color:var(--brown);font-weight:bold;
+      border:none;border-radius:6px;cursor:pointer;transition:.25s;
     }
+    .submitBtn:hover{background:var(--orange);color:#fff}
 
-    form label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #4e342e;
-    }
+    .localMsg{margin-top:6px;font-weight:bold}
 
-    form input,
-    form textarea,
-    form select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
+    .nav{
+      margin-top:35px;display:inline-block;
+      background:var(--gold);color:var(--brown);
+      padding:10px 24px;border-radius:8px;font-weight:bold;
+      text-decoration:none;transition:.25s;
     }
-
-    form textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    form button {
-      background-color: #ffb800;
-      color: #4e342e;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    form button i {
-      margin-right: 8px;
-    }
-
-    form button:hover {
-      opacity: 0.85;
-    }
-
-    .back-home {
-      display: flex;
-      justify-content: center;
-      margin-top: 30px;
-    }
-
-    .back-home a {
-      text-decoration: none;
-    }
-
-    .back-home button {
-      background-color: #ffb800;
-      color: #4e342e;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .back-home button i {
-      margin-right: 8px;
-    }
-
-    .back-home button:hover {
-      opacity: 0.85;
-    }
+    .nav:hover{background:var(--orange);color:#fff}
   </style>
 </head>
 <body>
+  <h1>Answer &amp; Evaluate</h1>
 
-  <h1><i class="fa-solid fa-question-circle"></i> Ask a Question</h1>
+  <!-- questions render here -->
+  <div id="list"><p>Loading…</p></div>
 
-  <div class="card">
-    <form id="questionForm">
-      <label for="askerName">Your Name:</label>
-      <input type="text" id="askerName" required>
-
-      <label for="questionText">Your Question:</label>
-      <textarea id="questionText" required></textarea>
-
-      <label for="assignedUser">Ask:</label>
-      <select id="assignedUser" required></select>
-
-      <button type="submit"><i class="fa-solid fa-paper-plane"></i> Ask Question</button>
-    </form>
-  </div>
-
-  <div class="back-home">
-    <a href="index.html">
-      <button><i class="fa-solid fa-house"></i> Back to Home</button>
-    </a>
-  </div>
+  <a class="nav" href="index.html"><i class="fa-solid fa-arrow-left"></i> Home</a>
 
   <script type="module" src="answer-me.js"></script>
 </body>
