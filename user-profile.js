@@ -25,6 +25,13 @@ if (personaBtnLink && userId) {
   personaBtnLink.href = `persona-cards.html?uid=${userId}`;
 }
 
+const answerBtn = document.getElementById("answerBtn");
+
+if (answerBtn && userId) {
+  answerBtn.onclick = () => location.href = `answer-me.html?uid=${userId}`;
+}
+
+
 // Load profile data
 function loadUserProfile(uid) {
   const userRef = ref(db, `users/${uid}`);
