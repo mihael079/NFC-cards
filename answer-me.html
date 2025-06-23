@@ -4,66 +4,263 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Answer & Evaluate</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- INLINE CSS -->
   <style>
     :root{
-      --gold:#ffb800; --orange:#f57f17; --cream:#fff8e1; --brown:#4e342e;
+      --gold:#ffb800; --orange:#f57f17; --cream:#fff8e1;
+      --brown:#4e342e; --teal:#0097a7;
     }
+    *{box-sizing:border-box}
     body{
       font-family:'Segoe UI',sans-serif;background:var(--cream);
-      margin:0;padding:40px 20px;text-align:center;
+      margin:0;padding:30px 0;display:flex;justify-content:center;
     }
-    h1{color:var(--brown);font-size:2.3rem;margin-bottom:25px}
+    /* phone frame */
+    .phone{
+      width:380px;max-width:95vw;border-radius:18px;
+      background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.18);
+      overflow:hidden;display:flex;flex-direction:column;
+    }
+    header{
+      padding:14px 18px;background:var(--cream);
+      display:flex;align-items:center;gap:10px;font-size:.95rem;
+    }
+    header img{width:34px;height:34px;border-radius:50%;border:2px solid var(--gold)}
+    header span{font-weight:bold;color:var(--brown)}
+    header a{margin-left:auto;color:var(--teal);font-size:.85rem;text-decoration:none}
 
-    #list{display:flex;flex-direction:column;gap:25px;align-items:center}
+    /* screens */
+    .screen{flex:1;overflow:auto;padding:18px;display:none}
+    .show  {display:block}
 
-    .q-card{
-      width:460px;max-width:95vw;padding:22px;
-      background:#fff;border-left:6px solid var(--gold);
-      border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.13);
-      text-align:left;
+    /* intro */
+    .dosdonts{background:var(--cream);padding:14px 16px;border-radius:12px;}
+    .dosdonts li{margin:4px 0;font-size:.9rem}
+    .dos{color:#2e7d32}.donts{color:#c62828}
+
+    /* chat bubbles */
+    .bubbleWrap{display:flex;flex-direction:column;gap:12px}
+    .bubble{
+      max-width:70%;padding:10px 14px;border-radius:18px;line-height:1.4;
+      font-size:.9rem;color:#fff;position:relative;
     }
-    .q-card h3{margin:0 0 12px;color:var(--brown)}
-    textarea,select,input[type=range]{
-      width:100%;padding:8px;margin-top:6px;font-size:1rem;
-      border-radius:6px;border:1px solid #ccc;box-sizing:border-box;
-      resize:vertical;
+    .host {align-self:flex-start;background:var(--gold);color:#422}
+    .guest{align-self:flex-end;background:var(--orange)}
+    .bubble::after{
+      content:"";position:absolute;width:10px;height:10px;background:inherit;
+      transform:rotate(45deg);
     }
-    /* lighting: update track color via inline style in JS */
+    .host::after {left:-5px;bottom:8px}
+    .guest::after{right:-5px;bottom:8px}
+
+    /* chat input */
+    #guestInput{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
+    #sendBtn{
+      margin-top:8px;width:100%;padding:10px;background:var(--gold);
+      border:none;border-radius:8px;font-weight:bold;color:var(--brown);cursor:pointer
+    }
+    #sendBtn:hover{background:var(--orange);color:#fff}
+
+    /* rating card */
+    .ratecard{
+      padding:20px;border-radius:8px;background:#fffefb;border:1px solid var(--gold);
+    }
+    .ratecard h3{margin-top:0;font-size:1rem;color:var(--brown)}
+    textarea,input[type=range]{
+      width:100%;margin-top:6px;padding:8px;border-radius:6px;border:1px solid #ccc;
+      font-size:.9rem;resize:vertical;
+    }
     input[type=range]{height:8px;background:#ddd;outline:none}
     input[type=range]::-webkit-slider-thumb{
       -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
-      background:var(--orange);cursor:pointer;border:none;
-    }
-
+      background:var(--orange);border:none;cursor:pointer}
     .slideVal{text-align:right;font-weight:bold;margin-top:4px}
 
-    .submitBtn{
-      display:inline-block;margin-top:12px;padding:9px 20px;
-      background:var(--gold);color:var(--brown);font-weight:bold;
-      border:none;border-radius:6px;cursor:pointer;transition:.25s;
+    .nextBtn{
+      margin-top:10px;width:100%;padding:10px 0;background:var(--gold);
+      border:none;border-radius:8px;font-weight:bold;color:var(--brown);cursor:pointer
     }
-    .submitBtn:hover{background:var(--orange);color:#fff}
+    .nextBtn:hover{background:var(--orange);color:#fff}
 
-    .localMsg{margin-top:6px;font-weight:bold}
-
-    .nav{
-      margin-top:35px;display:inline-block;
-      background:var(--gold);color:var(--brown);
-      padding:10px 24px;border-radius:8px;font-weight:bold;
-      text-decoration:none;transition:.25s;
+    /* timeline & timer */
+    ol.timeline{margin:0;padding-left:18px;font-size:.85rem}
+    ol.timeline li{margin:6px 0;position:relative}
+    ol.timeline li::before{
+      content:"";position:absolute;left:-16px;top:6px;width:8px;height:8px;border-radius:50%;
+      background:#9e9e9e}
+    ol.timeline li.active::before{background:var(--teal)}
+    .timerBar{
+      margin:16px auto 0;width:120px;text-align:center;background:var(--teal);
+      color:#fff;padding:6px 0;border-radius:20px;font-weight:bold
     }
-    .nav:hover{background:var(--orange);color:#fff}
+
+    /* back button (re-uses nextBtn styles) */
+    #backBtn{width:90%;margin:18px auto 24px}
   </style>
 </head>
+
 <body>
-  <h1>Answer &amp; Evaluate</h1>
+<div class="phone">
 
-  <!-- questions render here -->
-  <div id="list"><p>Loading…</p></div>
+  <!-- header -->
+  <header>
+    <img src="avatar1.jpg" id="hostAvatar" alt="Avatar">
+    <span id="hostName">Host</span>
+    <a href="#">Answer me</a>
+  </header>
 
-  <a class="nav" href="index.html"><i class="fa-solid fa-arrow-left"></i> Home</a>
+  <!-- INTRO -->
+  <div id="scrIntro" class="screen show">
+    <p>Hello, <strong>Mysterious Owl!</strong></p>
+    <h4>Guidelines <span style="color:#2e7d32">Do's</span> /
+        <span style="color:#c62828">Don'ts</span></h4>
+    <ul class="dosdonts">
+      <li class="dos">✓ Ask clear, concise questions</li>
+      <li class="donts">✗ Don’t reveal private info</li>
+      <li class="dos">✓ Stay respectful</li>
+    </ul>
+    <p style="margin-top:18px">Ready? Hit start!</p>
+    <button id="startBtn" class="nextBtn"><i class="fa-solid fa-play"></i> Start</button>
+  </div>
 
-  <script type="module" src="answer-me.js"></script>
+  <!-- CHAT -->
+  <div id="scrChat" class="screen">
+    <div id="bubbleWrap" class="bubbleWrap"></div>
+    <textarea id="guestInput" rows="2" placeholder="Type your answer…"></textarea>
+    <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i> Send</button>
+  </div>
+
+  <!-- RATE -->
+  <div id="scrRate" class="screen">
+    <div id="ratingArea"></div>
+  </div>
+
+  <!-- timeline & timer -->
+  <div style="padding:16px">
+    <ol class="timeline" id="timelineList">
+      <li class="active">I will ask you <span>max 5 questions</span></li>
+      <li>You answer my questions</li>
+      <li>I will tell you what I think</li>
+      <li>You will <strong>evaluate my questions</strong></li>
+      <li>(Optional) Join activities</li>
+    </ol>
+    <div id="timerBar" class="timerBar">25:00</div>
+  </div>
+
+  <!-- Back to Profile -->
+  <button id="backBtn" class="nextBtn">
+    <i class="fa-solid fa-rotate-left"></i> Back to Profile
+  </button>
+</div>
+
+<!-- MAIN JS -->
+<script type="module">
+import { db } from "./firebase-config.js";
+import { ref, get, push } from
+  "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+/* ---- config ---- */
+const TOTAL_TIME = 25*60;
+const MAX_Q      = 5;
+
+/* ---- DOM refs ---- */
+const scrIntro   = document.getElementById("scrIntro");
+const scrChat    = document.getElementById("scrChat");
+const scrRate    = document.getElementById("scrRate");
+const startBtn   = document.getElementById("startBtn");
+const bubbleWrap = document.getElementById("bubbleWrap");
+const gInput     = document.getElementById("guestInput");
+const sendBtn    = document.getElementById("sendBtn");
+const ratingArea = document.getElementById("ratingArea");
+const timerBar   = document.getElementById("timerBar");
+const timeline   = document.getElementById("timelineList").children;
+const backBtn    = document.getElementById("backBtn");
+
+/* ---- UID ---- */
+const uid = new URLSearchParams(location.search).get("uid");
+if(!uid){ alert("UID missing"); throw new Error("uid missing"); }
+
+/* ---- Load host Q ---- */
+let questions=[];
+let qi=0;
+try{
+  const snap=await get(ref(db,`users/${uid}/questions`));
+  if(snap.exists()){
+    questions = Object.entries(snap.val())
+       .slice(-MAX_Q).map(([qid,o])=>({qid,text:o.text||o}));
+  }
+}catch(e){console.error(e);}
+
+/* ---- helpers ---- */
+function show(el){[scrIntro,scrChat,scrRate].forEach(s=>s.classList.remove("show"));
+                  el.classList.add("show");}
+
+function addBubble(text,cls){
+  const b=document.createElement("div");
+  b.className=`bubble ${cls}`;
+  b.textContent=text;
+  bubbleWrap.appendChild(b);
+  bubbleWrap.scrollTop=bubbleWrap.scrollHeight;
+}
+
+/* ---- timer ---- */
+let seconds=TOTAL_TIME;
+setInterval(()=>{if(--seconds<0)return;
+  timerBar.textContent=
+    `${String(seconds/60|0).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+},1000);
+
+/* ---- flow ---- */
+startBtn.onclick=()=>{show(scrChat);timeline[1].classList.add("active");askNext();}
+sendBtn.onclick = ()=>{const t=gInput.value.trim();if(!t)return;
+  addBubble(t,"guest");gInput.value="";qi++;askNext();}
+
+function askNext(){
+  if(qi>=questions.length){showRate();return;}
+  addBubble(questions[qi].text,"host");
+}
+
+function showRate(){
+  show(scrRate);timeline[2].classList.add("active");renderRate(0);
+}
+
+function renderRate(i){
+  ratingArea.innerHTML="";
+  if(i>=questions.length){ratingArea.innerHTML="<p>All feedback saved. Thanks!</p>";return;}
+  const q=questions[i];
+  const wrap=document.createElement("div");
+  wrap.className="ratecard";
+  wrap.innerHTML=`
+    <h3>Question ${i+1}/${questions.length}<br>${q.text}</h3>
+    <label>➕ Plus Points</label><textarea id="plus" rows="2"></textarea>
+    <label>➖ Minus Points</label><textarea id="minus" rows="2"></textarea>
+    <label>Score (0-10)</label>
+    <input type="range" id="range" min="0" max="10" value="5">
+    <div class="slideVal" id="val">5</div>
+    <button class="nextBtn">Save & Next</button>`;
+  ratingArea.appendChild(wrap);
+
+  const range=wrap.querySelector("#range"),val=wrap.querySelector("#val");
+  range.oninput=()=>{val.textContent=range.value;
+    range.style.background=
+      `linear-gradient(90deg,hsl(${40+range.value*3} 100% 50%) ${range.value*10}%,#ddd 0%)`;}
+  range.oninput();
+
+  wrap.querySelector(".nextBtn").onclick=async()=>{
+    await push(ref(db,`users/${uid}/questions/${q.qid}/reviews`),{
+      plus: wrap.querySelector("#plus").value.trim(),
+      minus:wrap.querySelector("#minus").value.trim(),
+      score:+range.value,createdAt:Date.now()
+    });
+    renderRate(i+1);
+  };
+}
+
+/* ---- back to profile ---- */
+backBtn.onclick = ()=>location.href = `user-profile.html?uid=${uid}`;
+</script>
 </body>
 </html>
