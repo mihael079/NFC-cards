@@ -4,69 +4,344 @@
   <meta charset="UTF-8" />
   <title>Persona Cards</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
+    :root {
+      --cream: #fffce8;
+      --dark: #3e2723;
+      --accent: #e53935;
+      --gold: #ffb800;
+    }
+    * { box-sizing: border-box }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #fffce8;
       margin: 0;
-      padding: 40px 20px;
-      text-align: center;
+      padding: 32px 0;
+      display: flex;
+      justify-content: center;
+      background: var(--cream);
+      font-family: 'Segoe UI', sans-serif;
     }
-
-    h1 {
-      color: #5d4037;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+    .phone {
+      width: 380px;
+      max-width: 95vw;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
-
-    #deck {
+    header {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--cream);
+    }
+    header img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+    }
+    header span {
+      margin-left: 10px;
+      font-weight: 600;
+    }
+    header a {
+      margin-left: auto;
+      color: var(--accent);
+      font-size: .85rem;
+      text-decoration: underline;
+    }
+    .screen {
+      display: none;
+      flex: 1;
+      overflow: auto;
+      padding: 18px 18px 8px;
+    }
+    .show { display: block }
+    #cardGrid {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 10px;
       justify-content: center;
-      margin-top: 30px;
+      margin-top: 6px;
     }
-
-    .card-back {
-      width: 180px;
-      height: 260px;
+    #cardGrid img {
+      width: 95px;
+      height: 135px;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      object-fit: cover;
-      transition: transform 0.2s ease;
+      cursor: pointer;
+      transition: transform .2s;
+      border: 1px solid #eee;
+    }
+    #cardGrid img:hover {
+      transform: scale(1.06);
+    }
+    .cardLarge {
+      width: 100%;
+      border-radius: 14px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+    .messageBox, .questionBox {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .messageBox p {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.45;
+    }
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 6px;
+      font-family: inherit;
+    }
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btnRow button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
       cursor: pointer;
     }
-
-    .card-back:hover {
-      transform: scale(1.05);
+    .btnRow button:hover {
+      opacity: .9;
     }
-
-    .error {
-      color: #c62828;
-      font-weight: bold;
+    ol.timeline {
+      margin: 0 0 8px 18px;
+      font-size: .85rem;
+      counter-reset: step;
     }
-
-    .back-home {
-      margin-top: 40px;
-      display: inline-block;
-      background: #fbc02d;
-      color: #4e342e;
-      text-decoration: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: bold;
+    ol.timeline li {
+      margin: 5px 0;
+      position: relative;
     }
-
-    .back-home:hover {
-      background-color: #f57f17;
+    ol.timeline li::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #bbb;
+    }
+    ol.timeline li.active::before {
+      background: var(--accent);
+    }
+    .timerBar {
+      text-align: center;
+      width: 140px;
+      margin: 12px auto;
+      padding: 6px 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .thankYou {
+      text-align: center;
+      padding: 30px 18px;
+    }
+    .thankYou h2 {
+      margin: 0;
+      font-family: cursive;
+      font-size: 2.2rem;
+      color: var(--accent);
+    }
+    .thankYou p span {
+      background: #ffcdd2;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .homeBtn {
+      margin-top: 18px;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 20px;
+      background: var(--gold);
+      color: var(--dark);
+      font-weight: 600;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>Persona Cards</h1>
-  <div id="deck"><p>Loading...</p></div>
-  <a class="back-home" href="index.html">⬅ Back to Home</a>
+<div class="phone">
+  <header>
+    <img src="avatar1.jpg" alt="Avatar">
+    <span>Hello, Guest!</span>
+    <a href="#">See my Persona card</a>
+  </header>
 
-  <script type="module" src="persona-cards.js"></script>
+  <!-- 1 ▸ Deck -->
+  <div id="scrDeck" class="screen show">
+    <h4 style="margin:4px 0 10px;color:var(--dark);font-size:1rem">Choose 1 card from the deck</h4>
+    <div id="cardGrid">Loading…</div>
+  </div>
+
+  <!-- 2 ▸ Front -->
+  <div id="scrFront" class="screen">
+    <img id="frontImg" class="cardLarge" alt="Front">
+    <div class="btnRow"><button onclick="goto('scrMsg')">Next</button></div>
+  </div>
+
+  <!-- 3 ▸ Message -->
+  <div id="scrMsg" class="screen">
+    <img id="msgFront" class="cardLarge" alt="Front again">
+    <div class="messageBox" id="msgBox"></div>
+    <div class="btnRow"><button onclick="goto('scrQ1')">Next</button></div>
+  </div>
+
+  <!-- 4 ▸ Q1 -->
+  <div id="scrQ1" class="screen">
+    <div class="questionBox">
+      <h4>Question 1/2</h4>
+      <p>What do you think is my strength?</p>
+      <textarea id="ans1"></textarea>
+      <div class="btnRow"><button onclick="goto('scrQ2')">Next</button></div>
+    </div>
+  </div>
+
+  <!-- 5 ▸ Q2 -->
+  <div id="scrQ2" class="screen">
+    <div class="questionBox">
+      <h4>Question 2/2</h4>
+      <p>How could I help you with my strength?</p>
+      <textarea id="ans2"></textarea>
+      <div class="btnRow"><button onclick="saveFeedback()">Send</button></div>
+    </div>
+  </div>
+
+  <!-- 6 ▸ Thank you -->
+  <div id="scrThanks" class="screen">
+    <div class="thankYou">
+      <h2>thank you</h2>
+      <p>Your perspective means a lot to me<br>in the journey of <span>Discovering Myself</span>.</p>
+      <p>The system is analyzing your responses and preparing a Persona Card for you.</p>
+      <button class="homeBtn" onclick="location.href='index.html'">Back to Home</button>
+    </div>
+  </div>
+
+  <div style="padding:14px 18px">
+    <ol class="timeline" id="tl">
+      <li class="active">Choose card</li>
+      <li>Read the card</li>
+      <li>Read the message</li>
+      <li>Answer questions</li>
+      <li>Send your perspectives</li>
+    </ol>
+    <div id="timerBar" class="timerBar">24:00</div>
+  </div>
+</div>
+
+<script type="module">
+import { db } from './firebase-config.js';
+import { ref, get, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+
+const params = new URLSearchParams(location.search);
+const uid = params.get('uid');
+if (!uid) { alert('UID missing'); throw new Error('uid'); }
+
+const grid = document.getElementById('cardGrid');
+const msgBox = document.getElementById('msgBox');
+const tl = document.getElementById('tl').children;
+
+function setStep(i) {
+  [...tl].forEach((li, j) => li.classList.toggle('active', j <= i));
+}
+function goto(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  const order = { scrFront: 1, scrMsg: 2, scrQ1: 3, scrQ2: 3, scrThanks: 4 };
+  if (order[id] != null) setStep(order[id]);
+}
+window.goto = goto;
+
+let sec = 24 * 60;
+setInterval(() => {
+  if (--sec < 0) return;
+  const m = String(sec / 60 | 0).padStart(2, '0');
+  const s = String(sec % 60).padStart(2, '0');
+  document.getElementById('timerBar').textContent = `${m}:${s}`;
+}, 1000);
+
+const snap = await get(ref(db, `users/${uid}`));
+if (!snap.exists()) { grid.textContent = 'User not found'; throw new Error('user'); }
+const folder = (snap.val().displayName || '').replace(/[^a-z0-9_-]/gi, '');
+loadDeck(folder);
+
+function loadDeck(folder) {
+  grid.innerHTML = '';
+  let idx = 1;
+
+  const probe = () => {
+    const back = `persona-cards/${folder}/card${idx}back.png`;
+    const test = new Image();
+
+    test.onload = () => {
+      const img = document.createElement('img');
+      img.src = back;
+      img.alt = `Card ${idx}`;
+      img.onclick = () => showFront(folder, idx);
+      grid.appendChild(img);
+      idx++;
+      probe();
+    };
+
+    test.onerror = () => {
+      console.log(`Stopped at card${idx} — no back image.`);
+    };
+
+    test.src = back;
+  };
+  probe();
+}
+
+function showFront(folder, i) {
+  const front = `persona-cards/${folder}/card${i}front.png`;
+  const back = `persona-cards/${folder}/card${i}back.png`;
+  const fImg = document.getElementById('frontImg');
+  const mImg = document.getElementById('msgFront');
+
+  fImg.src = front;
+  mImg.src = front;
+
+  fImg.onerror = mImg.onerror = () => {
+    alert('Missing images; choose another card.');
+    goto('scrDeck');
+  };
+
+  fetch(`persona-cards/${folder}/message${i}.txt`)
+    .then(r => r.ok ? r.text() : Promise.reject())
+    .then(t => msgBox.innerHTML = `<p>${t}</p>`)
+    .catch(() => msgBox.innerHTML = '<p>A resilient soul who reframes obstacles…</p>');
+
+  goto('scrFront');
+}
+
+function saveFeedback() {
+  push(ref(db, `users/${uid}/personaFeedback`), {
+    ans1: document.getElementById('ans1').value.trim(),
+    ans2: document.getElementById('ans2').value.trim(),
+    createdAt: Date.now()
+  }).finally(() => goto('scrThanks'));
+}
+window.saveFeedback = saveFeedback;
+</script>
 </body>
 </html>
