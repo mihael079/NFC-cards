@@ -5,199 +5,312 @@
   <title>Persona Cards</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root{--cream:#fffce8;--dark:#3e2723;--accent:#e53935;--gold:#ffb800}
-    *{box-sizing:border-box}
-    body{margin:0;padding:32px 0;display:flex;justify-content:center;background:var(--cream);font-family:'Segoe UI',sans-serif}
-    .phone{width:380px;max-width:95vw;background:#fff;border-radius:20px;box-shadow:0 6px 18px rgba(0,0,0,.15);display:flex;flex-direction:column;overflow:hidden}
-    header{display:flex;align-items:center;padding:14px 16px;background:var(--cream)}
-    header img{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold)}
-    header span{margin-left:10px;font-weight:600}
-    header a{margin-left:auto;color:var(--accent);font-size:.85rem;text-decoration:underline}
-    .screen{display:none;flex:1;overflow:auto;padding:18px 18px 8px}
-    .show{display:block}
-    #cardGrid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
-    #cardGrid img{width:95px;height:135px;border-radius:12px;cursor:pointer;transition:transform .2s;border:1px solid #eee}
-    #cardGrid img:hover{transform:scale(1.06)}
-    .cardLarge{width:100%;border-radius:14px;object-fit:contain;margin-bottom:12px}
-    .messageBox,.questionBox{background:#fafafa;border-radius:12px;padding:18px}
-    .messageBox p{margin:0;font-size:1.02rem;line-height:1.45}
-    textarea{width:100%;min-height:90px;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:6px;font-family:inherit}
-    .btnRow{display:flex;gap:10px;margin-top:10px}
-    .btnRow button{flex:1;padding:10px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-weight:600;cursor:pointer}
-    .btnRow button:hover{opacity:.9}
-    ol.timeline{margin:0 0 8px 18px;font-size:.85rem;counter-reset:step}
-    ol.timeline li{margin:5px 0;position:relative}
-    ol.timeline li::before{content:"";position:absolute;left:-14px;top:6px;width:8px;height:8px;border-radius:50%;background:#bbb}
-    ol.timeline li.active::before{background:var(--accent)}
-    .timerBar{text-align:center;width:140px;margin:12px auto;padding:6px 0;background:var(--accent);color:#fff;border-radius:20px;font-weight:600}
-    .thankYou{text-align:center;padding:30px 18px}
-    .thankYou h2{margin:0;font-family:cursive;font-size:2.2rem;color:var(--accent)}
-    .thankYou p span{background:#ffcdd2;padding:2px 6px;border-radius:4px}
-    .homeBtn{margin-top:18px;padding:10px 22px;border:none;border-radius:20px;background:var(--gold);color:var(--dark);font-weight:600;cursor:pointer}
+    :root {
+      --cream: #fffce8;
+      --dark: #3e2723;
+      --accent: #e53935;
+      --gold: #ffb800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 0;
+      display: flex;
+      justify-content: center;
+      background: var(--cream);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .phone {
+      width: 380px;
+      max-width: 95vw;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      align-items: center;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--cream);
+      width: 100%;
+    }
+    header img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+    }
+    header span {
+      margin-left: 10px;
+      font-weight: 600;
+    }
+    .screen {
+      display: none;
+      flex: 1;
+      overflow: auto;
+      padding: 18px;
+      width: 100%;
+    }
+    .show { display: block; }
+    #cardGrid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .card {
+      width: 100px;
+      height: 140px;
+      perspective: 1000px;
+    }
+    .cardInner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .card.flipped .cardInner {
+      transform: rotateY(180deg);
+    }
+    .cardFront, .cardBack {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      object-fit: contain;
+    }
+    .cardBack {
+      background: #fff;
+    }
+    .cardFront {
+      transform: rotateY(180deg);
+      background: #fff;
+    }
+    .messageBox, .questionBox {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 6px;
+      font-family: inherit;
+    }
+    .btnRow {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .btnRow button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btnRow button:hover { opacity: 0.9; }
+    .thankYou {
+      text-align: center;
+      padding: 30px 18px;
+    }
+    .thankYou h2 {
+      margin: 0;
+      font-family: cursive;
+      font-size: 2.2rem;
+      color: var(--accent);
+    }
+    .thankYou p span {
+      background: #ffcdd2;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .homeBtn {
+      margin-top: 18px;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 20px;
+      background: var(--gold);
+      color: var(--dark);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    ol.timeline {
+      margin: 12px 0 8px 18px;
+      font-size: 0.85rem;
+      counter-reset: step;
+      padding-left: 1rem;
+    }
+    ol.timeline li {
+      margin: 5px 0;
+      position: relative;
+    }
+    ol.timeline li::before {
+      content: "";
+      position: absolute;
+      left: -14px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #bbb;
+    }
+    ol.timeline li.active::before {
+      background: var(--accent);
+    }
   </style>
+
 </head>
 <body>
-<div class="phone">
-  <header>
-    <img src="avatar1.jpg" alt="Avatar">
-    <span>Hello, Guest!</span>
-    <a href="#">See my Persona card</a>
-  </header>
+  <div class="phone">
+    <header>
+      <img src="avatar1.jpg" alt="Avatar">
+      <span>Hello!</span>
+    </header>
 
-  <!-- 1 ▸ Deck -->
-  <div id="scrDeck" class="screen show">
-    <h4 style="margin:4px 0 10px;color:var(--dark);font-size:1rem">Choose 1 card from the deck</h4>
-    <div id="cardGrid">Loading…</div>
-  </div>
+    <div id="scrDeck" class="screen show">
+      <h4>Choose 1 card from the deck</h4>
+      <div id="cardGrid">Loading…</div>
+    </div>
 
-  <!-- 2 ▸ Front -->
-  <div id="scrFront" class="screen">
-    <img id="frontImg" class="cardLarge">
-    <div class="btnRow"><button onclick="goto('scrMsg')">Next</button></div>
-  </div>
+    <div id="scrMsg" class="screen">
+      <img id="msgFront" class="cardLarge" />
+      <div class="messageBox" id="msgBox"></div>
+      <div class="btnRow"><button onclick="goto('scrQ1')">Next</button></div>
+    </div>
 
-  <!-- 3 ▸ Message -->
-  <div id="scrMsg" class="screen">
-    <img id="msgFront" class="cardLarge">
-    <div class="messageBox" id="msgBox"></div>
-    <div class="btnRow"><button onclick="goto('scrQ1')">Next</button></div>
-  </div>
+    <div id="scrQ1" class="screen">
+      <div class="questionBox">
+        <h4>Question 1/2</h4>
+        <p>What do you think is my strength?</p>
+        <textarea id="ans1"></textarea>
+        <div class="btnRow"><button onclick="goto('scrQ2')">Next</button></div>
+      </div>
+    </div>
 
-  <!-- 4 ▸ Q1 -->
-  <div id="scrQ1" class="screen">
-    <div class="questionBox">
-      <h4>Question 1/2</h4>
-      <p>What do you think is my strength?</p>
-      <textarea id="ans1"></textarea>
-      <div class="btnRow"><button onclick="goto('scrQ2')">Next</button></div>
+    <div id="scrQ2" class="screen">
+      <div class="questionBox">
+        <h4>Question 2/2</h4>
+        <p>How could I help you with my strength?</p>
+        <textarea id="ans2"></textarea>
+        <div class="btnRow"><button onclick="saveFeedback()">Send</button></div>
+      </div>
+    </div>
+
+    <div id="scrThanks" class="screen">
+      <div class="thankYou">
+        <h2>thank you</h2>
+        <p>Your perspective means a lot to me<br>in the journey of <span>Discovering Myself</span>.</p>
+        <button class="homeBtn" onclick="location.href='index.html'">Back to Home</button>
+      </div>
     </div>
   </div>
 
-  <!-- 5 ▸ Q2 -->
-  <div id="scrQ2" class="screen">
-    <div class="questionBox">
-      <h4>Question 2/2</h4>
-      <p>How could I help you with my strength?</p>
-      <textarea id="ans2"></textarea>
-      <div class="btnRow"><button onclick="saveFeedback()">Send</button></div>
-    </div>
-  </div>
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import { ref, get, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
-  <!-- 6 ▸ Thank you -->
-  <div id="scrThanks" class="screen">
-    <div class="thankYou">
-      <h2>thank you</h2>
-      <p>Your perspective means a lot to me<br>in the journey of <span>Discovering Myself</span>.</p>
-      <p>The system is analyzing your responses and preparing a Persona Card for you.</p>
-      <button class="homeBtn" onclick="location.href='index.html'">Back to Home</button>
-    </div>
-  </div>
+    const params = new URLSearchParams(location.search);
+    const uid = params.get('uid');
+    if (!uid) {
+      alert("UID missing");
+      throw new Error("UID not found");
+    }
 
-  <!-- timeline + timer -->
-  <div style="padding:14px 18px">
-    <ol class="timeline" id="tl">
-      <li class="active">Choose card</li>
-      <li>Read the card</li>
-      <li>Read the message</li>
-      <li>Answer questions</li>
-      <li>Send your perspectives</li>
-    </ol>
-    <div id="timerBar" class="timerBar">24:00</div>
-  </div>
-</div>
+    const grid = document.getElementById('cardGrid');
+    const msgBox = document.getElementById('msgBox');
+    const msgImg = document.getElementById('msgFront');
+    const ans1 = document.getElementById('ans1');
+    const ans2 = document.getElementById('ans2');
 
-<script type="module">
-  import { db } from './firebase-config.js';
-  import { ref, get, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+    function goto(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
+      document.getElementById(id).classList.add('show');
+    }
+    window.goto = goto;
 
-  const params = new URLSearchParams(location.search);
-  const uid = params.get('uid');
-  if (!uid) {
-    alert('UID missing');
-    throw new Error('UID required');
-  }
+    async function loadDeck(folder) {
+      grid.innerHTML = '';
+      let index = 1;
+      while (true) {
+        const backPath = `${folder}/card${index}back.png`;
+        const frontPath = `${folder}/card${index}front.png`;
+        try {
+          const res = await fetch(backPath, { method: 'HEAD' });
+          if (!res.ok) break;
 
-  const grid = document.getElementById('cardGrid');
-  const msgBox = document.getElementById('msgBox');
-  const tl = document.getElementById('tl').children;
+          const card = document.createElement('div');
+          card.className = 'card';
 
-  function setStep(i) {
-    [...tl].forEach((li, j) => li.classList.toggle('active', j <= i));
-  }
-  function goto(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
-    document.getElementById(id).classList.add('show');
-    const order = { scrFront: 1, scrMsg: 2, scrQ1: 3, scrQ2: 3, scrThanks: 4 };
-    if (order[id] != null) setStep(order[id]);
-  }
-  window.goto = goto;
+          const cardInner = document.createElement('div');
+          cardInner.className = 'cardInner';
 
-  // Timer
-  let sec = 24 * 60;
-  setInterval(() => {
-    if (--sec < 0) return;
-    const m = String(sec / 60 | 0).padStart(2, '0');
-    const s = String(sec % 60).padStart(2, '0');
-    document.getElementById('timerBar').textContent = `${m}:${s}`;
-  }, 1000);
+          const cardBack = document.createElement('img');
+          cardBack.className = 'cardBack';
+          cardBack.src = backPath;
 
-  // Load folder
-  const snap = await get(ref(db, `users/${uid}`));
-  if (!snap.exists()) {
-    grid.textContent = 'User not found';
-    throw new Error('User not found');
-  }
-  const folder = (snap.val().displayName || '').trim();
-  if (!folder) throw new Error('Missing display name');
-  loadDeck(folder);
+          const cardFront = document.createElement('img');
+          cardFront.className = 'cardFront';
+          cardFront.src = frontPath;
 
-  function loadDeck(folder) {
-    grid.innerHTML = '';
-    let idx = 1;
-    const probe = () => {
-      const back = `${folder}/card${idx}back.png`;
-      const test = new Image();
-      test.src = back;
-      test.onload = () => {
-        const img = document.createElement('img');
-        img.src = back;
-        img.alt = `Card ${idx}`;
-        img.onclick = () => showFront(folder, idx);
-        grid.appendChild(img);
-        idx++; probe();
-      };
-      test.onerror = () => {
-        if (idx === 1) grid.textContent = 'No cards found.';
-      };
-    };
-    probe();
-  }
+          cardInner.appendChild(cardBack);
+          cardInner.appendChild(cardFront);
+          card.appendChild(cardInner);
 
-  function showFront(folder, i) {
-    const front = `${folder}/card${i}front.png`;
-    const back = `${folder}/card${i}back.png`;
-    const fImg = document.getElementById('frontImg');
-    const mImg = document.getElementById('msgFront');
-    fImg.src = front; mImg.src = front;
-    fImg.onerror = mImg.onerror = () => {
-      fImg.src = back;
-      mImg.src = back;
-    };
-    fetch(`${folder}/message${i}.txt`)
-      .then(r => r.ok ? r.text() : Promise.reject())
-      .then(t => msgBox.innerHTML = `<p>${t}</p>`)
-      .catch(() => msgBox.innerHTML = '<p>A resilient soul who reframes obstacles…</p>');
-    goto('scrFront');
-  }
+          card.onclick = async () => {
+            card.classList.add('flipped');
+            try {
+              const res = await fetch(`${folder}/message${index}.txt`);
+              const msg = await res.text();
+              msgBox.innerHTML = `<p>${msg}</p>`;
+              msgImg.src = frontPath;
+            } catch {
+              msgBox.innerHTML = '<p>A resilient soul who reframes obstacles…</p>';
+              msgImg.src = frontPath;
+            }
+            setTimeout(() => goto('scrMsg'), 1000);
+          };
 
-  function saveFeedback() {
-    push(ref(db, `users/${uid}/personaFeedback`), {
-      ans1: document.getElementById('ans1').value.trim(),
-      ans2: document.getElementById('ans2').value.trim(),
-      createdAt: Date.now()
-    }).finally(() => goto('scrThanks'));
-  }
-  window.saveFeedback = saveFeedback;
-</script>
+          grid.appendChild(card);
+        } catch {
+          break;
+        }
+        index++;
+      }
+      if (index === 1) grid.textContent = 'No cards found.';
+    }
+
+    function saveFeedback() {
+      push(ref(db, `users/${uid}/personaFeedback`), {
+        ans1: ans1.value.trim(),
+        ans2: ans2.value.trim(),
+        createdAt: Date.now()
+      }).finally(() => goto('scrThanks'));
+    }
+    window.saveFeedback = saveFeedback;
+
+    const snap = await get(ref(db, `users/${uid}`));
+    if (!snap.exists()) {
+      grid.textContent = 'User not found';
+      throw new Error('User missing in DB');
+    }
+    const folder = (snap.val().displayName || '').trim();
+    if (!folder) throw new Error("Missing folder mapping");
+    loadDeck(folder);
+  </script>
 </body>
 </html>
