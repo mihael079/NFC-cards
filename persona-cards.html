@@ -14,7 +14,7 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 32px 0;
+      padding: 32px 0 80px; /* Add space for progress steps */
       display: flex;
       justify-content: center;
       background: var(--cream);
@@ -61,14 +61,14 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      overflow: hidden;  /* Prevent scrolling */
+      overflow: hidden;
       padding: 10px;
     }
     .card {
       width: 100px;
       height: 140px;
       perspective: 1000px;
-      cursor: pointer;  /* Add a pointer cursor for interaction */
+      cursor: pointer;
       transform-style: preserve-3d;
       transition: transform 0.6s;
       transform-origin: center;
@@ -94,11 +94,11 @@
     }
     .cardBack {
       background: #fff;
-      transform: rotateY(180deg); /* Ensure the back is rotated by 180 degrees */
+      transform: rotateY(180deg);
     }
     .cardFront {
       background: #fff;
-      transform: rotateY(0deg); /* Front remains at default */
+      transform: rotateY(0deg);
     }
     .messageBox, .questionBox {
       background: #fafafa;
@@ -158,9 +158,50 @@
     .cardLarge{
       width: 100%;
     }
-  </style>
 
+    /* Progress Bar */
+    .progressSteps {
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .stepsList {
+      display: flex;
+      justify-content: space-between;
+      list-style: none;
+      margin: 0;
+      padding: 0 12px;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+    .step {
+      position: relative;
+      padding-bottom: 4px;
+      text-align: center;
+      flex: 1;
+    }
+    .step.active {
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .step::before {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #aaa;
+      border-radius: 50%;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .step.active::before {
+      background: var(--accent);
+    }
+  </style>
 </head>
+
 <body>
   <div class="phone">
     <header>
@@ -175,7 +216,6 @@
 
     <div id="scrMsg" class="screen">
       <img id="msgFront" class="cardLarge" />
-      <div class="messageBox" id="msgBox"></div>
       <div class="btnRow"><button onclick="goto('scrQ1')">Next</button></div>
     </div>
 
@@ -204,105 +244,105 @@
         <button class="homeBtn" onclick="location.href='index.html'">Back to Home</button>
       </div>
     </div>
+
+    <div class="progressSteps">
+      <ol class="stepsList">
+        <li class="step active">Choose 1 card</li>
+        <li class="step">Read the card</li>
+        <li class="step">Tell me what you think</li>
+        <li class="step">Send your answers</li>
+        <li class="step">Sign up (optional)</li>
+      </ol>
+    </div>
   </div>
 
- <script type="module">
-  import { db } from './firebase-config.js';
-  import { ref, get, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import { ref, get, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
-  const params = new URLSearchParams(location.search);
-  const uid = params.get('uid');
-  if (!uid) {
-    alert("UID missing");
-    throw new Error("UID not found");
-  }
-
-  const grid = document.getElementById('cardGrid');
-  const msgBox = document.getElementById('msgBox');
-  const msgImg = document.getElementById('msgFront');
-  const ans1 = document.getElementById('ans1');
-  const ans2 = document.getElementById('ans2');
-
-  function goto(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
-    document.getElementById(id).classList.add('show');
-  }
-  window.goto = goto;
-
-  async function loadDeck(folder) {
-    grid.innerHTML = '';
-    let index = 1;
-    while (true) {
-      const backPath = `${folder}/card${index}back.png`;
-      const frontPath = `${folder}/card${index}front.png`;
-      try {
-        const res = await fetch(backPath, { method: 'HEAD' });
-        if (!res.ok) break;
-
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        const cardInner = document.createElement('div');
-        cardInner.className = 'cardInner';
-
-        const cardFront = document.createElement('img');
-        cardFront.className = 'cardFront';
-        cardFront.src = frontPath;
-
-        const cardBack = document.createElement('img');
-        cardBack.className = 'cardBack';
-        cardBack.src = backPath;
-
-        cardInner.appendChild(cardFront);
-        cardInner.appendChild(cardBack);
-        card.appendChild(cardInner);
-
-        card.onclick = async () => {
-          // Flip the card
-          card.classList.add('flipped');
-
-          // Load message
-          try {
-            const res = await fetch(`${folder}/message${index}.txt`);
-            const msg = await res.text();
-            msgBox.innerHTML = `<p>${msg}</p>`;
-            msgImg.src = frontPath;
-          } catch {
-            msgBox.innerHTML = '<p>A resilient soul who reframes obstacles…</p>';
-            msgImg.src = frontPath;
-          }
-
-          // Navigate after delay
-          setTimeout(() => goto('scrMsg'), 800);
-        };
-
-        grid.appendChild(card);
-      } catch {
-        break;
-      }
-      index++;
+    const params = new URLSearchParams(location.search);
+    const uid = params.get('uid');
+    if (!uid) {
+      alert("UID missing");
+      throw new Error("UID not found");
     }
-    if (index === 1) grid.textContent = 'No cards found.';
-  }
 
-  function saveFeedback() {
-    push(ref(db, `users/${uid}/personaFeedback`), {
-      ans1: ans1.value.trim(),
-      ans2: ans2.value.trim(),
-      createdAt: Date.now()
-    }).finally(() => goto('scrThanks'));
-  }
-  window.saveFeedback = saveFeedback;
+    const grid = document.getElementById('cardGrid');
+    const msgImg = document.getElementById('msgFront');
+    const ans1 = document.getElementById('ans1');
+    const ans2 = document.getElementById('ans2');
 
-  const snap = await get(ref(db, `users/${uid}`));
-  if (!snap.exists()) {
-    grid.textContent = 'User not found';
-    throw new Error('User missing in DB');
-  }
-  const folder = (snap.val().displayName || '').trim();
-  if (!folder) throw new Error("Missing folder mapping");
-  loadDeck(folder);
-</script>
+    function goto(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
+      document.getElementById(id).classList.add('show');
 
+      const steps = ['scrDeck', 'scrMsg', 'scrQ1', 'scrQ2', 'scrThanks'];
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.classList.toggle('active', idx === steps.indexOf(id));
+      });
+    }
+    window.goto = goto;
+
+    async function loadDeck(folder) {
+      grid.innerHTML = '';
+      let index = 1;
+      while (true) {
+        const backPath = `${folder}/card${index}back.png`;
+        const frontPath = `${folder}/card${index}front.png`;
+        try {
+          const res = await fetch(backPath, { method: 'HEAD' });
+          if (!res.ok) break;
+
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          const cardInner = document.createElement('div');
+          cardInner.className = 'cardInner';
+
+          const cardFront = document.createElement('img');
+          cardFront.className = 'cardFront';
+          cardFront.src = frontPath;
+
+          const cardBack = document.createElement('img');
+          cardBack.className = 'cardBack';
+          cardBack.src = backPath;
+
+          cardInner.appendChild(cardFront);
+          cardInner.appendChild(cardBack);
+          card.appendChild(cardInner);
+
+          card.onclick = () => {
+            card.classList.add('flipped');
+            msgImg.src = frontPath;
+            setTimeout(() => goto('scrMsg'), 800);
+          };
+
+          grid.appendChild(card);
+        } catch {
+          break;
+        }
+        index++;
+      }
+      if (index === 1) grid.textContent = 'No cards found.';
+    }
+
+    function saveFeedback() {
+      push(ref(db, `users/${uid}/personaFeedback`), {
+        ans1: ans1.value.trim(),
+        ans2: ans2.value.trim(),
+        createdAt: Date.now()
+      }).finally(() => goto('scrThanks'));
+    }
+    window.saveFeedback = saveFeedback;
+
+    const snap = await get(ref(db, `users/${uid}`));
+    if (!snap.exists()) {
+      grid.textContent = 'User not found';
+      throw new Error('User missing in DB');
+    }
+    const folder = (snap.val().displayName || '').trim();
+    if (!folder) throw new Error("Missing folder mapping");
+    loadDeck(folder);
+  </script>
 </body>
 </html>
