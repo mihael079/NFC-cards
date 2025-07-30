@@ -102,19 +102,42 @@
       z-index: 1;
     }
 
-    /* Enlarged Card */
     .cardLarge {
-      width: 100%;
-      max-width: 300px;
-      height: auto;
-      aspect-ratio: 100 / 140;
-      margin: 0 auto;
-      perspective: 1000px;
-      cursor: pointer;
-    }
-    .cardLarge .cardInner {
-      height: 100%;
-    }
+  width: 90%;
+  max-width: 320px;
+  height: auto;
+  aspect-ratio: 100 / 140;
+  perspective: 1000px;
+  cursor: pointer;
+  margin: 0 auto 12px;
+  position: relative;
+}
+.cardLarge .cardInner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+.cardLarge .cardFront,
+.cardLarge .cardBack {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #eee;
+  object-fit: cover;
+}
+.cardLarge .cardBack {
+  transform: rotateY(180deg);
+}
+.cardLarge.flipped .cardInner {
+  transform: rotateY(180deg);
+}
+
 
     .messageBox, .questionBox {
       background: #fafafa;
@@ -287,7 +310,6 @@
     const grid = document.getElementById('cardGrid');
     const ans1 = document.getElementById('ans1');
     const ans2 = document.getElementById('ans2');
-
     const enlargedFront = document.getElementById('enlargedFront');
     const enlargedBack = document.getElementById('enlargedBack');
     const enlargedCard = document.getElementById('enlargedCard');
@@ -357,7 +379,12 @@
         ans1: ans1.value.trim(),
         ans2: ans2.value.trim(),
         createdAt: Date.now()
-      }).finally(() => goto('scrThanks'));
+      })
+      .then(() => goto('scrThanks'))
+      .catch((error) => {
+        console.error("Submission failed:", error);
+        alert("Error: " + error.message);
+      });
     }
     window.saveFeedback = saveFeedback;
 
