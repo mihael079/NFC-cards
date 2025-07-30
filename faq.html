@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tap Tap – FAQ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --cream: #fffce8;
+      --brown: #4e342e;
+      --gold: #ffb800;
+      --hover-gold: #ffc107;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cream);
+      margin: 0;
+      padding: 40px 20px;
+      color: var(--brown);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--brown);
+      margin-bottom: 30px;
+    }
+
+    .faq-section {
+      max-width: 900px;
+      margin: 0 auto 40px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .section-title {
+      background: var(--gold);
+      padding: 16px 24px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .faq-item {
+      border-top: 1px solid #eee;
+    }
+
+    .faq-question {
+      padding: 16px 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .faq-question:hover {
+      background: #fff8dc;
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 24px 16px;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-item.open .faq-question::after {
+      content: "▲";
+      float: right;
+    }
+
+    .faq-question::after {
+      content: "▼";
+      float: right;
+      transition: transform 0.3s;
+    }
+
+    a {
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .section-title {
+        font-size: 1rem;
+      }
+      .faq-question {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1><i class="fas fa-question-circle"></i> Tap Tap – Frequently Asked Questions</h1>
+
+<!-- General Info -->
+<div class="faq-section">
+  <div class="section-title"><i class="fas fa-info-circle"></i> General Information</div>
+
+  <div class="faq-item">
+    <div class="faq-question">What is Tap Tap?</div>
+    <div class="faq-answer">
+      Tap Tap is an innovative app designed to revolutionize face-to-face social interactions...
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How does it work?</div>
+    <div class="faq-answer">
+      Each Card Holder (Host) has their unique NFC card linked to their public profile. When tapped...
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Why did we create Tap Tap?</div>
+    <div class="faq-answer">
+      Tap Tap was created to inspire meaningful, reflective connections that foster self-exploration...
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Who are we?</div>
+    <div class="faq-answer">
+      We, at Fundamental Decisions (TeamFD), are a consulting agency headquartered in Singapore...
+      <br/><br/>
+      <a href="https://www.fundamentaldecisions.com/about-us/" target="_blank">Read more about us here.</a>
+    </div>
+  </div>
+</div>
+
+<!-- Interaction Types -->
+<div class="faq-section">
+  <div class="section-title"><i class="fas fa-bolt"></i> What You Can Do with Tap Tap</div>
+
+  <div class="faq-item">
+    <div class="faq-question">What happens if Guest chose "Answer Me"?</div>
+    <div class="faq-answer">
+      The Guest answers the Host’s questions and evaluates them. The system analyzes both parties.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What happens if Guest chose "Challenge Me"?</div>
+    <div class="faq-answer">
+      The Guest sets a challenge and critiques the Host’s performance. Mutual learning follows.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">What happens if Guest chose "See My Persona Card"?</div>
+    <div class="faq-answer">
+      The Guest views the Host’s Persona Card and shares impressions. System feedback is generated.
+    </div>
+  </div>
+</div>
+
+<!-- Additional Info -->
+<div class="faq-section">
+  <div class="section-title"><i class="fas fa-plus-circle"></i> More Info</div>
+
+  <div class="faq-item">
+    <div class="faq-question">How to get a Card for myself?</div>
+    <div class="faq-answer">
+      Currently, Cards are available only to TeamFD and contracted partners.<br/><br/>
+      Institutions may contact us at <a href="mailto:mail@fundamentaldecisions.com">mail@fundamentaldecisions.com</a>.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">Do we have to meet in person to use Tap Tap?</div>
+    <div class="faq-answer">
+      It’s best in person, but you can also use a QR code from the app to engage remotely.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-question">How can Guest save their progress and receive analysis?</div>
+    <div class="faq-answer">
+      Guests must log in to the app before tapping. This ensures data is saved and analysis provided.
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>
