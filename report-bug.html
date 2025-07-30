@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Bug</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff8e1;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #5d4037;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      border: 2px solid #ffcc80;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 15px;
+      color: #4e342e;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background-color: #6d4c41;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #5d4037;
+    }
+
+    .message {
+      margin-top: 10px;
+      color: #388e3c;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐞 Report a Bug</h1>
+  <div class="form-container">
+    <label for="title">Bug Title:</label>
+    <input type="text" id="title" placeholder="Brief bug title" required />
+
+    <label for="description">Description:</label>
+    <textarea id="description" placeholder="Describe what happened..." required></textarea>
+
+    <button id="submitBtn">Submit Bug Report</button>
+    <div id="status" class="message"></div>
+  </div>
+
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import { ref, push } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const statusDiv = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    submitBtn.addEventListener('click', async () => {
+      const title = titleInput.value.trim();
+      const description = descInput.value.trim();
+
+      if (!title || !description) {
+        statusDiv.textContent = 'Please fill in all fields.';
+        return;
+      }
+
+      try {
+        await push(ref(db, 'bugReports'), {
+          title,
+          description,
+          createdAt: Date.now()
+        });
+        statusDiv.textContent = '✅ Bug report submitted successfully!';
+        titleInput.value = '';
+        descInput.value = '';
+      } catch (error) {
+        console.error('Error submitting bug report:', error);
+        statusDiv.textContent = '❌ Submission failed. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>
