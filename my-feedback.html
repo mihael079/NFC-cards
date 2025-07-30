@@ -7,53 +7,118 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body{
-      font-family:'Segoe UI',sans-serif;
-      background:#fff8e1;
-      margin:0;
-      padding:40px 20px;
-      text-align:center;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8e1;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
     }
 
-    h1{
-      color:#5d4037;font-size:2.3rem;margin-bottom:25px;
+    h1 {
+      color: #5d4037;
+      font-size: 2.3rem;
+      margin-bottom: 25px;
     }
 
-    #list{
-      display:flex;flex-direction:column;gap:20px;align-items:center;
+    #list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
     }
 
-    .fb-card{
-      background:#fff;
-      border-left:6px solid #ffb800;
-      border-radius:8px;
-      box-shadow:0 4px 10px rgba(0,0,0,.12);
-      padding:20px;
-      width:420px;max-width:90vw;
-      text-align:left;
+    .fb-card {
+      background: #fff;
+      border-left: 6px solid #ffb800;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.12);
+      padding: 20px;
+      width: 420px;
+      max-width: 90vw;
+      text-align: left;
     }
 
-    .fb-card h3{margin:0 0 8px;color:#4e342e}
-    .fb-card small{color:#777}
-    .fb-card p{margin:5px 0}
+    .fb-card h3 { margin: 0 0 8px; color: #4e342e; }
+    .fb-card small { color: #777; }
+    .fb-card p { margin: 5px 0; }
 
-    .nav{
-      display:inline-block;margin-top:35px;
-      background:#ffb800;
-      color:#4e342e;padding:10px 22px;
-      border-radius:8px;font-weight:bold;
-      text-decoration:none;
+    .nav {
+      display: inline-block;
+      margin-top: 35px;
+      background: #ffb800;
+      color: #4e342e;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
     }
-    .nav:hover{background:#f57f17;color:#fff}
+
+    .nav:hover {
+      background: #f57f17;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <h1>My Persona Feedback</h1>
-
   <div id="list"><p>Loading…</p></div>
-
   <a class="nav" href="index.html"><i class="fa-solid fa-arrow-left"></i> Home</a>
 
-  <script type="module" src="my-feedback.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const list = document.getElementById("list");
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        list.innerHTML = "<p>You must be logged in to view feedback.</p>";
+        return;
+      }
+
+      try {
+        const snap = await get(ref(db, `personaFeedback/${user.uid}`));
+        if (!snap.exists()) {
+          list.innerHTML = "<p>No feedback yet.</p>";
+          return;
+        }
+
+        list.innerHTML = "";
+        const entries = Object.values(snap.val()).reverse();
+
+        entries.forEach(fb => {
+          const card = document.createElement("div");
+          card.className = "fb-card";
+          card.innerHTML = `
+            <h3>Card #${fb.card ?? "?"}</h3>
+            <small>${new Date(fb.submittedAt).toLocaleString()}</small>
+            <p><strong>Impression:</strong><br>${fb.impression}</p>
+            <p><strong>Intensity:</strong> ${fb.intensity}</p>
+            <p><strong>Performance:</strong><br>${fb.performance}</p>
+          `;
+          list.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = "<p>Error loading feedback.</p>";
+      }
+    });
+  </script>
 </body>
 </html>
