@@ -2,84 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Challenge Me</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Challenge</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #fff8e1;
+      background: #fefae0;
       margin: 0;
       padding: 30px 15px;
       color: #4e342e;
     }
-
     h1 {
       text-align: center;
-      margin-bottom: 20px;
       color: #5d4037;
-    }
-
-    .container {
-      max-width: 750px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .progress-bar {
-      height: 10px;
-      background: #eee;
-      border-radius: 5px;
       margin-bottom: 20px;
-      overflow: hidden;
     }
-
-    .progress {
-  height: 100%;
-  width: 0%;
-  background: #00bcd4; /* Cyan */
-  transition: width 0.3s ease;
-}
-
-
-    .step {
-      display: none;
-      animation: fadeIn 0.4s;
-    }
-
-    .step.active {
-      display: block;
-    }
-
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-top: 5px;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .challenge-grid {
+    .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 15px;
-      margin: 15px 0;
+      max-width: 750px;
+      margin: 0 auto 30px;
     }
-
     .challenge-card {
       position: relative;
       width: 100%;
@@ -87,7 +32,6 @@
       perspective: 1000px;
       cursor: pointer;
     }
-
     .card-inner {
       position: absolute;
       width: 100%;
@@ -95,11 +39,9 @@
       transition: transform 0.8s;
       transform-style: preserve-3d;
     }
-
     .challenge-card.flipped .card-inner {
       transform: rotateY(180deg);
     }
-
     .card-face {
       position: absolute;
       width: 100%;
@@ -108,201 +50,210 @@
       border-radius: 8px;
       overflow: hidden;
     }
-
     .card-face img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
     .card-face.back {
       transform: rotateY(180deg);
     }
-
-    .selected {
-      outline: 4px solid #ffb800;
+    .step {
+      display: none;
+      max-width: 750px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
+    .step.active {
+      display: block;
     }
-
-    .buttons button {
-      background: #ffb800;
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 20px 0 5px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .submit-btn, .next-btn {
+      background-color: #ffb800;
       color: #4e342e;
       border: none;
       padding: 12px 24px;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
       border-radius: 6px;
+      margin-top: 20px;
       cursor: pointer;
     }
-
-    .buttons button:hover {
-      background: #f57f17;
+    .submit-btn:hover, .next-btn:hover {
+      background-color: #f57f17;
       color: #fff;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #e0e0e0;
+      border-radius: 5px;
+      margin: 20px auto;
+      max-width: 750px;
+      overflow: hidden;
+    }
+    .progress {
+      height: 100%;
+      background-color: #00bcd4; /* Cyan */
+      transition: width 0.3s ease-in-out;
     }
   </style>
 </head>
 <body>
+  <h1>Challenge Me</h1>
+  <div class="progress-bar"><div class="progress" id="progressBar" style="width: 0%;"></div></div>
 
-  <h1><i class="fa-solid fa-bolt"></i> Challenge Me</h1>
-
-  <div class="container">
-    <div class="progress-bar"><div class="progress" id="progressBar"></div></div>
-    <form id="challengeForm">
-
-      <div class="step active">
-        <label>Your Full Name *</label>
-        <input type="text" id="fullName" required />
-      </div>
-
-      <div class="step">
-        <label>Journeast Booking Code *</label>
-        <input type="text" id="bookingCode" required />
-      </div>
-
-      <div class="step">
-        <label>Email Address *</label>
-        <input type="email" id="email" required />
-      </div>
-
-      <div class="step">
-        <label>Select Your Challenge *</label>
-        <div class="challenge-grid" id="challengeGrid"></div>
-      </div>
-
-      <div class="step">
-        <label>Date You Took the Challenge *</label>
-        <input type="date" id="dateTaken" required />
-      </div>
-
-      <div class="step">
-        <label>What did you do? How do you feel?</label>
-        <textarea id="action" required></textarea>
-      </div>
-
-      <div class="step">
-        <label>Share your journey</label>
-        <textarea id="journey" required></textarea>
-      </div>
-
-      <div class="step">
-        <label>What would you do differently?</label>
-        <textarea id="different" required></textarea>
-      </div>
-
-      <div class="step">
-        <label>Any questions?</label>
-        <textarea id="questions" required></textarea>
-      </div>
-
-      <div class="step">
-        <label>Rate the challenge (1–10)</label>
-        <input type="range" id="rating" min="1" max="10" value="5"/>
-      </div>
-
-      <div class="buttons">
-        <button type="button" id="prevBtn">Previous</button>
-        <button type="button" id="nextBtn">Next</button>
-      </div>
-
-    </form>
+  <div class="step active" id="step0">
+    <h3 style="text-align:center;">Step 1: Select Your Challenge</h3>
+    <div class="card-grid" id="challengeGrid"></div>
+    <button class="next-btn" id="next0">Next</button>
   </div>
+
+  <form id="challengeForm">
+    <div class="step" id="step1">
+      <label for="fullName">2. Your Full Name *</label>
+      <input type="text" id="fullName" required />
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step2">
+      <label for="bookingCode">3. Booking Code *</label>
+      <input type="text" id="bookingCode" required />
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step3">
+      <label for="email">4. Your Email *</label>
+      <input type="email" id="email" required />
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step4">
+      <label for="dateTaken">5. Date of Challenge Taken *</label>
+      <input type="date" id="dateTaken" required />
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step5">
+      <label for="action">6. What did you do? How do you feel? *</label>
+      <textarea id="action" required></textarea>
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step6">
+      <label for="journey">7. Share your journey *</label>
+      <textarea id="journey" required></textarea>
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step7">
+      <label for="different">8. What would you do differently? *</label>
+      <textarea id="different" required></textarea>
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step8">
+      <label for="questions">9. Any questions you have?</label>
+      <textarea id="questions"></textarea>
+      <button class="next-btn" type="button">Next</button>
+    </div>
+    <div class="step" id="step9">
+      <label for="rating">10. How did you like the challenge? (1-10)</label>
+      <input type="range" id="rating" min="1" max="10" value="5" />
+      <button class="submit-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
+    </div>
+  </form>
 
   <script type="module">
     import { db } from "./firebase-config.js";
-    import { push, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const form = document.getElementById("challengeForm");
     const steps = document.querySelectorAll(".step");
-    const progressBar = document.getElementById("progressBar");
-    const nextBtn = document.getElementById("nextBtn");
-    const prevBtn = document.getElementById("prevBtn");
+    const nextButtons = document.querySelectorAll(".next-btn");
+    const progress = document.getElementById("progressBar");
     const challengeGrid = document.getElementById("challengeGrid");
+    const challengeForm = document.getElementById("challengeForm");
     let currentStep = 0;
     let selectedChallenge = "";
-
     const totalCards = 10;
+
+    function updateProgress() {
+      const percent = ((currentStep) / (steps.length - 1)) * 100;
+      progress.style.width = `${percent}%`;
+    }
+
+    nextButtons.forEach((btn, idx) => {
+      btn.addEventListener("click", () => {
+        if (idx === 0 && !selectedChallenge) {
+          alert("Please select a challenge first.");
+          return;
+        }
+        steps[currentStep].classList.remove("active");
+        currentStep++;
+        steps[currentStep].classList.add("active");
+        updateProgress();
+      });
+    });
+
     for (let i = 1; i <= totalCards; i++) {
       const card = document.createElement("div");
       card.className = "challenge-card";
       card.dataset.cardId = `#00${i}`;
       card.innerHTML = `
         <div class="card-inner">
-          <div class="card-face front"><img src="challenges/front${i}.png" alt="Front ${i}" /></div>
-          <div class="card-face back"><img src="challenges/back${i}.png" alt="Back ${i}" /></div>
+          <div class="card-face front">
+            <img src="challenges/front${i}.png" />
+          </div>
+          <div class="card-face back">
+            <img src="challenges/back${i}.png" />
+          </div>
         </div>
       `;
       card.addEventListener("click", () => {
-        challengeGrid.querySelectorAll(".challenge-card").forEach(c => {
-          c.classList.remove("selected", "flipped");
-        });
-        card.classList.toggle("flipped");
-        card.classList.add("selected");
+        document.querySelectorAll(".challenge-card").forEach(c => c.classList.remove("selected", "flipped"));
+        card.classList.add("flipped", "selected");
         selectedChallenge = card.dataset.cardId;
       });
       challengeGrid.appendChild(card);
     }
 
-    function showStep(index) {
-      steps.forEach((step, i) => step.classList.toggle("active", i === index));
-      progressBar.style.width = `${(index / (steps.length - 1)) * 100}%`;
-      prevBtn.style.display = index === 0 ? "none" : "inline-block";
-      nextBtn.innerText = index === steps.length - 1 ? "Submit" : "Next";
-    }
-
-    nextBtn.addEventListener("click", async () => {
-      if (currentStep === 3 && !selectedChallenge) {
-        alert("Please select a challenge card.");
-        return;
-      }
-
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        showStep(currentStep);
-      } else {
+    challengeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
         const submission = {
-          fullName: document.getElementById("fullName").value.trim(),
-          bookingCode: document.getElementById("bookingCode").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          challengeId: selectedChallenge,
+          fullName: document.getElementById("fullName").value,
+          bookingCode: document.getElementById("bookingCode").value,
+          email: document.getElementById("email").value,
           dateTaken: document.getElementById("dateTaken").value,
-          action: document.getElementById("action").value.trim(),
-          journey: document.getElementById("journey").value.trim(),
-          different: document.getElementById("different").value.trim(),
-          questions: document.getElementById("questions").value.trim(),
+          action: document.getElementById("action").value,
+          journey: document.getElementById("journey").value,
+          different: document.getElementById("different").value,
+          questions: document.getElementById("questions").value,
           rating: parseInt(document.getElementById("rating").value),
-          submittedAt: new Date().toISOString(),
+          challengeId: selectedChallenge,
+          submittedAt: new Date().toISOString()
         };
-
-        try {
-          const newRef = push(ref(db, "challenges/"));
-          await set(newRef, submission);
-          alert("🎉 Challenge submitted!");
-          location.reload();
-        } catch (err) {
-          console.error(err);
-          alert("❌ Submission failed. Please try again.");
-        }
+        const newRef = push(ref(db, "challenges"));
+        await set(newRef, submission);
+        alert("Challenge submitted successfully!");
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error(err);
+        alert("Submission failed.");
       }
     });
 
-    prevBtn.addEventListener("click", () => {
-      if (currentStep > 0) {
-        currentStep--;
-        showStep(currentStep);
-      }
-    });
-
-    showStep(currentStep);
+    updateProgress();
   </script>
 </body>
 </html>
