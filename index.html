@@ -178,8 +178,9 @@
         <li><a href="answer-question.html"><i class="fa-solid fa-question"></i>Ask A Question</a></li>
         <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i>Submit Talent</a></li>
         <li><a href="my-feedback.html"><i class="fa-solid fa-list"></i>My Feedback</a></li>
-        <li><a href="report-bug.html"><i class="fa-solid fa-bug"></i>Report Bug</a></li>
+        <li><a href="bug-report.html"><i class="fa-solid fa-bug"></i>Report Bug</a></li>
         <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
+        <li><a href="challenges.html"><i class="fa-solid fa-bolt"></i>Daily Challenges</a></li>
       </ul>
     </nav>
 
@@ -196,15 +197,17 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  
+const firebaseConfig = {
+    apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s",
+    authDomain: "nfc-cards-dfa6b.firebaseapp.com",
+    projectId: "nfc-cards-dfa6b",
+    storageBucket: "nfc-cards-dfa6b.appspot.com",
+    messagingSenderId: "321725769305",
+    appId: "1:321725769305:web:42e79fd85cc6029b97f348",
+    databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com/"
+};
+
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -221,5 +224,3 @@
   </script>
 </body>
 </html>
-
-
