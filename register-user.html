@@ -103,12 +103,87 @@
 
     <button id="registerBtn">Register</button>
 
-    <!-- Brown-themed FD Button -->
     <a href="https://forms.gle/NUPRvFFTkyNST3k26" target="_blank" class="fd-button">Register on FD</a>
 
     <div id="status" class="message"></div>
   </div>
 
-  <script type="module" src="register-user.js"></script>
+  <!-- Firebase script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s",
+  authDomain: "nfc-cards-dfa6b.firebaseapp.com",
+  databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com",
+  projectId: "nfc-cards-dfa6b",
+  storageBucket: "nfc-cards-dfa6b.firebasestorage.app",
+  messagingSenderId: "321725769305",
+  appId: "1:321725769305:web:42e79fd85cc6029b97f348"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const registerBtn = document.getElementById("registerBtn");
+    const status = document.getElementById("status");
+
+    registerBtn.addEventListener("click", async () => {
+      let email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value.trim();
+      const sourceCode = document.getElementById("displayName").value.trim();
+
+      status.textContent = "";
+
+      if (!email || !password || !sourceCode) {
+        status.textContent = "Please fill in all fields.";
+        return;
+      }
+
+      try {
+        const snapshot = await get(ref(db, "users"));
+
+        if (snapshot.exists()) {
+          const users = snapshot.val();
+
+          const emailTaken = Object.values(users).some(
+            user => user.email && user.email.toLowerCase() === email
+          );
+
+          const sourceTaken = Object.values(users).some(
+            user => user.sourceCode && user.sourceCode === sourceCode
+          );
+
+          if (emailTaken) {
+            status.textContent = "This email is already registered.";
+            return;
+          }
+
+          if (sourceTaken) {
+            status.textContent = "This SOURCE CODE is already registered.";
+            return;
+          }
+        }
+
+        const userId = Date.now();
+        await set(ref(db, `users/${userId}`), {
+          email,
+          password, // ⚠️ Not secure for production
+          sourceCode
+        });
+
+        // Success message + redirect
+        status.textContent = "Registration successful! Redirecting...";
+        setTimeout(() => {
+          window.location.href = "profile.html";
+        }, 1000);
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        status.textContent = "Error occurred. Try again later.";
+      }
+    });
+  </script>
 </body>
 </html>
