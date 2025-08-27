@@ -6,100 +6,176 @@
   <title>TAP TAP...</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
+    :root{
+      --brown:#5d4037;
+      --gold:#ffb800;
+      --cream:#fff7df;
+      --ink:#3b2f2a;
+      --soft:#f7f4ef;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+      background: radial-gradient(1200px 800px at 50% -100px, #ffd27a 0 30%, #ffe8b5 30% 55%, #f6efe6 55% 100%) fixed;
+      display:flex; align-items:center; justify-content:center;
+      padding:18px; color:var(--ink);
     }
 
-    h1 {
-      text-align: center;
-      color: #5d4037;
+    /* Phone frame */
+    .phone{
+      width:min(420px,100%);
+      background:#fff;
+      border-radius:32px;
+      box-shadow:0 10px 25px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.04);
+      overflow:hidden; border:10px solid #f0f0f0; position:relative;
+    }
+    .notch{position:absolute; inset:10px auto auto 50%; transform:translateX(-50%); width:120px; height:18px; background:#111; border-radius:0 0 14px 14px; z-index:5;}
+
+    /* Top bar & hero */
+    .topbar{display:flex; align-items:center; justify-content:space-between; padding:18px 18px 0; font-size:13px; color:#6b4b3d;}
+    .topbar .hello{font-weight:700; opacity:.9}
+    .topbar a{color:#6b4b3d; text-decoration:none; font-weight:700}
+
+    .hero{
+      position:relative; height:170px; border-radius:22px; margin:10px 16px 0; overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.2) 60%, rgba(255,255,255,.9) 100%),
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+    }
+    .quote{position:absolute; left:16px; right:16px; bottom:12px; color:#6b4b3d; line-height:1.15; text-shadow:0 1px 0 rgba(255,255,255,.7);}
+    .quote .lead{font-weight:900; font-size:22px; letter-spacing:.2px;}
+    .quote .highlight{color:#ff8c00;}
+
+    /* Profile card */
+    .card{background:var(--cream); border:2px solid var(--gold); border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,.06); margin:12px 16px; padding:16px;}
+    .profile{position:relative; padding-top:50px;}
+    #profile-photo{
+      width:92px; height:92px; border-radius:50%; object-fit:cover; border:3px solid var(--gold);
+      position:absolute; top:-46px; left:16px; background:#fff;
+    }
+    .profile h2{margin:0 0 8px; padding-left:124px; font-size:16px; color:var(--brown); opacity:.85;}
+    .kv{
+      display:grid; grid-template-columns:130px 1fr; gap:8px 10px; padding-left:124px;
+      font-size:14px; align-items:start;
+    }
+    .kv strong{opacity:.75}
+    #talents{font-weight:700; letter-spacing:.2px;} /* same typography but with light emphasis */
+    .bio-lines{margin-top:6px; padding-left:124px; font-size:13px; color:#6b4b3d;}
+    .bio-lines em{font-style:normal; opacity:.8}
+
+    /* Buttons below profile (IDs preserved) */
+    .actions{display:flex; gap:10px; justify-content:space-between; padding:0 16px; margin:6px 0 8px;}
+    .actions button{
+      flex:1; padding:12px 10px; border:none; border-radius:12px; font-weight:800; font-size:13px;
+      color:#4b2f20; background:#ffe08a; box-shadow:0 2px 0 #e8b100;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+    }
+    .actions button:hover{transform:translateY(-1px)}
+    .actions a{flex:1; text-decoration:none}
+    i{margin:0}
+
+    /* Edit block (ID unchanged) */
+    #edit-section{text-align:center; background:#ffefe7; border:2px solid #ffcbb2; color:#663a2d;}
+    #edit-section button{background:#ffb6a1; color:#4a231b; box-shadow:none; border-radius:12px; padding:10px 14px;}
+
+    /* Footer: only timer + rounded bottom */
+    .footer{
+      margin:8px 16px 0; padding:14px 0 24px; position:relative;
+      border-top-left-radius:18px; border-top-right-radius:18px; background:var(--soft);
+      border:1px solid #eee2d4; border-bottom:0;
+    }
+    .timer{
+      margin:0 auto; width:170px; text-align:center; background:#fff8e8; border:2px dashed #f3c25e;
+      border-radius:999px; padding:10px 0; font-weight:800; color:#6b4b3d;
+    }
+    .timer .tiny{display:block; font-size:11px; opacity:.75; margin-top:2px}
+    .bottom-pad{
+      background:#fff; height:28px; margin:0 16px 12px; border-radius:0 0 22px 22px;
+      border:1px solid #eee2d4; border-top:0; box-shadow:inset 0 1px 0 #fff;
     }
 
-    .card {
-      background-color: #fffbe6;
-      border: 2px solid #ffb800;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
+    /* Back to Home */
+    .home-wrap{padding:0 16px 18px}
+    .home-wrap a{ text-decoration:none; display:block}
+    .home-wrap button{
+      width:100%; border-radius:14px; background:#f0e7db; color:#5a463d; box-shadow:none; padding:12px;
+      border:2px solid #29221d; font-weight:700;
     }
 
-    button {
-      padding: 10px 20px;
-      margin: 10px 10px 0 0;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      font-size: 15px;
-      font-weight: bold;
-      background-color: #ffb800;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
-    i {
-      margin-right: 8px;
-    }
-
-    #profile-photo {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid #ffb800;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 15px auto;
-    }
-
-    .button-group {
-      text-align: center;
+    @media (max-width:360px){
+      .kv{grid-template-columns:118px 1fr; font-size:13px}
+      .actions button{font-size:12px; padding:10px 8px}
+      .timer{width:150px}
     }
   </style>
 </head>
 <body>
 
-  <h1>User Profile</h1>
+  <div class="phone">
+    <div class="notch" aria-hidden="true"></div>
 
-  <!-- Top Buttons -->
-  <div class="card button-group">
-    <!-- <button onclick="window.location.href='answer-me.html'"><i class="fa-solid fa-comment"></i> Answer Me</button> -->
-    <button id="answerBtn"><i class="fa-solid fa-comment"></i> Answer Me</button>
-    <a id="persona-button-link"><button><i class="fa-regular fa-id-card"></i> Persona Cards</button></a>
-    <button onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
+    <!-- Top -->
+    <div class="topbar">
+      <div class="hello">Hello, Mysterious Owl</div>
+      <a href="login.html">Sign Up / Log in</a>
+    </div>
+
+    <!-- Quote hero -->
+    <div class="hero">
+      <div class="quote">
+        <div class="lead">“Don’t enjoy life, <span class="highlight">explore</span> it.”</div>
+      </div>
+    </div>
+
+    <!-- Profile (IDs exactly as your JS expects) -->
+    <div class="card profile" id="user-info">
+      <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" />
+      <h2>User Information</h2>
+
+      <div class="kv">
+        <strong>Display Name:</strong> <span id="display-name">Loading...</span>
+        <strong>Talents:</strong> <span id="talents">Loading...</span>
+        <strong>Brief:</strong> <span id="bio">Loading...</span>
+        <strong>Interests:</strong> <span id="interests">Loading...</span>
+      </div>
+
+      <div class="bio-lines">
+        <em>Thank you for connecting with me,</em>
+      </div>
+    </div>
+
+    <!-- Owner-only Edit -->
+    <div class="card" id="edit-section" style="display:none;">
+      <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i> Edit My Profile</button>
+    </div>
+
+    <!-- Buttons moved below profile (same IDs) -->
+    <div class="actions">
+      <button id="answerBtn"><i class="fa-solid fa-comment"></i> Answer Me</button>
+      <a id="persona-button-link"><button><i class="fa-regular fa-id-card"></i> Persona Cards</button></a>
+      <button onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
+    </div>
+
+    <!-- Clean footer -->
+    <div class="footer">
+      <div class="timer">
+        <div>26 : 04</div>
+        <span class="tiny">Connecting time</span>
+      </div>
+    </div>
+    <div class="bottom-pad"></div>
+
+    <!-- Back to Home -->
+    <div class="home-wrap">
+      <a href="index.html">
+        <button><i class="fa-solid fa-house"></i> Back to Home</button>
+      </a>
+    </div>
   </div>
 
-  <!-- User Info -->
-  <div class="card" id="user-info">
-    <h2 style="text-align:center;">User Information</h2>
-    <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" />
-    <p><strong>Display Name:</strong> <span id="display-name">Loading...</span></p>
-    <p><strong>Talents:</strong> <span id="talents">Loading...</span></p>
-    <p><strong>Brief:</strong> <span id="bio">Loading...</span></p>
-    <p><strong>Interests:</strong> <span id="interests">Loading...</span></p>
-  </div>
-
-  <!-- Edit Button (Only for Owner) -->
-  <div class="card" id="edit-section" style="display: none; text-align: center;">
-    <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i> Edit My Profile</button>
-  </div>
-
-  <!-- Back to Home -->
-  <div class="card button-group">
-    <a href="index.html">
-      <button><i class="fa-solid fa-house"></i> Back to Home</button>
-    </a>
-  </div>
-
+  <!-- Keep your original JS (old logic) -->
   <script type="module" src="user-profile.js"></script>
 </body>
 </html>
