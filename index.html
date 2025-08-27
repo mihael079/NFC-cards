@@ -146,6 +146,16 @@
     }
 
     .hidden { display: none !important; }
+
+    /* New Activities button styling */
+.activities-button {
+  background-color: var(--light-brown);
+}
+
+.activities-button:hover {
+  background-color: var(--dark-brown);
+}
+
   </style>
 
   <script>
@@ -168,21 +178,27 @@
   </header>
 
   <main>
-    <nav>
-      <ul>
-        <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>
-        <li><a href="register-user.html"><i class="fa-solid fa-user-plus"></i>Register</a></li>
-        <li><a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a></li>
-        <li id="usersPage" class="hidden"><a href="users.html"><i class="fa-solid fa-users"></i>Users</a></li>
-        <li><a href="view-challenges.html"><i class="fa-solid fa-eye"></i>My Challenges</a></li>
-        <li><a href="answer-question.html"><i class="fa-solid fa-question"></i>Ask A Question</a></li>
-        <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i>Submit Talent</a></li>
-        <li><a href="my-feedback.html"><i class="fa-solid fa-list"></i>My Feedback</a></li>
-        <li><a href="report-bug.html"><i class="fa-solid fa-bug"></i>Report Bug</a></li>
-        <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
-        <li><a href="challenges.html"><i class="fa-solid fa-bolt"></i>Daily Challenges</a></li>
-      </ul>
-    </nav>
+<nav>
+  <ul>
+    <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>
+    <li><a href="register-user.html"><i class="fa-solid fa-user-plus"></i>Register</a></li>
+    <li><a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a></li>
+    <li id="usersPage" class="hidden"><a href="users.html"><i class="fa-solid fa-users"></i>Users</a></li>
+    <li><a href="view-challenges.html"><i class="fa-solid fa-eye"></i>My Challenges</a></li>
+    <li><a href="answer-question.html"><i class="fa-solid fa-question"></i>Ask A Question</a></li>
+    <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i>Submit Talent</a></li>
+    <li><a href="my-feedback.html"><i class="fa-solid fa-list"></i>My Feedback</a></li>
+    <li><a href="bug-report.html"><i class="fa-solid fa-bug"></i>Report Bug</a></li>
+    <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
+    <li><a href="challenges.html"><i class="fa-solid fa-bolt"></i>Daily Challenges</a></li>
+    <li><a href="https://www.fundamentaldecisions.com/recent-posts/"><i class="fa-solid fa-calendar-check"></i>Activities</a></li>
+    <!-- New View My Report button -->
+    <li><a href="https://www.fundamentaldecisions.com/my-report/"><i class="fa-solid fa-file-alt"></i>View My Report</a></li>
+  </ul>
+</nav>
+
+
+
 
     <div style="text-align:center; margin-top:40px;">
       <a href="https://www.fundamentaldecisions.com/" class="website-button">🌐 Visit Our Official Website</a>
@@ -224,4 +240,3 @@ const firebaseConfig = {
   </script>
 </body>
 </html>
-
