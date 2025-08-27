@@ -17,22 +17,16 @@
       justify-content: center;
       height: 100vh;
     }
-
-    h2 {
-      color: #5d4037;
-      margin-bottom: 20px;
-    }
-
+    h2 { color: #5d4037; margin-bottom: 20px; }
     .card {
       background-color: #fffbe6;
       border: 2px solid #ffb800;
       border-radius: 10px;
       padding: 30px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 400px;
     }
-
     input[type="email"],
     input[type="password"] {
       width: 100%;
@@ -42,7 +36,6 @@
       border: 1px solid #ccc;
       font-size: 14px;
     }
-
     button {
       width: 100%;
       background-color: #ffb800;
@@ -54,25 +47,26 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
+    button:hover { opacity: 0.85; }
     #login-error {
       color: #d32f2f;
       text-align: center;
       margin-top: 10px;
     }
-
+    .extra-links {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .extra-links a {
+      color: #5d4037;
+      font-size: 14px;
+      text-decoration: underline;
+      display: inline-block;
+      margin: 5px;
+    }
     .back-home {
       margin-top: 30px;
     }
-
-    .back-home a {
-      text-decoration: none;
-    }
-
     .back-home button {
       background-color: #ffb800;
       color: #4e342e;
@@ -85,14 +79,8 @@
       display: inline-flex;
       align-items: center;
     }
-
-    .back-home button i {
-      margin-right: 6px;
-    }
-
-    .back-home button:hover {
-      opacity: 0.85;
-    }
+    .back-home button i { margin-right: 6px; }
+    .back-home button:hover { opacity: 0.85; }
   </style>
 
   <script type="module" src="firebase-config.js"></script>
@@ -108,6 +96,10 @@
       <button type="submit">Login</button>
     </form>
     <p id="login-error"></p>
+
+    <div class="extra-links">
+      <a href="forgot-password.html">Forgot password?</a>
+    </div>
   </div>
 
   <div class="back-home">
