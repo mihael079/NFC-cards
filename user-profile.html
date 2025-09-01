@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TAP TAP...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#ffe8b5"/>
+  <title>TAP TAP…</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
     :root{
@@ -12,108 +13,155 @@
       --cream:#fff7df;
       --ink:#3b2f2a;
       --soft:#f7f4ef;
+      --ring: 0 0 0 4px rgba(255,184,0,.25);
+
+      /* Fluid type scale */
+      --fs-12: clamp(11px, .65rem + .1vw, 12px);
+      --fs-13: clamp(12px, .7rem + .2vw, 13px);
+      --fs-14: clamp(13px, .75rem + .2vw, 14px);
+      --fs-16: clamp(14px, .82rem + .3vw, 16px);
+      --fs-18: clamp(16px, .95rem + .5vw, 18px);
+      --fs-20: clamp(18px, 1.05rem + .6vw, 20px);
+      --fs-22: clamp(19px, 1.1rem + .9vw, 22px);
     }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
-      background: radial-gradient(1200px 800px at 50% -100px, #ffd27a 0 30%, #ffe8b5 30% 55%, #f6efe6 55% 100%) fixed;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      font-family: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 800px at 50% -100px, #ffd27a 0 30%, #ffe8b5 30% 55%, #f6efe6 55% 100%) fixed;
+      min-height:100svh; /* mobile safe viewport */
       display:flex; align-items:center; justify-content:center;
-      padding:18px; color:var(--ink);
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Phone frame */
     .phone{
-      width:min(420px,100%);
+      width:min(480px, 100%);
+      max-width:100%;
       background:#fff;
-      border-radius:32px;
+      border-radius:28px;
       box-shadow:0 10px 25px rgba(0,0,0,.08), inset 0 0 0 1px rgba(0,0,0,.04);
-      overflow:hidden; border:10px solid #f0f0f0; position:relative;
+      overflow:hidden;
+      border:10px solid #f0f0f0;
+      position:relative;
+      transition: border-radius .2s ease;
     }
+    @media (max-width:420px){
+      .phone{border-radius:22px;}
+    }
+
     .notch{position:absolute; inset:10px auto auto 50%; transform:translateX(-50%); width:120px; height:18px; background:#111; border-radius:0 0 14px 14px; z-index:5;}
 
     /* Top bar & hero */
-    .topbar{display:flex; align-items:center; justify-content:space-between; padding:18px 18px 0; font-size:13px; color:#6b4b3d;}
-    .topbar .hello{font-weight:700; opacity:.9}
+    .topbar{display:flex; align-items:center; justify-content:space-between; padding:18px 18px 0; font-size:var(--fs-13); color:#6b4b3d; gap:8px}
+    .topbar .hello{font-weight:700; opacity:.9; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
     .topbar a{color:#6b4b3d; text-decoration:none; font-weight:700}
 
     .hero{
-      position:relative; height:170px; border-radius:22px; margin:10px 16px 0; overflow:hidden;
+      position:relative; aspect-ratio: 16/9; border-radius:22px; margin:10px 16px 0; overflow:hidden;
       background:
         linear-gradient(180deg, rgba(255,255,255,.0) 0%, rgba(255,255,255,.2) 60%, rgba(255,255,255,.9) 100%),
         url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      will-change: transform;
     }
-    .quote{position:absolute; left:16px; right:16px; bottom:12px; color:#6b4b3d; line-height:1.15; text-shadow:0 1px 0 rgba(255,255,255,.7);}
-    .quote .lead{font-weight:900; font-size:22px; letter-spacing:.2px;}
+    .quote{position:absolute; left:16px; right:16px; bottom:12px; color:#6b4b3d; line-height:1.2; text-shadow:0 1px 0 rgba(255,255,255,.7);}
+    .quote .lead{font-weight:900; font-size:var(--fs-22); letter-spacing:.2px;}
     .quote .highlight{color:#ff8c00;}
 
-    /* Profile card */
+    /* Cards */
     .card{background:var(--cream); border:2px solid var(--gold); border-radius:18px; box-shadow:0 4px 12px rgba(0,0,0,.06); margin:12px 16px; padding:16px;}
-    .profile{position:relative; padding-top:50px;}
+
+    /* Profile card */
+    .profile{position:relative; padding-top:58px;}
     #profile-photo{
       width:92px; height:92px; border-radius:50%; object-fit:cover; border:3px solid var(--gold);
       position:absolute; top:-46px; left:16px; background:#fff;
     }
-    .profile h2{margin:0 0 8px; padding-left:124px; font-size:16px; color:var(--brown); opacity:.85;}
+    .profile h2{margin:0 0 8px; padding-left:124px; font-size:var(--fs-16); color:var(--brown); opacity:.85;}
+
     .kv{
-      display:grid; grid-template-columns:130px 1fr; gap:8px 10px; padding-left:124px;
-      font-size:14px; align-items:start;
+      display:grid; grid-template-columns: minmax(98px, 130px) 1fr; gap:8px 10px; padding-left:124px;
+      font-size:var(--fs-14); align-items:start; word-break:break-word;
     }
     .kv strong{opacity:.75}
-    #talents{font-weight:700; letter-spacing:.2px;} /* same typography but with light emphasis */
-    .bio-lines{margin-top:6px; padding-left:124px; font-size:13px; color:#6b4b3d;}
+    #talents{font-weight:700; letter-spacing:.2px;}
+    .bio-lines{margin-top:6px; padding-left:124px; font-size:var(--fs-13); color:#6b4b3d;}
     .bio-lines em{font-style:normal; opacity:.8}
 
-    /* Buttons below profile (IDs preserved) */
-    .actions{display:flex; gap:10px; justify-content:space-between; padding:0 16px; margin:6px 0 8px;}
-    .actions button{
-      flex:1; padding:12px 10px; border:none; border-radius:12px; font-weight:800; font-size:13px;
-      color:#4b2f20; background:#ffe08a; box-shadow:0 2px 0 #e8b100;
-      display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+    /* Actions */
+    .actions{display:flex; gap:10px; justify-content:space-between; padding:0 16px; margin:8px 0 10px; flex-wrap:wrap}
+    .actions button, .actions a.button-like{
+      flex:1 1 32%; min-width: 0; padding:14px 10px; border:2px solid #e8b100; border-radius:14px; font-weight:800; font-size:var(--fs-13);
+      color:#4b2f20; background:#ffe08a; box-shadow:0 2px 0 #e8b100; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+      min-height:44px; text-align:center; text-decoration:none;
     }
-    .actions button:hover{transform:translateY(-1px)}
-    .actions a{flex:1; text-decoration:none}
+    .actions button:hover, .actions a.button-like:hover{transform:translateY(-1px)}
+    .actions button:focus-visible, .actions a.button-like:focus-visible{outline:none; box-shadow: var(--ring)}
     i{margin:0}
 
-    /* Edit block (ID unchanged) */
+    /* Edit block */
     #edit-section{text-align:center; background:#ffefe7; border:2px solid #ffcbb2; color:#663a2d;}
-    #edit-section button{background:#ffb6a1; color:#4a231b; box-shadow:none; border-radius:12px; padding:10px 14px;}
+    #edit-section button{background:#ffb6a1; color:#4a231b; box-shadow:none; border-radius:12px; padding:12px 14px; min-height:44px}
 
-    /* Footer: only timer + rounded bottom */
-    .footer{
-      margin:8px 16px 0; padding:14px 0 24px; position:relative;
-      border-top-left-radius:18px; border-top-right-radius:18px; background:var(--soft);
-      border:1px solid #eee2d4; border-bottom:0;
-    }
-    .timer{
-      margin:0 auto; width:170px; text-align:center; background:#fff8e8; border:2px dashed #f3c25e;
-      border-radius:999px; padding:10px 0; font-weight:800; color:#6b4b3d;
-    }
-    .timer .tiny{display:block; font-size:11px; opacity:.75; margin-top:2px}
-    .bottom-pad{
-      background:#fff; height:28px; margin:0 16px 12px; border-radius:0 0 22px 22px;
-      border:1px solid #eee2d4; border-top:0; box-shadow:inset 0 1px 0 #fff;
-    }
+    /* Footer */
+    .footer{margin:8px 16px 0; padding:14px 0 24px; position:relative; border-top-left-radius:18px; border-top-right-radius:18px; background:var(--soft); border:1px solid #eee2d4; border-bottom:0;}
+    .timer{margin:0 auto; width:min(220px, 70%); text-align:center; background:#fff8e8; border:2px dashed #f3c25e; border-radius:999px; padding:12px 0; font-weight:800; color:#6b4b3d;}
+    .timer div{font-size:var(--fs-18)}
+    .timer .tiny{display:block; font-size:var(--fs-12); opacity:.75; margin-top:2px}
+    .bottom-pad{background:#fff; height:28px; margin:0 16px 12px; border-radius:0 0 22px 22px; border:1px solid #eee2d4; border-top:0; box-shadow:inset 0 1px 0 #fff;}
 
     /* Back to Home */
     .home-wrap{padding:0 16px 18px}
     .home-wrap a{ text-decoration:none; display:block}
-    .home-wrap button{
-      width:100%; border-radius:14px; background:#f0e7db; color:#5a463d; box-shadow:none; padding:12px;
-      border:2px solid #29221d; font-weight:700;
+    .home-wrap button{width:100%; border-radius:14px; background:#f0e7db; color:#5a463d; box-shadow:none; padding:12px; border:2px solid #29221d; font-weight:700; min-height:44px}
+
+    /* Tiny screens */
+    @media (max-width:360px){
+      .profile{padding-top:52px}
+      #profile-photo{width:80px;height:80px; top:-40px}
+      .profile h2{padding-left:108px}
+      .kv{grid-template-columns:108px 1fr; font-size:var(--fs-13); padding-left:108px}
+      .actions button, .actions a.button-like{font-size:var(--fs-12); padding:10px 8px}
     }
 
-    @media (max-width:360px){
-      .kv{grid-template-columns:118px 1fr; font-size:13px}
-      .actions button{font-size:12px; padding:10px 8px}
-      .timer{width:150px}
+    /* Larger screens (tablet/desktop preview) */
+    @media (min-width:640px){
+      body{padding:32px}
+      .phone{border-radius:32px}
+    }
+
+    /* Dark mode (optional) */
+    @media (prefers-color-scheme: dark){
+      body{background: radial-gradient(1200px 800px at 50% -100px, #3d2f17 0 30%, #4a3a23 30% 55%, #221b15 55% 100%) fixed; color:#f9f6f2}
+      .phone{background:#1c1713; border-color:#2a241f}
+      .topbar, .quote{color:#f2e4d8}
+      .card{background:#1f1915; border-color:#ad7a00}
+      .profile h2{color:#f1e4d8}
+      .kv strong{color:#f1e4d8}
+      .actions button, .actions a.button-like{background:#f2b93d; color:#3b2f2a; border-color:#cc9400}
+      .footer{background:#1a1511; border-color:#3a3128}
+      .timer{background:#2a221c; color:#f2e4d8}
+      .bottom-pad{background:#17120f; border-color:#3a3128}
+      .home-wrap button{background:#2a221c; color:#f2e4d8; border-color:#f2e4d8}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .actions button:hover, .actions a.button-like:hover{transform:none}
+      .phone{transition:none}
     }
   </style>
 </head>
 <body>
 
-  <div class="phone">
+  <div class="phone" role="region" aria-label="Profile and actions">
     <div class="notch" aria-hidden="true"></div>
 
     <!-- Top -->
@@ -123,7 +171,7 @@
     </div>
 
     <!-- Quote hero -->
-    <div class="hero">
+    <div class="hero" role="img" aria-label="Sunrise with mountains and a motivational quote">
       <div class="quote">
         <div class="lead">“Don’t enjoy life, <span class="highlight">explore</span> it.”</div>
       </div>
@@ -131,14 +179,14 @@
 
     <!-- Profile (IDs exactly as your JS expects) -->
     <div class="card profile" id="user-info">
-      <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" />
+      <img id="profile-photo" src="avatar1.jpg" alt="Profile Photo" loading="lazy"/>
       <h2>User Information</h2>
 
       <div class="kv">
-        <strong>Display Name:</strong> <span id="display-name">Loading...</span>
-        <strong>Talents:</strong> <span id="talents">Loading...</span>
-        <strong>Brief:</strong> <span id="bio">Loading...</span>
-        <strong>Interests:</strong> <span id="interests">Loading...</span>
+        <strong>Display Name:</strong> <span id="display-name">Loading…</span>
+        <strong>Talents:</strong> <span id="talents">Loading…</span>
+        <strong>Brief:</strong> <span id="bio">Loading…</span>
+        <strong>Interests:</strong> <span id="interests">Loading…</span>
       </div>
 
       <div class="bio-lines">
@@ -148,19 +196,20 @@
 
     <!-- Owner-only Edit -->
     <div class="card" id="edit-section" style="display:none;">
-      <button id="edit-profile-btn"><i class="fa-solid fa-pencil"></i> Edit My Profile</button>
+      <button id="edit-profile-btn" aria-label="Edit My Profile"><i class="fa-solid fa-pencil" aria-hidden="true"></i> Edit My Profile</button>
     </div>
 
-    <!-- Buttons moved below profile (same IDs) -->
+    <!-- Actions -->
     <div class="actions">
-      <button id="answerBtn"><i class="fa-solid fa-comment"></i> Answer Me</button>
-      <a id="persona-button-link"><button><i class="fa-regular fa-id-card"></i> Persona Cards</button></a>
-      <button onclick="window.location.href='challenges.html'"><i class="fa-solid fa-broom"></i> Challenges</button>
+      <button id="answerBtn" aria-label="Answer Me"><i class="fa-solid fa-comment" aria-hidden="true"></i> <span>Answer Me</span></button>
+      <!-- Keep the original anchor + id, but make it behave like a button via class -->
+      <a id="persona-button-link" class="button-like" href="#"><i class="fa-regular fa-id-card" aria-hidden="true"></i> <span>Persona Cards</span></a>
+      <button onclick="window.location.href='challenges.html'" aria-label="Challenges"><i class="fa-solid fa-broom" aria-hidden="true"></i> <span>Challenges</span></button>
     </div>
 
     <!-- Clean footer -->
     <div class="footer">
-      <div class="timer">
+      <div class="timer" role="status" aria-live="polite">
         <div>26 : 04</div>
         <span class="tiny">Connecting time</span>
       </div>
@@ -170,7 +219,7 @@
     <!-- Back to Home -->
     <div class="home-wrap">
       <a href="index.html">
-        <button><i class="fa-solid fa-house"></i> Back to Home</button>
+        <button><i class="fa-solid fa-house" aria-hidden="true"></i> Back to Home</button>
       </a>
     </div>
   </div>
