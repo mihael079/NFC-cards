@@ -7,236 +7,180 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     :root {
-      --gold: #ffb800;
-      --dark-brown: #4e342e;
+      --gold: #ffbe3c;
+      --dark-brown: #3f2f2a;
       --light-brown: #6d4c41;
       --cream: #fff8e1;
-      --orange: #f57f17;
-      --hover-gold: #ffc107;
-      --soft-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      --orange: #ff9e1c;
+      --hover-gold: #ffd35e;
+      --surface: #ffffff;
+      --border: #efe7da;
+      --soft-shadow: 0 10px 30px rgba(0,0,0,0.10);
+      --bg-grad: linear-gradient(135deg, var(--cream), #fdebe6);
+      --maxw: 1200px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --z-sidebar: 1001;
+      --z-header: 1002;
+      --z-loader: 1100;
+      --z-bottomnav: 1000;
     }
 
     * { box-sizing: border-box; }
 
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, var(--cream), #fbe9e7);
+    body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background: var(--bg-grad); }
+
+    .loader { position: fixed; inset: 0; background: #fff; display: grid; place-items: center; z-index: var(--z-loader); }
+    .spinner { border: 8px solid #f3f3f3; border-top: 8px solid var(--gold); border-radius: 50%; width: 80px; height: 80px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+
+    .topbar { position: sticky; top: 0; z-index: var(--z-header); background: var(--gold); color: var(--dark-brown); box-shadow: var(--soft-shadow); }
+    .topbar-inner { max-width: var(--maxw); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; }
+    .brand-title { font-size: 1.15rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .icon-link { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--dark-brown); font-weight: 700; }
+    .icon-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; background: var(--light-brown); color: #fff; padding: 6px 10px; border-radius: var(--radius-sm); border: none; cursor: pointer; }
+    .ghost-btn { background: transparent; color: var(--dark-brown); border: 2px solid rgba(0,0,0,.08); }
+
+    .layout { max-width: var(--maxw); margin: 16px auto; padding: 16px; }
+    main.card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--soft-shadow); padding: 16px; max-width: 980px; margin: 0 auto; }
+    main.card > * { max-width: 880px; margin-left: auto; margin-right: auto; }
+
+    header.hero { text-align: center; padding: 24px 16px 14px; background-color: var(--gold); color: var(--dark-brown); border-radius: 18px; box-shadow: var(--soft-shadow); }
+    header.hero h1 { font-size: clamp(1.6rem, 4.5vw, 3rem); margin: 0 0 8px; }
+    header.hero p { font-size: clamp(1rem, 2.5vw, 1.2rem); margin: 0; }
+
+    .sidebar { position: fixed; inset: 0 40% 0 0; max-width: 320px; width: 85vw; background: #fff; box-shadow: var(--soft-shadow); transform: translateX(-100%); transition: transform .25s ease; z-index: var(--z-sidebar); padding: 16px; display: flex; flex-direction: column; }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .sidebar ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .sidebar li a { display: flex; align-items: center; gap: 12px; padding: 12px; text-decoration: none; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); color: #374151; font-weight: 600; box-shadow: 0 1px 1px rgba(0,0,0,.04); }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: none; z-index: calc(var(--z-sidebar) - 1); }
+    .overlay.show { display: block; }
+
+    .bottom-tabs { position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-bottomnav); background: #fff; border-top: 1px solid #e5e7eb; box-shadow: 0 -6px 20px rgba(0,0,0,.06); padding-bottom: env(safe-area-inset-bottom); }
+    .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); }
+    .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 2px; text-decoration: none; color: #6b7280; font-weight: 700; font-size: .72rem; }
+    .tab i { font-size: 1.1rem; }
+    .home-fab { width: 60px; height: 60px; border-radius: 999px; background: var(--gold); color: var(--dark-brown); border: 6px solid #fff; box-shadow: var(--soft-shadow); font-size: 1.4rem; display: grid; place-items: center; }
+
+    @media (max-width: 480px) {
+      .topbar-right .icon-link span { display: none; }
+      .icon-btn span { display: none; }
+      .brand-title { font-size: 1rem; }
     }
-
-    .loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+    @media (min-width: 1024px) {
+      .layout { grid-template-columns: 300px 1fr; }
+      main.card { padding: 24px; }
     }
-
-    .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid var(--gold);
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    header {
-      text-align: center;
-      padding: 50px 20px 30px;
-      background-color: var(--gold);
-      color: var(--dark-brown);
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
-      box-shadow: var(--soft-shadow);
-    }
-
-    header h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      margin: 0;
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 20px;
-      box-shadow: var(--soft-shadow);
-    }
-
-    nav ul {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    nav li {
-      background: linear-gradient(145deg, var(--gold), var(--hover-gold));
-      border-radius: 15px;
-      text-align: center;
-      padding: 25px 10px;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-
-    nav li:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--soft-shadow);
-      background: var(--orange);
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--dark-brown);
-      font-weight: bold;
-      font-size: 1.1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    nav i {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .website-button {
-      display: inline-block;
-      margin: 50px auto 0;
-      padding: 15px 30px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      background-color: var(--light-brown);
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: background-color 0.3s ease;
-    }
-
-    .website-button:hover {
-      background-color: var(--dark-brown);
-    }
-
-    footer {
-      text-align: center;
-      margin: 50px 0 20px;
-      font-size: 0.9rem;
-      color: var(--light-brown);
-    }
-
-    .hidden { display: none !important; }
-
-    /* New Activities button styling */
-.activities-button {
-  background-color: var(--light-brown);
-}
-
-.activities-button:hover {
-  background-color: var(--dark-brown);
-}
-
   </style>
-
-  <script>
-    window.addEventListener('load', () => {
-      const loader = document.querySelector('.loader');
-      loader.style.opacity = '0';
-      loader.style.pointerEvents = 'none';
-      setTimeout(() => loader.style.display = 'none', 500);
-    });
-  </script>
 </head>
 <body>
-  <div class="loader">
-    <div class="spinner"></div>
+  <div class="loader"><div class="spinner"></div></div>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <h1 class="brand-title">Fundamental Decisions</h1>
+      <div class="topbar-right">
+        <a href="login.html" class="icon-link"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></a>
+        <a href="register-user.html" class="icon-link"><i class="fa-solid fa-user-plus"></i><span>Register</span></a>
+        <button id="openSidebar" class="icon-btn ghost-btn"><i class="fa-solid fa-bars"></i><span>Menu</span></button>
+      </div>
+    </div>
   </div>
 
-  <header>
-    <h1>Welcome to Fundamental Decisions</h1>
-    <p>Empowering individuals, teams, and organizations to make purposeful, impactful choices.</p>
-  </header>
-
-  <main>
-<nav>
-  <ul>
-    <li><a href="login.html"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>
-    <li><a href="register-user.html"><i class="fa-solid fa-user-plus"></i>Register</a></li>
-    <li><a href="profile.html"><i class="fa-solid fa-user"></i>Profile</a></li>
-    <li id="usersPage" class="hidden"><a href="users.html"><i class="fa-solid fa-users"></i>Users</a></li>
-    <li><a href="view-challenges.html"><i class="fa-solid fa-eye"></i>My Challenges</a></li>
-    <li><a href="answer-question.html"><i class="fa-solid fa-question"></i>Ask A Question</a></li>
-    <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i>Submit Talent</a></li>
-    <li><a href="my-feedback.html"><i class="fa-solid fa-list"></i>My Feedback</a></li>
-    <li><a href="bug-report.html"><i class="fa-solid fa-bug"></i>Report Bug</a></li>
-    <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i>FAQ</a></li>
-    <li><a href="challenges.html"><i class="fa-solid fa-bolt"></i>Daily Challenges</a></li>
-    <li><a href="https://www.fundamentaldecisions.com/recent-posts/"><i class="fa-solid fa-calendar-check"></i>Activities</a></li>
-    <!-- New View My Report button -->
-    <li><a href="https://www.fundamentaldecisions.com/my-report/"><i class="fa-solid fa-file-alt"></i>View My Report</a></li>
-  </ul>
-</nav>
-
-
-
-
-    <div style="text-align:center; margin-top:40px;">
-      <a href="https://www.fundamentaldecisions.com/" class="website-button">🌐 Visit Our Official Website</a>
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <strong>Quick Menu</strong>
+      <button id="closeSidebar" class="sidebar-close"><i class="fa-solid fa-xmark"></i></button>
     </div>
-  </main>
+    <ul>
+      <li><a href="answer-question.html"><i class="fa-solid fa-question"></i> Ask A Question</a></li>
+      <li><a href="report-bug.html"><i class="fa-solid fa-bug"></i> Report Bug</a></li>
+      <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+      <li><a href="https://www.fundamentaldecisions.com/recent-posts/"><i class="fa-solid fa-calendar-check"></i> Activities</a></li>
+      <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i> Submit Talent</a></li>
+      <li id="usersPage" class="hidden"><a href="users.html"><i class="fa-solid fa-users"></i> Users</a></li>
+    </ul>
+  </aside>
+  <div id="overlay" class="overlay"></div>
 
-  <footer>
-    &copy; 2025 Fundamental Decisions. All rights reserved.
-  </footer>
+  <div class="layout">
+    <main class="card">
+      <header class="hero">
+        <h1>Welcome to Fundamental Decisions</h1>
+        <p>Empowering individuals, teams, and organizations to make purposeful, impactful choices.</p>
+      </header>
+
+      <section aria-labelledby="daily-challenges" style="margin-top: 22px;">
+        <h2 id="daily-challenges">Daily Challenges</h2>
+        <div style="display:grid; gap:12px;">
+          <a href="challenges.html" style="text-decoration:none;">
+            <div style="background:#fff8e1; border:1px solid #ffe082; border-radius:14px; padding:14px; box-shadow: var(--soft-shadow);">
+              <i class="fa-solid fa-bolt"></i> Jump into Today's Challenge
+            </div>
+          </a>
+          <a href="view-challenges.html" style="text-decoration:none;">
+            <div style="background:#fff; border:1px solid #f1f5f9; border-radius:14px; padding:14px; box-shadow: var(--soft-shadow);">
+              <i class="fa-solid fa-eye"></i> View My Challenges
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <div style="text-align:center; margin-top:22px;">
+        <a href="https://www.fundamentaldecisions.com/" class="website-button">🌐 Visit Our Official Website</a>
+      </div>
+    </main>
+  </div>
+
+  <footer>&copy; 2025 Fundamental Decisions. All rights reserved.</footer>
+
+  <nav class="bottom-tabs">
+    <div class="tabbar">
+      <a class="tab" href="my-feedback.html"><i class="fa-solid fa-list"></i><span>Feedback</span></a>
+      <a class="tab" href="https://www.fundamentaldecisions.com/my-report/"><i class="fa-solid fa-file-alt"></i><span>My Report</span></a>
+      <a class="tab home" href="index.html"><div class="home-fab"><i class="fa-solid fa-house"></i></div><span>Home</span></a>
+      <a class="tab" href="view-challenges.html"><i class="fa-solid fa-eye"></i><span>Challenges</span></a>
+      <a class="tab" href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+    </div>
+  </nav>
+
+  <script>
+    // Fade out loader on page load
+    window.addEventListener('load', () => {
+      const loader = document.querySelector('.loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => loader.style.display = 'none', 400);
+      }
+    });
+  </script>
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
-
-  
-const firebaseConfig = {
-    apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s",
-    authDomain: "nfc-cards-dfa6b.firebaseapp.com",
-    projectId: "nfc-cards-dfa6b",
-    storageBucket: "nfc-cards-dfa6b.appspot.com",
-    messagingSenderId: "321725769305",
-    appId: "1:321725769305:web:42e79fd85cc6029b97f348",
-    databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com/"
-};
-
-
+    const firebaseConfig = { apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s", authDomain: "nfc-cards-dfa6b.firebaseapp.com", projectId: "nfc-cards-dfa6b", storageBucket: "nfc-cards-dfa6b.appspot.com", messagingSenderId: "321725769305", appId: "1:321725769305:web:42e79fd85cc6029b97f348", databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com/" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
+    const usersPage = document.getElementById('usersPage');
+    const talentPage = document.getElementById('talentPage');
     onAuthStateChanged(auth, user => {
-      if (user?.uid === "SBu5uRcZgTVQGN7MKuaOBnjNg7C2") {
-        document.getElementById('usersPage')?.classList.remove('hidden');
-        document.getElementById('talentPage')?.classList.remove('hidden');
-      } else {
-        document.getElementById('usersPage')?.classList.add('hidden');
-        document.getElementById('talentPage')?.classList.add('hidden');
-      }
+      const isAdmin = user?.uid === 'SBu5uRcZgTVQGN7MKuaOBnjNg7C2';
+      [usersPage, talentPage].forEach(el => { if (el) el.classList.toggle('hidden', !isAdmin); });
     });
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const openBtn = document.getElementById('openSidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+    const openSidebar = () => { sidebar.classList.add('open'); overlay.classList.add('show'); };
+    const closeSidebarFn = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
+    openBtn?.addEventListener('click', openSidebar);
+    closeBtn?.addEventListener('click', closeSidebarFn);
+    overlay?.addEventListener('click', closeSidebarFn);
+    window.addEventListener('keydown', e => { if (e.key==='Escape') closeSidebarFn(); });
   </script>
 </body>
 </html>
