@@ -44,17 +44,8 @@
       border-radius: 50%;
       border: 2px solid var(--gold);
     }
-    header span {
-      margin-left: 10px;
-      font-weight: 600;
-    }
-    .screen {
-      display: none;
-      flex: 1;
-      overflow: hidden;
-      padding: 18px;
-      width: 100%;
-    }
+    header span { margin-left: 10px; font-weight: 600; }
+    .screen { display: none; flex: 1; overflow: hidden; padding: 18px; width: 100%; }
     .show { display: block; }
     #cardGrid {
       display: flex;
@@ -64,176 +55,50 @@
       overflow: hidden;
       padding: 10px;
     }
-    .card {
-      width: 100px;
-      height: 140px;
-      perspective: 1000px;
-      cursor: pointer;
-      position: relative;
-    }
-    .cardInner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-    .card.flipped .cardInner {
-      transform: rotateY(180deg);
-    }
+    .card { width: 100px; height: 140px; perspective: 1000px; cursor: pointer; position: relative; }
+    .cardInner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+    .card.flipped .cardInner { transform: rotateY(180deg); }
     .cardFront, .cardBack {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 10px;
-      border: 1px solid #eee;
-      top: 0;
-      left: 0;
+      position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 10px; border: 1px solid #eee; top: 0; left: 0;
     }
-    .cardFront {
-      background: #fff;
-      transform: rotateY(0deg);
-      z-index: 2;
-    }
-    .cardBack {
-      background: #fff;
-      transform: rotateY(180deg);
-      z-index: 1;
-    }
+    .cardFront { background: #fff; transform: rotateY(0deg); z-index: 2; }
+    .cardBack { background: #fff; transform: rotateY(180deg); z-index: 1; }
 
     .cardLarge {
-  width: 90%;
-  max-width: 320px;
-  height: auto;
-  aspect-ratio: 100 / 140;
-  perspective: 1000px;
-  cursor: pointer;
-  margin: 0 auto 12px;
-  position: relative;
-}
-.cardLarge .cardInner {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-  position: relative;
-}
-.cardLarge .cardFront,
-.cardLarge .cardBack {
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 1px solid #eee;
-  object-fit: cover;
-}
-.cardLarge .cardBack {
-  transform: rotateY(180deg);
-}
-.cardLarge.flipped .cardInner {
-  transform: rotateY(180deg);
-}
-
-
-    .messageBox, .questionBox {
-      background: #fafafa;
-      border-radius: 12px;
-      padding: 18px;
+      width: 90%; max-width: 320px; height: auto; aspect-ratio: 100 / 140; perspective: 1000px; cursor: pointer; margin: 0 auto 12px; position: relative;
     }
+    .cardLarge .cardInner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; position: relative; }
+    .cardLarge .cardFront, .cardLarge .cardBack {
+      width: 100%; height: 100%; border-radius: 12px; backface-visibility: hidden; position: absolute; top: 0; left: 0; border: 1px solid #eee; object-fit: cover;
+    }
+    .cardLarge .cardBack { transform: rotateY(180deg); }
+    .cardLarge.flipped .cardInner { transform: rotateY(180deg); }
+
+    .messageBox, .questionBox { background: #fafafa; border-radius: 12px; padding: 18px; }
     textarea {
-      width: 100%;
-      min-height: 90px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-top: 6px;
-      font-family: inherit;
+      width: 100%; min-height: 90px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 6px; font-family: inherit;
     }
-    .btnRow {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
+    .error {
+      margin-top: 6px; font-size: 0.85rem; color: var(--accent); display: none;
     }
+    .btnRow { display: flex; gap: 10px; margin-top: 10px; }
     .btnRow button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: var(--accent);
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
+      flex: 1; padding: 10px; border: none; border-radius: 8px; background: var(--accent); color: white; font-weight: 600; cursor: pointer;
     }
     .btnRow button:hover { opacity: 0.9; }
-    .thankYou {
-      text-align: center;
-      padding: 30px 18px;
-    }
-    .thankYou h2 {
-      margin: 0;
-      font-family: cursive;
-      font-size: 2.2rem;
-      color: var(--accent);
-    }
-    .thankYou p span {
-      background: #ffcdd2;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .homeBtn {
-      margin-top: 18px;
-      padding: 10px 22px;
-      border: none;
-      border-radius: 20px;
-      background: var(--gold);
-      color: var(--dark);
-      font-weight: 600;
-      cursor: pointer;
-    }
+    .thankYou { text-align: center; padding: 30px 18px; }
+    .thankYou h2 { margin: 0; font-family: cursive; font-size: 2.2rem; color: var(--accent); }
+    .thankYou p span { background: #ffcdd2; padding: 2px 6px; border-radius: 4px; }
+    .homeBtn { margin-top: 18px; padding: 10px 22px; border: none; border-radius: 20px; background: var(--gold); color: var(--dark); font-weight: 600; cursor: pointer; }
 
-    .progressSteps {
-      width: 100%;
-      background: #fff;
-      border-top: 1px solid #eee;
-      padding: 10px 0;
-    }
-    .stepsList {
-      display: flex;
-      justify-content: space-between;
-      list-style: none;
-      margin: 0;
-      padding: 0 12px;
-      font-size: 0.75rem;
-      color: #aaa;
-    }
-    .step {
-      position: relative;
-      padding-bottom: 4px;
-      text-align: center;
-      flex: 1;
-    }
-    .step.active {
-      font-weight: bold;
-      color: var(--accent);
-    }
+    .progressSteps { width: 100%; background: #fff; border-top: 1px solid #eee; padding: 10px 0; }
+    .stepsList { display: flex; justify-content: space-between; list-style: none; margin: 0; padding: 0 12px; font-size: 0.75rem; color: #aaa; }
+    .step { position: relative; padding-bottom: 4px; text-align: center; flex: 1; }
+    .step.active { font-weight: bold; color: var(--accent); }
     .step::before {
-      content: '';
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: #aaa;
-      border-radius: 50%;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
+      content: ''; position: absolute; width: 6px; height: 6px; background: #aaa; border-radius: 50%; top: -8px; left: 50%; transform: translateX(-50%);
     }
-    .step.active::before {
-      background: var(--accent);
-    }
+    .step.active::before { background: var(--accent); }
   </style>
 </head>
 
@@ -264,7 +129,8 @@
         <h4>Question 1/2</h4>
         <p>What do you think is my strength?</p>
         <textarea id="ans1"></textarea>
-        <div class="btnRow"><button onclick="goto('scrQ2')">Next</button></div>
+        <div id="err1" class="error">Please write at least 30 words.</div>
+        <div class="btnRow"><button onclick="nextFromQ1()">Next</button></div>
       </div>
     </div>
 
@@ -273,6 +139,7 @@
         <h4>Question 2/2</h4>
         <p>How could I help you with my strength?</p>
         <textarea id="ans2"></textarea>
+        <div id="err2" class="error">Please write at least 30 words.</div>
         <div class="btnRow"><button onclick="saveFeedback()">Send</button></div>
       </div>
     </div>
@@ -310,6 +177,8 @@
     const grid = document.getElementById('cardGrid');
     const ans1 = document.getElementById('ans1');
     const ans2 = document.getElementById('ans2');
+    const err1 = document.getElementById('err1');
+    const err2 = document.getElementById('err2');
     const enlargedFront = document.getElementById('enlargedFront');
     const enlargedBack = document.getElementById('enlargedBack');
     const enlargedCard = document.getElementById('enlargedCard');
@@ -318,6 +187,32 @@
     enlargedCard.onclick = () => {
       enlargedCard.classList.toggle('flipped');
     };
+
+    function wordCount(text) {
+      return text.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function requireMinWords(textarea, errorEl, min = 30) {
+      const count = wordCount(textarea.value);
+      const ok = count >= min;
+      errorEl.style.display = ok ? 'none' : 'block';
+      // subtle shake if invalid
+      if (!ok) {
+        textarea.style.borderColor = '#e53935';
+        textarea.animate([{transform:'translateX(0)'},{transform:'translateX(-2px)'},{transform:'translateX(2px)'},{transform:'translateX(0)'}], {duration: 180});
+      } else {
+        textarea.style.borderColor = '#ccc';
+      }
+      return ok;
+    }
+
+    // Next from Q1 -> Q2 with validation (>=30 words)
+    function nextFromQ1() {
+      if (requireMinWords(ans1, err1, 30)) {
+        goto('scrQ2');
+      }
+    }
+    window.nextFromQ1 = nextFromQ1;
 
     function goto(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('show'));
@@ -375,9 +270,22 @@
     }
 
     function saveFeedback() {
+      // Validate both answers on submit
+      const ok1 = requireMinWords(ans1, err1, 30);
+      const ok2 = requireMinWords(ans2, err2, 30);
+      if (!ok1 || !ok2) {
+        alert("Each answer must be at least 30 words before you can submit.");
+        // Focus first invalid
+        if (!ok1) ans1.focus(); else ans2.focus();
+        return;
+      }
+
+      const a1 = ans1.value.trim();
+      const a2 = ans2.value.trim();
+
       push(ref(db, `users/${uid}/personaFeedback`), {
-        ans1: ans1.value.trim(),
-        ans2: ans2.value.trim(),
+        ans1: a1,
+        ans2: a2,
         createdAt: Date.now()
       })
       .then(() => goto('scrThanks'))
@@ -388,6 +296,7 @@
     }
     window.saveFeedback = saveFeedback;
 
+    // Load user & deck
     const snap = await get(ref(db, `users/${uid}`));
     if (!snap.exists()) {
       grid.textContent = 'User not found';
