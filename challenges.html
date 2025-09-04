@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Challenge</title>
+  <title>Challenge Me Submission</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
     body {
@@ -13,11 +13,7 @@
       padding: 30px 15px;
       color: #4e342e;
     }
-    h1 {
-      text-align: center;
-      color: #5d4037;
-      margin-bottom: 20px;
-    }
+    h1 { text-align: center; color: #5d4037; margin-bottom: 20px; }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -25,150 +21,94 @@
       max-width: 750px;
       margin: 0 auto 30px;
     }
-    .challenge-card {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 3/4;
-      perspective: 1000px;
-      cursor: pointer;
-    }
-    .card-inner {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-    }
-    .challenge-card.flipped .card-inner {
-      transform: rotateY(180deg);
-    }
-    .card-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .card-face img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .card-face.back {
-      transform: rotateY(180deg);
-    }
+    .challenge-card { position: relative; width: 100%; aspect-ratio: 3/4; perspective: 1000px; cursor: pointer; }
+    .card-inner { position: absolute; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+    .challenge-card.flipped .card-inner { transform: rotateY(180deg); }
+    .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; overflow: hidden; }
+    .card-face img { width: 100%; height: 100%; object-fit: cover; }
+    .card-face.back { transform: rotateY(180deg); }
     .step {
-      display: none;
-      max-width: 750px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: none; max-width: 750px; margin: 0 auto; background: #fff; padding: 25px;
+      border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .step.active {
-      display: block;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin: 20px 0 5px;
-    }
+    .step.active { display: block; }
+    label { font-weight: bold; display: block; margin: 20px 0 5px; }
     input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
+      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px;
     }
-    textarea {
-      resize: vertical;
-    }
+    textarea { resize: vertical; min-height: 120px; }
     .submit-btn, .next-btn {
-      background-color: #ffb800;
-      color: #4e342e;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 6px;
-      margin-top: 20px;
-      cursor: pointer;
+      background-color: #ffb800; color: #4e342e; border: none; padding: 12px 24px;
+      font-size: 16px; font-weight: bold; border-radius: 6px; margin-top: 20px; cursor: pointer;
     }
-    .submit-btn:hover, .next-btn:hover {
-      background-color: #f57f17;
-      color: #fff;
-    }
+    .submit-btn:hover, .next-btn:hover { background-color: #f57f17; color: #fff; }
     .progress-bar {
-      width: 100%;
-      height: 10px;
-      background-color: #e0e0e0;
-      border-radius: 5px;
-      margin: 20px auto;
-      max-width: 750px;
-      overflow: hidden;
+      width: 100%; height: 10px; background-color: #e0e0e0; border-radius: 5px;
+      margin: 20px auto; max-width: 750px; overflow: hidden;
     }
-    .progress {
-      height: 100%;
-      background-color: #00bcd4; /* Cyan */
-      transition: width 0.3s ease-in-out;
-    }
+    .progress { height: 100%; background-color: #00bcd4; transition: width 0.3s ease-in-out; }
+    .helper { font-size: 12px; color: #6d4c41; margin-top: 6px; }
+    .warning { color: #d84315; font-weight: 600; }
+    .selected { outline: 3px solid #00bcd4; border-radius: 8px; }
   </style>
 </head>
 <body>
   <h1>Challenge Me</h1>
   <div class="progress-bar"><div class="progress" id="progressBar" style="width: 0%;"></div></div>
 
+  <!-- Step 1: Card selection -->
   <div class="step active" id="step0">
     <h3 style="text-align:center;">Step 1: Select Your Challenge</h3>
     <div class="card-grid" id="challengeGrid"></div>
-    <button class="next-btn" id="next0">Next</button>
+    <button class="next-btn" id="next0" type="button">Next</button>
   </div>
 
   <form id="challengeForm">
+    <!-- Step 2: Display Name (dropdown) -->
     <div class="step" id="step1">
-      <label for="fullName">2. Your Full Name *</label>
-      <input type="text" id="fullName" required />
+      <label for="displayName">2. Select Your Name *</label>
+      <select id="displayName" required>
+        <option value="">Loading...</option>
+      </select>
+      <div class="helper">If you can’t find your name, please contact the organizer to be added.</div>
       <button class="next-btn" type="button">Next</button>
     </div>
+
+    <!-- Step 3: Email -->
     <div class="step" id="step2">
-      <label for="bookingCode">3. Booking Code *</label>
-      <input type="text" id="bookingCode" required />
-      <button class="next-btn" type="button">Next</button>
-    </div>
-    <div class="step" id="step3">
-      <label for="email">4. Your Email *</label>
+      <label for="email">3. Your Email *</label>
       <input type="email" id="email" required />
       <button class="next-btn" type="button">Next</button>
     </div>
-    <div class="step" id="step4">
-      <label for="dateTaken">5. Date of Challenge Taken *</label>
-      <input type="date" id="dateTaken" required />
-      <button class="next-btn" type="button">Next</button>
-    </div>
-    <div class="step" id="step5">
-      <label for="action">6. What did you do? How do you feel? *</label>
+
+    <!-- Step 4: Reflection questions -->
+    <div class="step" id="step3">
+      <label for="action">4. What did you do? How do you feel? *</label>
       <textarea id="action" required></textarea>
       <button class="next-btn" type="button">Next</button>
     </div>
-    <div class="step" id="step6">
-      <label for="journey">7. Share your journey *</label>
+
+    <div class="step" id="step4">
+      <label for="journey">5. Share your journey *</label>
       <textarea id="journey" required></textarea>
       <button class="next-btn" type="button">Next</button>
     </div>
-    <div class="step" id="step7">
-      <label for="different">8. What would you do differently? *</label>
+
+    <div class="step" id="step5">
+      <label for="different">6. What would you do differently? *</label>
       <textarea id="different" required></textarea>
       <button class="next-btn" type="button">Next</button>
     </div>
-    <div class="step" id="step8">
-      <label for="questions">9. Any questions you have?</label>
+
+    <div class="step" id="step6">
+      <label for="questions">7. Any questions you have?</label>
       <textarea id="questions"></textarea>
       <button class="next-btn" type="button">Next</button>
     </div>
-    <div class="step" id="step9">
-      <label for="rating">10. How did you like the challenge? (1-10)</label>
+
+    <!-- Step 8: Rating + Submit -->
+    <div class="step" id="step7">
+      <label for="rating">8. How did you like the challenge? (1-10)</label>
       <input type="range" id="rating" min="1" max="10" value="5" />
       <button class="submit-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Submit</button>
     </div>
@@ -176,26 +116,35 @@
 
   <script type="module">
     import { db } from "./firebase-config.js";
-    import { ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const steps = document.querySelectorAll(".step");
     const nextButtons = document.querySelectorAll(".next-btn");
     const progress = document.getElementById("progressBar");
     const challengeGrid = document.getElementById("challengeGrid");
     const challengeForm = document.getElementById("challengeForm");
+    const nameSelect = document.getElementById("displayName");
+
     let currentStep = 0;
     let selectedChallenge = "";
     const totalCards = 10;
 
     function updateProgress() {
-      const percent = ((currentStep) / (steps.length - 1)) * 100;
-      progress.style.width = `${percent}%`;
+      const percent = (currentStep / (steps.length - 1)) * 100;
+      progress.style.width = percent + "%";
     }
 
+    // Step navigation
     nextButtons.forEach((btn, idx) => {
       btn.addEventListener("click", () => {
+        // Ensure a challenge is selected before leaving Step 1
         if (idx === 0 && !selectedChallenge) {
           alert("Please select a challenge first.");
+          return;
+        }
+        // Ensure a name is chosen
+        if (idx === 1 && !nameSelect.value) {
+          alert("Please select your name.");
           return;
         }
         steps[currentStep].classList.remove("active");
@@ -205,6 +154,7 @@
       });
     });
 
+    // Card grid
     for (let i = 1; i <= totalCards; i++) {
       const card = document.createElement("div");
       card.className = "challenge-card";
@@ -212,10 +162,10 @@
       card.innerHTML = `
         <div class="card-inner">
           <div class="card-face front">
-            <img src="challenges/front${i}.png" />
+            <img src="challenges/front${i}.png" alt="Challenge ${i} front" />
           </div>
           <div class="card-face back">
-            <img src="challenges/back${i}.png" />
+            <img src="challenges/back${i}.png" alt="Challenge ${i} back" />
           </div>
         </div>
       `;
@@ -227,24 +177,71 @@
       challengeGrid.appendChild(card);
     }
 
+    // Load display names from /users and populate dropdown (text + value = display name)
+    async function loadDisplayNames() {
+      try {
+        const snapshot = await get(child(ref(db), "users"));
+        nameSelect.innerHTML = "<option value=''>-- Select Name --</option>";
+
+        if (!snapshot.exists()) {
+          nameSelect.innerHTML = "<option value=''>No users found</option>";
+          return;
+        }
+
+        const users = snapshot.val();
+        const names = [];
+
+        Object.keys(users).forEach(uid => {
+          const displayName =
+            users[uid]?.displayName ||
+            users[uid]?.name ||
+            users[uid]?.username ||
+            ""; // last resort (we'll filter empty)
+          if (displayName && typeof displayName === "string") {
+            names.push(displayName.trim());
+          }
+        });
+
+        // Deduplicate and sort A→Z
+        const uniqueSorted = Array.from(new Set(names)).sort((a, b) => a.localeCompare(b));
+
+        if (uniqueSorted.length === 0) {
+          nameSelect.innerHTML = "<option value=''>No display names found</option>";
+          return;
+        }
+
+        uniqueSorted.forEach(n => {
+          const opt = document.createElement("option");
+          opt.value = n;      // stored in submission
+          opt.textContent = n; // shown in dropdown
+          nameSelect.appendChild(opt);
+        });
+      } catch (e) {
+        console.error(e);
+        nameSelect.innerHTML = "<option value=''>Failed to load names</option>";
+      }
+    }
+    loadDisplayNames();
+
+    // Submit
     challengeForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       try {
         const submission = {
-          fullName: document.getElementById("fullName").value,
-          bookingCode: document.getElementById("bookingCode").value,
+          name: nameSelect.value, // display name only (no UID)
           email: document.getElementById("email").value,
-          dateTaken: document.getElementById("dateTaken").value,
           action: document.getElementById("action").value,
           journey: document.getElementById("journey").value,
           different: document.getElementById("different").value,
           questions: document.getElementById("questions").value,
-          rating: parseInt(document.getElementById("rating").value),
+          rating: parseInt(document.getElementById("rating").value, 10),
           challengeId: selectedChallenge,
-          submittedAt: new Date().toISOString()
+          submittedAt: new Date().toISOString() // timestamp instead of date input
         };
+
         const newRef = push(ref(db, "challenges"));
         await set(newRef, submission);
+
         alert("Challenge submitted successfully!");
         window.location.href = "index.html";
       } catch (err) {
