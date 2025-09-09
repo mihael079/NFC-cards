@@ -65,7 +65,7 @@
     .tab i { font-size: 1.1rem; }
     .home-fab { width: 60px; height: 60px; border-radius: 999px; background: var(--gold); color: var(--dark-brown); border: 6px solid #fff; box-shadow: var(--soft-shadow); font-size: 1.4rem; display: grid; place-items: center; }
 
-    /* === Added: Daily 3 card grid (same look as challenges.html) === */
+    /* Daily cards */
     .fd-daily-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -80,7 +80,6 @@
     .card-face img { width: 100%; height: 100%; object-fit: cover; }
     .card-face.back { transform: rotateY(180deg); }
 
-    /* Optional: a clean button for "Daily Challenges" under the grid */
     .daily-btn {
       display:inline-block; text-decoration:none; font-weight:800;
       background: var(--gold); color: var(--dark-brown);
@@ -141,14 +140,22 @@
       <section aria-labelledby="daily-challenges" style="margin-top: 22px;">
         <h2 id="daily-challenges">Daily Challenges</h2>
 
-        <!-- ADDED: Daily 3 random cards (same card format) -->
+        <!-- Daily 3 cards -->
         <div id="fdDailyCards" class="fd-daily-grid" aria-live="polite"></div>
-        <!-- ADDED: Daily Challenges button under the grid -->
+
+        <!-- Daily Challenges CTA -->
         <div style="display:flex; justify-content:center;">
           <a class="daily-btn" href="challenges.html"><i class="fa-solid fa-bolt"></i> Daily Challenges</a>
         </div>
 
-        <!-- Existing quick links kept exactly as-is -->
+        <!-- NEW: Auth-gated "My Submissions" button -->
+        <div id="mySubsButtonWrap" style="display:none; display:flex; justify-content:center; margin-top:8px;">
+          <a class="daily-btn" href="my-submissions.html">
+            <i class="fa-solid fa-folder-open"></i> My Submissions
+          </a>
+        </div>
+
+        <!-- Existing quick links -->
         <div style="display:grid; gap:12px;">
           <a href="challenges.html" style="text-decoration:none;">
             <div style="background:#fff8e1; border:1px solid #ffe082; border-radius:14px; padding:14px; box-shadow: var(--soft-shadow);">
@@ -182,7 +189,7 @@
   </nav>
 
   <script>
-    // Fade out loader on page load
+    // Fade out loader
     window.addEventListener('load', () => {
       const loader = document.querySelector('.loader');
       if (loader) {
@@ -193,18 +200,33 @@
     });
   </script>
 
+  <!-- Firebase + sidebar + admin toggle + My Submissions toggle -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
-    const firebaseConfig = { apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s", authDomain: "nfc-cards-dfa6b.firebaseapp.com", projectId: "nfc-cards-dfa6b", storageBucket: "nfc-cards-dfa6b.appspot.com", messagingSenderId: "321725769305", appId: "1:321725769305:web:42e79fd85cc6029b97f348", databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com/" };
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s",
+      authDomain: "nfc-cards-dfa6b.firebaseapp.com",
+      projectId: "nfc-cards-dfa6b",
+      storageBucket: "nfc-cards-dfa6b.appspot.com",
+      messagingSenderId: "321725769305",
+      appId: "1:321725769305:web:42e79fd85cc6029b97f348",
+      databaseURL: "https://nfc-cards-dfa6b-default-rtdb.firebaseio.com/"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+
+    // Admin-only sidebar entries
     const usersPage = document.getElementById('usersPage');
     const talentPage = document.getElementById('talentPage');
     onAuthStateChanged(auth, user => {
       const isAdmin = user?.uid === 'SBu5uRcZgTVQGN7MKuaOBnjNg7C2';
       [usersPage, talentPage].forEach(el => { if (el) el.classList.toggle('hidden', !isAdmin); });
     });
+
+    // Sidebar interactions
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
     const openBtn = document.getElementById('openSidebar');
@@ -215,20 +237,27 @@
     closeBtn?.addEventListener('click', closeSidebarFn);
     overlay?.addEventListener('click', closeSidebarFn);
     window.addEventListener('keydown', e => { if (e.key==='Escape') closeSidebarFn(); });
+
+    // Toggle "My Submissions" button when signed in
+    const mySubsWrap = document.getElementById('mySubsButtonWrap');
+    onAuthStateChanged(auth, (user) => {
+      if (mySubsWrap) {
+        mySubsWrap.style.display = user ? 'flex' : 'none';
+      }
+    });
   </script>
 
-  <!-- ADDED: Daily 3 cards logic (kept separate; no changes to your existing scripts) -->
+  <!-- Daily 3 cards logic -->
   <script>
-    // Number of available card images (front1/back1 ... front10/back10)
     const FD_TOTAL_CARDS = 10;
 
-    // Keep the same trio for a whole SG day; new trio after midnight Asia/Singapore
+    // Keep same trio for a whole SG day; new trio after midnight Asia/Singapore
     function fdSingaporeYYYYMMDD() {
       const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Singapore', year: 'numeric', month: '2-digit', day: '2-digit' });
       return fmt.format(new Date()).replaceAll('-', ''); // "YYYYMMDD"
     }
 
-    // Deterministic PRNG (Mulberry32) so everyone sees the same 3 for the day
+    // Deterministic PRNG (Mulberry32)
     function fdMulberry32(seed) {
       return function() {
         let t = seed += 0x6D2B79F5;
@@ -265,18 +294,15 @@
             </div>
           </div>
         `;
-        // Flip on tap for fun, but navigate to challenges.html on click
+        // Flip for fun, then navigate
         card.addEventListener('click', () => {
-          // Optional quick flip feedback
           card.classList.toggle('flipped');
-          // Navigate to the full challenges page
           window.location.href = 'challenges.html';
         });
         mount.appendChild(card);
       });
     }
 
-    // Build daily trio
     const fdSeed = fdSingaporeYYYYMMDD();
     const fdDailyIds = fdPickDailyIds(FD_TOTAL_CARDS, 3, fdSeed);
     fdRenderDailyCards(fdDailyIds);
