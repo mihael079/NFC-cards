@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Challenge Submissions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fefae0;
+      margin: 0; padding: 30px 15px; color: #4e342e;
+    }
+    h1 { text-align: center; color: #5d4037; margin-bottom: 10px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .card {
+      background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 18px; margin: 14px 0;
+    }
+    .topbar {
+      display: flex; gap: 10px; align-items: center; justify-content: space-between;
+      max-width: 900px; margin: 0 auto 12px;
+    }
+    .muted { color: #6d4c41; font-size: 14px; }
+    .btn {
+      background-color: #ffb800; color: #4e342e; border: none; padding: 10px 16px;
+      font-weight: 600; border-radius: 6px; cursor: pointer;
+    }
+    .btn:hover { background-color: #f57f17; color: #fff; }
+    .btn.secondary { background: #00bcd4; color: #073642; }
+    .btn.secondary:hover { background: #00a0b6; color: #fff; }
+    .controls {
+      display: grid; grid-template-columns: 1fr 180px 140px; gap: 10px; width: 100%;
+    }
+    input[type="search"], select {
+      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px;
+      background: #fff;
+    }
+    .pill {
+      display: inline-block; padding: 2px 8px; border-radius: 999px; background: #e8f5e9; color: #2e7d32; font-size: 12px;
+    }
+    .empty {
+      text-align: center; color: #6d4c41; padding: 30px 10px;
+    }
+    .row {
+      display: grid; grid-template-columns: 140px 1fr; gap: 10px; margin: 8px 0;
+    }
+    .row strong { color: #5d4037; }
+    .header {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 6px;
+    }
+    .challenge-tag { font-weight: 700; color: #4e342e; }
+    .footer {
+      display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 10px; flex-wrap: wrap;
+    }
+    .badge { font-size: 12px; color: #6d4c41; }
+    .danger { color: #d84315; }
+    .loading {
+      text-align: center; padding: 20px; color: #6d4c41;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Challenge Submissions</h1>
+  <div class="topbar">
+    <div class="muted" id="welcomeText">Checking sign-in…</div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn secondary" id="exportBtn" title="Export to CSV"><i class="fa-solid fa-file-csv"></i> Export</button>
+      <button class="btn" id="signOutBtn" title="Sign out"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <div class="controls">
+      <input type="search" id="searchInput" placeholder="Search in action / journey / different / questions…"/>
+      <select id="sortSelect" title="Sort">
+        <option value="newest">Sort by Newest</option>
+        <option value="oldest">Sort by Oldest</option>
+        <option value="ratingHigh">Rating: High → Low</option>
+        <option value="ratingLow">Rating: Low → High</option>
+      </select>
+      <select id="filterRating" title="Filter by rating">
+        <option value="">All Ratings</option>
+        <option value=">=8">Rating ≥ 8</option>
+        <option value="<=4">Rating ≤ 4</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" id="content">
+    <div class="loading" id="loading"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading your submissions…</div>
+    <div id="list"></div>
+    <div class="empty" id="emptyState" style="display:none;">
+      <p>No submissions yet.</p>
+      <p class="muted">Head to <a href="challenges.html">Challenge Me</a> to submit your first one.</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import {
+      getAuth, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import {
+      ref, get, child
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    const auth = getAuth();
+    const welcomeText = document.getElementById("welcomeText");
+    const listEl = document.getElementById("list");
+    const loadingEl = document.getElementById("loading");
+    const emptyEl = document.getElementById("emptyState");
+    const signOutBtn = document.getElementById("signOutBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const searchInput = document.getElementById("searchInput");
+    const sortSelect = document.getElementById("sortSelect");
+    const filterRating = document.getElementById("filterRating");
+
+    let allMine = []; // raw submissions matched to current user
+    let filtered = []; // view model after search/sort/filter
+    let currentUserEmail = null;
+
+    const fmt = (iso) => {
+      try {
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return iso || "";
+        return d.toLocaleString(undefined, {
+          year: "numeric", month: "short", day: "2-digit",
+          hour: "2-digit", minute: "2-digit"
+        });
+      } catch { return iso || ""; }
+    };
+
+    function normalizeEmail(s) { return (s || "").trim().toLowerCase(); }
+
+    function renderList(items) {
+      listEl.innerHTML = "";
+      if (!items.length) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      items.forEach((it) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <div class="header">
+            <div>
+              <div class="challenge-tag"><i class="fa-solid fa-hashtag"></i> ${it.challengeId || "(no id)"}</div>
+              <div class="badge"><i class="fa-regular fa-calendar"></i> ${fmt(it.submittedAt)}</div>
+            </div>
+            <div>
+              <span class="pill" title="Your rating">${typeof it.rating === "number" ? `Rating: ${it.rating}/10` : "No rating"}</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <strong>What did you do / feel?</strong>
+            <div>${escapeHtml(it.action || "")}</div>
+          </div>
+          <div class="row">
+            <strong>Journey</strong>
+            <div>${escapeHtml(it.journey || "")}</div>
+          </div>
+          <div class="row">
+            <strong>Do differently</strong>
+            <div>${escapeHtml(it.different || "")}</div>
+          </div>
+          ${it.questions ? `
+          <div class="row">
+            <strong>Questions</strong>
+            <div>${escapeHtml(it.questions)}</div>
+          </div>` : ""}
+
+          <div class="footer">
+            <div class="badge"><i class="fa-regular fa-user"></i> ${escapeHtml(it.name || "")} • <i class="fa-regular fa-envelope"></i> ${escapeHtml(it.email || "")}</div>
+            <div class="badge">DB Key: <span class="danger" title="Database path key">${it._key || "—"}</span></div>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      return (str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;")
+        .replaceAll("\n", "<br>");
+    }
+
+    function applyFilters() {
+      const q = (searchInput.value || "").trim().toLowerCase();
+      const fr = filterRating.value;
+
+      filtered = allMine.filter(it => {
+        let ratingOk = true;
+        if (fr === ">=8") ratingOk = (typeof it.rating === "number" ? it.rating >= 8 : false);
+        if (fr === "<=4") ratingOk = (typeof it.rating === "number" ? it.rating <= 4 : false);
+
+        if (!q) return ratingOk;
+        const hay = [it.action, it.journey, it.different, it.questions].join(" ").toLowerCase();
+        return ratingOk && hay.includes(q);
+      });
+
+      const sort = sortSelect.value;
+      filtered.sort((a, b) => {
+        if (sort === "newest") return new Date(b.submittedAt) - new Date(a.submittedAt);
+        if (sort === "oldest") return new Date(a.submittedAt) - new Date(b.submittedAt);
+        if (sort === "ratingHigh") return (b.rating ?? -1) - (a.rating ?? -1);
+        if (sort === "ratingLow") return (a.rating ?? 999) - (b.rating ?? 999);
+        return 0;
+      });
+
+      renderList(filtered);
+    }
+
+    async function loadMySubmissions() {
+      loadingEl.style.display = "block";
+      listEl.innerHTML = "";
+      emptyEl.style.display = "none";
+
+      try {
+        const snapshot = await get(child(ref(db), "challenges"));
+        const mine = [];
+        if (snapshot.exists()) {
+          snapshot.forEach(childSnap => {
+            const val = childSnap.val();
+            if (!val) return;
+            // Match by email (case-insensitive)
+            if (normalizeEmail(val.email) === normalizeEmail(currentUserEmail)) {
+              mine.push({ ...val, _key: childSnap.key });
+            }
+          });
+        }
+        allMine = mine;
+        applyFilters();
+      } catch (e) {
+        console.error(e);
+        listEl.innerHTML = `<div class="card"><div class="danger"><i class="fa-solid fa-triangle-exclamation"></i> Failed to load submissions. Please try again later.</div></div>`;
+      } finally {
+        loadingEl.style.display = "none";
+      }
+    }
+
+    function downloadCSV(rows) {
+      const header = ["challengeId","submittedAt","name","email","rating","action","journey","different","questions","dbKey"];
+      const esc = (v) => {
+        const s = (v ?? "").toString().replaceAll('"', '""');
+        return `"${s}"`;
+      };
+      const lines = [header.join(",")].concat(
+        rows.map(r => [
+          esc(r.challengeId),
+          esc(r.submittedAt),
+          esc(r.name),
+          esc(r.email),
+          esc(typeof r.rating === "number" ? r.rating : ""),
+          esc(r.action),
+          esc(r.journey),
+          esc(r.different),
+          esc(r.questions),
+          esc(r._key)
+        ].join(","))
+      );
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "my-challenges.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Wire UI
+    searchInput.addEventListener("input", applyFilters);
+    sortSelect.addEventListener("change", applyFilters);
+    filterRating.addEventListener("change", applyFilters);
+    exportBtn.addEventListener("click", () => downloadCSV(filtered));
+
+    signOutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        welcomeText.innerHTML = `You’re not signed in. <a href="login.html">Go to Login</a>`;
+        loadingEl.style.display = "none";
+        emptyEl.style.display = "block";
+        return;
+      }
+      currentUserEmail = user.email || "";
+      welcomeText.textContent = `Signed in as ${user.displayName || user.email}`;
+      await loadMySubmissions();
+    });
+  </script>
+</body>
+</html>
