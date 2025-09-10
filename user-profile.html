@@ -117,10 +117,26 @@
     .timer .tiny{display:block; font-size:var(--fs-12); opacity:.75; margin-top:2px}
     .bottom-pad{background:#fff; height:28px; margin:0 16px 12px; border-radius:0 0 22px 22px; border:1px solid #eee2d4; border-top:0; box-shadow:inset 0 1px 0 #fff;}
 
-    /* Back to Home */
-    .home-wrap{padding:0 16px 18px}
-    .home-wrap a{ text-decoration:none; display:block}
-    .home-wrap button{width:100%; border-radius:14px; background:#f0e7db; color:#5a463d; box-shadow:none; padding:12px; border:2px solid #29221d; font-weight:700; min-height:44px}
+    /* Back to Home & FAQ container */
+    .home-wrap{
+      padding:0 16px 18px;
+    }
+    .home-buttons{
+      display:flex;
+      gap:10px;
+    }
+    .home-buttons a{flex:1; text-decoration:none; display:block}
+    .home-buttons button{
+      width:100%;
+      border-radius:14px;
+      background:#f0e7db;
+      color:#5a463d;
+      box-shadow:none;
+      padding:12px;
+      border:2px solid #29221d;
+      font-weight:700;
+      min-height:44px
+    }
 
     /* Tiny screens */
     @media (max-width:360px){
@@ -149,7 +165,7 @@
       .footer{background:#1a1511; border-color:#3a3128}
       .timer{background:#2a221c; color:#f2e4d8}
       .bottom-pad{background:#17120f; border-color:#3a3128}
-      .home-wrap button{background:#2a221c; color:#f2e4d8; border-color:#f2e4d8}
+      .home-buttons button{background:#2a221c; color:#f2e4d8; border-color:#f2e4d8}
     }
 
     /* Reduced motion */
@@ -216,11 +232,16 @@
     </div>
     <div class="bottom-pad"></div>
 
-    <!-- Back to Home -->
+    <!-- Back to Home & FAQ -->
     <div class="home-wrap">
-      <a href="index.html">
-        <button><i class="fa-solid fa-house" aria-hidden="true"></i> Back to Home</button>
-      </a>
+      <div class="home-buttons">
+        <a href="index.html">
+          <button><i class="fa-solid fa-house" aria-hidden="true"></i> Back to Home</button>
+        </a>
+        <a href="faq.html">
+          <button><i class="fa-solid fa-circle-question" aria-hidden="true"></i> FAQ</button>
+        </a>
+      </div>
     </div>
   </div>
 
