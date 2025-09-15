@@ -30,6 +30,19 @@
       --z-header: 1002;
       --z-loader: 1100;
       --z-bottomnav: 1000;
+
+      /* New themed button colors */
+      --btn-brown: #5d4037;
+      --btn-brown-fg: #fff8e6;
+
+      --btn-dkorange: #e77919;  /* dark orange */
+      --btn-dkorange-fg: #fffaf3;
+
+      --btn-purple: #7c4dff;
+      --btn-purple-fg: #f6f1ff;
+
+      --btn-green: #1b5e20; /* forest green */
+      --btn-green-fg: #eaffea;
     }
 
     * { box-sizing: border-box; }
@@ -46,9 +59,7 @@
     .loader { position: fixed; inset: 0; background: #fff; display: grid; place-items: center; z-index: var(--z-loader); transition: opacity .35s ease; }
     .spinner { border: 8px solid #f3f3f3; border-top: 8px solid var(--gold); border-radius: 50%; width: 80px; height: 80px; animation: spin 1s linear infinite; }
     @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-    @media (prefers-reduced-motion: reduce) {
-      .spinner { animation: none; border-top-color: var(--gold); }
-    }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 
     /* Topbar */
     .topbar {
@@ -64,28 +75,19 @@
       padding: 10px 14px;
     }
     .brand-title { font-size: 1.15rem; font-weight: 900; letter-spacing: .2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .icon-link, .icon-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      text-decoration: none; border: none; cursor: pointer;
-      font-weight: 700; border-radius: var(--radius-sm);
-    }
+    .icon-link, .icon-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; border: none; cursor: pointer; font-weight: 700; border-radius: var(--radius-sm); }
     .icon-link { color: var(--dark-brown); padding: 6px 8px; }
     .icon-btn { background: var(--light-brown); color: #fff; padding: 8px 12px; box-shadow: var(--soft-shadow-2); }
     .icon-btn.ghost-btn { background: transparent; color: var(--dark-brown); border: 2px solid rgba(0,0,0,.08); }
-    .icon-btn:focus-visible, .icon-link:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px #0000, 0 0 0 3px rgba(63,47,42,.25) inset; border-radius: 12px; }
+    .icon-btn:focus-visible, .icon-link:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px rgba(63,47,42,.25) inset; border-radius: 12px; }
 
     /* Page layout */
     .layout { max-width: var(--maxw); margin: 16px auto; padding: 16px; }
-    main.card {
-      background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--soft-shadow);
-      padding: 18px; max-width: 980px; margin: 0 auto;
-    }
+    main.card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--soft-shadow); padding: 18px; max-width: 980px; margin: 0 auto; }
     main.card > * { max-width: 920px; margin-left: auto; margin-right: auto; }
 
     header.hero {
-      position: relative;
-      text-align: center; padding: 28px 16px 18px;
+      position: relative; text-align: center; padding: 28px 16px 18px;
       background: radial-gradient(120% 120% at 50% -10%, #fff3d4 0%, #ffe9b3 45%, var(--gold) 100%);
       color: var(--dark-brown); border-radius: 18px; box-shadow: var(--soft-shadow);
       overflow: hidden;
@@ -99,121 +101,109 @@
     .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .sidebar ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
     .sidebar li a { display: flex; align-items: center; gap: 12px; padding: 12px; text-decoration: none; background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md); color: #374151; font-weight: 600; box-shadow: 0 1px 1px rgba(0,0,0,.04); }
-    .sidebar li a:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px #0000, 0 0 0 3px rgba(255,190,60,.55) inset; }
+    .sidebar li a:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px rgba(255,190,60,.55) inset; }
 
     .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: none; z-index: calc(var(--z-sidebar) - 1); }
     .overlay.show { display: block; }
 
-    /* Bottom tabs */
-    .bottom-tabs {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-bottomnav);
-      background: #fff; border-top: 1px solid #e5e7eb; box-shadow: 0 -6px 20px rgba(0,0,0,.06);
-      padding-bottom: env(safe-area-inset-bottom);
-    }
-    .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); }
-    .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 2px; text-decoration: none; color: #6b7280; font-weight: 700; font-size: .72rem; }
-    .tab i { font-size: 1.1rem; }
-    .home-fab { width: 60px; height: 60px; border-radius: 999px; background: var(--gold); color: var(--dark-brown); border: 6px solid #fff; box-shadow: var(--soft-shadow); font-size: 1.4rem; display: grid; place-items: center; }
-
     /* Buttons (shared) */
     .daily-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      text-decoration: none; font-weight: 800;
-      background: var(--gold); color: var(--dark-brown);
-      padding: 10px 16px; border-radius: 12px; border: 2px solid rgba(0,0,0,.06);
-      box-shadow: var(--soft-shadow);
-      text-align: center;
+      display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800;
+      background: var(--gold); color: var(--dark-brown); padding: 10px 16px; border-radius: 12px; border: 2px solid rgba(0,0,0,.06); box-shadow: var(--soft-shadow); text-align: center;
       transition: transform .08s ease, box-shadow .2s ease;
-      will-change: transform;
     }
     .daily-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,.12); }
-    .daily-btn:active { transform: translateY(0); }
     .daily-btn:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px rgba(255,190,60,.7); }
 
-    /* ===== Daily Challenges (single row, auto-size by width & height) ===== */
+    /* ===== Daily Challenges ===== */
     .fd-daily-grid {
-      display: flex !important;
-      flex-wrap: nowrap;                 /* keep on one line */
-      justify-content: center;
-      align-items: stretch;
-      gap: 12px;
-      width: 100%;
-      max-width: none;
-      margin: 12px auto 8px;
-      padding: 0 10px;                   /* small guard against edge clipping */
-      overflow-x: hidden;                /* prevent accidental scrollbars */
+      display: flex !important; flex-wrap: nowrap; justify-content: center; align-items: stretch;
+      gap: 12px; width: 100%; max-width: none; margin: 12px auto 8px; padding: 0 10px; overflow-x: hidden;
     }
-
-    /* Each card preserves 3:4 aspect and sizes to fit 3 across the viewport.
-       We cap by height also, so on short devices it shrinks to fit. */
     .challenge-card {
-      position: relative;
-      flex: 0 0 auto;
-      aspect-ratio: 3 / 4;
-      width: clamp(
-        88px,                                      /* tiny devices safe floor */
-        calc((100vw - 20px - 2 * 12px) / 3),       /* (vw - side padding - gaps)/3 */
-        240px                                      /* upper cap for phones */
-      );
-      max-height: min(                             
-        calc(100dvh * 0.32),                       /* avoid towering on short screens */
-        380px                                      /* absolute sanity cap */
-      );
-      perspective: 1000px;
-      border-radius: 12px;
-      box-shadow: var(--soft-shadow-2);
-      cursor: pointer;
-      transition: transform .2s ease;
+      position: relative; flex: 0 0 auto; aspect-ratio: 3 / 4;
+      width: clamp(88px, calc((100vw - 20px - 2 * 12px) / 3), 240px);
+      max-height: min(calc(100dvh * 0.32), 380px);
+      perspective: 1000px; border-radius: 12px; box-shadow: var(--soft-shadow-2);
+      cursor: pointer; transition: transform .2s ease;
     }
     .challenge-card:hover { transform: translateY(-2px); }
-    .challenge-card:active { transform: translateY(0); }
-
     .card-inner { position: absolute; inset: 0; transition: transform 0.8s; transform-style: preserve-3d; }
     .challenge-card.flipped .card-inner { transform: rotateY(180deg); }
     .card-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; overflow: hidden; }
     .card-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .card-face.back { transform: rotateY(180deg); }
-
-    /* Prefer reduced motion (less flip sensation) */
-    @media (prefers-reduced-motion: reduce) {
-      .card-inner { transition: none; }
-      .challenge-card.flipped .card-inner { transform: none; }
-    }
-
-    /* Tablet / Desktop refinements (slightly larger caps) */
+    @media (prefers-reduced-motion: reduce) { .card-inner { transition: none; } .challenge-card.flipped .card-inner { transform: none; } }
     @media (min-width: 768px) {
-      .challenge-card {
-        width: clamp(120px, calc((100vw - 64px) / 3), 280px);
-        max-height: min(calc(100dvh * 0.36), 420px);
-      }
+      .challenge-card { width: clamp(120px, calc((100vw - 64px) / 3), 280px); max-height: min(calc(100dvh * 0.36), 420px); }
       main.card { padding: 24px; }
     }
 
     /* Utility */
     .hidden { display: none !important; }
 
-    /* Footer */
-    footer {
-      text-align: center; color: #6b7280; font-size: .85rem;
-      padding: 40px 16px 100px; /* leave room for bottom tabs */
-    }
+    /* Footer bottom padding for tabs */
+    footer { text-align: center; color: #6b7280; font-size: .85rem; padding: 40px 16px 100px; }
 
-    /* Small header tweaks on very narrow phones */
     @media (max-width: 480px) {
       .topbar-right .icon-link span { display: none; }
       .icon-btn span { display: none; }
       .brand-title { font-size: 1rem; }
     }
 
-    /* Nice link tiles */
-    .tile {
-      background:#fff; border:1px solid #f1f5f9; border-radius:14px; padding:14px;
-      box-shadow: var(--soft-shadow-2); color: inherit; text-decoration: none;
-      display:flex; align-items:center; gap:10px; font-weight: 700;
+    /* ===== Profile snippet ===== */
+    .profile-snippet {
+      display: none; /* shown when user + data ready */
+      margin-top: 16px; margin-bottom: 8px; padding: 12px;
+      border: 1px solid var(--border); border-radius: 14px; background: #fffdf5; box-shadow: var(--soft-shadow-2);
     }
-    .tile--warm { background:#fff8e1; border-color:#ffe082; }
-    .tile i { opacity:.8; }
-    .tile:focus-visible { outline: 3px solid #0000; box-shadow: 0 0 0 3px rgba(255,190,60,.55); }
+    .profile-snippet__row { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: center; }
+    .profile-snippet__avatar { width: 56px; height: 56px; border-radius: 999px; object-fit: cover; border: 3px solid #ffe082; }
+    .profile-snippet__name { font-weight: 900; color: var(--dark-brown); margin: 0 0 4px; }
+    .profile-snippet__meta { margin: 0; font-size: .9rem; color: #6b7280; }
+    .profile-snippet__talent { margin: 6px 0 0; font-size: .9rem; color: #374151; }
+
+    /* ===== Bottom Tab Bar (5 buttons with center FAB) ===== */
+    .bottom-tabs {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-bottomnav);
+      background: #fff; border-top: 1px solid #e5e7eb; box-shadow: 0 -6px 20px rgba(0,0,0,.06);
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+    }
+    .tabbar {
+      max-width: 760px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(5, 1fr); align-items: end;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      height: 44px; width: 44px; border-radius: 999px; display: grid; place-items: center;
+      text-decoration: none; box-shadow: 0 3px 10px rgba(0,0,0,.10); border: 2px solid rgba(0,0,0,.06);
+      transform: translateY(0); transition: transform .12s ease, box-shadow .2s ease;
+      margin: 0 auto;
+      color: #222;
+    }
+    .tab-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.14); }
+    .tab-btn:active { transform: translateY(0); }
+
+    /* Themed buttons */
+    .btn-brown { background: var(--btn-brown); color: var(--btn-brown-fg); }
+    .btn-dkorange { background: var(--btn-dkorange); color: var(--btn-dkorange-fg); }
+    .btn-purple { background: var(--btn-purple); color: var(--btn-purple-fg); }
+    .btn-green { background: var(--btn-green); color: var(--btn-green-fg); }
+
+    /* Center FAB (Ace of Spades) */
+    .tab-fab {
+      height: 64px; width: 64px; border-radius: 999px;
+      background: var(--gold); color: var(--dark-brown);
+      border: 6px solid #fff; box-shadow: var(--soft-shadow);
+      display: grid; place-items: center; margin: 0 auto;
+      transform: translateY(-16px);
+    }
+    .tab-fab:hover { transform: translateY(-18px); box-shadow: 0 12px 24px rgba(0,0,0,.16); }
+    .tab-fab:active { transform: translateY(-16px); }
+
+    /* Ace of spades SVG size */
+    .spade-icon { width: 24px; height: 24px; display: block; }
   </style>
 </head>
 <body>
@@ -223,9 +213,9 @@
     <div class="topbar-inner">
       <h1 class="brand-title">Fundamental Decisions</h1>
       <div class="topbar-right">
-        <a href="login.html" class="icon-link"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></a>
-        <a href="register-user.html" class="icon-link"><i class="fa-solid fa-user-plus"></i><span>Register</span></a>
-        <button id="openSidebar" class="icon-btn ghost-btn" aria-haspopup="dialog" aria-controls="sidebar"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>Menu</span></button>
+        <a href="login.html" class="icon-link" aria-label="Login"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></a>
+        <a href="register-user.html" class="icon-link" aria-label="Register"><i class="fa-solid fa-user-plus"></i><span>Register</span></a>
+        <button id="openSidebar" class="icon-btn ghost-btn" aria-haspopup="dialog" aria-controls="sidebar" aria-label="Open Menu"><i class="fa-solid fa-bars" aria-hidden="true"></i><span>Menu</span></button>
       </div>
     </div>
   </div>
@@ -242,6 +232,11 @@
       <li><a href="https://www.fundamentaldecisions.com/recent-posts/"><i class="fa-solid fa-calendar-check"></i> Activities</a></li>
       <li id="talentPage" class="hidden"><a href="submit-talent.html"><i class="fa-solid fa-star"></i> Submit Talent</a></li>
       <li id="usersPage" class="hidden"><a href="users.html"><i class="fa-solid fa-users"></i> Users</a></li>
+      <!-- moved from old bottom bar -->
+      <li><a href="my-feedback.html"><i class="fa-solid fa-list"></i> Feedback</a></li>
+      <li><a href="https://www.fundamentaldecisions.com/my-report/"><i class="fa-solid fa-file-alt"></i> My Report</a></li>
+      <li><a href="view-challenges.html"><i class="fa-solid fa-eye"></i> Challenges</a></li>
+      <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
     </ul>
   </aside>
   <div id="overlay" class="overlay" tabindex="-1" aria-hidden="true"></div>
@@ -253,25 +248,33 @@
         <p>Empowering individuals, teams, and organizations to make purposeful, impactful choices.</p>
       </header>
 
+      <!-- Profile Snippet -->
+      <section id="profileSnippet" class="profile-snippet" aria-labelledby="profile-snippet-title">
+        <div class="profile-snippet__row">
+          <img id="psAvatar" src="avatar1.jpg" alt="Your profile picture" class="profile-snippet__avatar" loading="lazy" />
+          <div>
+            <h3 id="profile-snippet-title" class="profile-snippet__name"><span id="psName">Loading…</span></h3>
+            <p class="profile-snippet__meta" id="psBio"></p>
+            <p class="profile-snippet__talent"><strong>Talents:</strong> <span id="psTalents"></span></p>
+          </div>
+        </div>
+      </section>
+
       <section aria-labelledby="daily-challenges" style="margin-top: 22px;">
         <h2 id="daily-challenges">Daily Challenges</h2>
 
-        <!-- Daily 3 cards -->
         <div id="fdDailyCards" class="fd-daily-grid" aria-live="polite"></div>
 
-        <!-- Daily Challenges CTA -->
         <div style="display:flex; justify-content:center;">
           <a class="daily-btn" href="challenges.html"><i class="fa-solid fa-bolt"></i> Daily Challenges</a>
         </div>
 
-        <!-- Auth-gated "My Submissions" button -->
         <div id="mySubsButtonWrap" style="display:none; display:flex; justify-content:center; margin-top:8px;">
           <a class="daily-btn" href="my-submissions.html">
             <i class="fa-solid fa-folder-open"></i> My Submissions
           </a>
         </div>
 
-        <!-- Quick links -->
         <div style="display:grid; gap:12px; margin-top:8px;">
           <a href="challenges.html" class="tile tile--warm">
             <i class="fa-solid fa-bolt"></i> Jump into Today's Challenge
@@ -290,15 +293,36 @@
 
   <footer>&copy; 2025 Fundamental Decisions. All rights reserved.</footer>
 
+  <!-- Bottom Tab Bar -->
   <nav class="bottom-tabs" aria-label="Bottom navigation">
     <div class="tabbar">
-      <a class="tab" href="my-feedback.html"><i class="fa-solid fa-list"></i><span>Feedback</span></a>
-      <a class="tab" href="https://www.fundamentaldecisions.com/my-report/"><i class="fa-solid fa-file-alt"></i><span>My Report</span></a>
-      <a class="tab home" href="index.html">
-        <div class="home-fab" aria-hidden="true"><i class="fa-solid fa-house"></i></div><span>Home</span>
+      <!-- Leftmost: Playground (brown) -->
+      <a class="tab-btn btn-brown" href="playground.html" aria-label="Playground">
+        <i class="fa-solid fa-cubes"></i>
       </a>
-      <a class="tab" href="view-challenges.html"><i class="fa-solid fa-eye"></i><span>Challenges</span></a>
-      <a class="tab" href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+
+      <!-- Left of center: Drama masks (dark orange) -->
+      <a class="tab-btn btn-dkorange" href="my-persona.html" aria-label="My Persona">
+        <i class="fa-solid fa-masks-theater"></i>
+      </a>
+
+      <!-- Center FAB: Ace of Spades (no text) -->
+      <a id="cardFab" class="tab-fab" href="index.html" aria-label="My Card">
+        <!-- Inline SVG spade to ensure consistent availability -->
+        <svg class="spade-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 2C8.5 6 5 8.9 5 12.3c0 2.2 1.8 3.9 3.9 3.9 1 0 1.9-.3 2.6-.9-.4 1.7-1.7 3.2-3.8 4.4-.3.2-.5.5-.5.9h8.6c0-.4-.2-.7-.5-.9-2.1-1.2-3.4-2.7-3.8-4.4.7.6 1.6.9 2.6.9 2.1 0 3.9-1.7 3.9-3.9C19 8.9 15.5 6 12 2z"/>
+        </svg>
+      </a>
+
+      <!-- Right of center: Brain (purple) -->
+      <a class="tab-btn btn-purple" href="mindset.html" aria-label="Mindset">
+        <i class="fa-solid fa-brain"></i>
+      </a>
+
+      <!-- Rightmost: Chat (forest green) -->
+      <a class="tab-btn btn-green" href="chatbot.html" aria-label="Chatbot">
+        <i class="fa-solid fa-comments"></i>
+      </a>
     </div>
   </nav>
 
@@ -314,10 +338,11 @@
     });
   </script>
 
-  <!-- Firebase + sidebar + admin toggle + My Submissions toggle -->
+  <!-- Firebase + sidebar + admin toggle + My Submissions toggle + Profile snippet -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+    import { getDatabase, ref as dbRef, get } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBEIGffCj6b7RTU0hjW8Z4BXlrzFVZFL-s",
@@ -331,14 +356,11 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getDatabase(app);
 
     // Admin-only sidebar entries
     const usersPage = document.getElementById('usersPage');
     const talentPage = document.getElementById('talentPage');
-    onAuthStateChanged(auth, user => {
-      const isAdmin = user?.uid === 'SBu5uRcZgTVQGN7MKuaOBnjNg7C2';
-      [usersPage, talentPage].forEach(el => { if (el) el.classList.toggle('hidden', !isAdmin); });
-    });
 
     // Sidebar interactions
     const sidebar = document.getElementById('sidebar');
@@ -354,9 +376,53 @@
 
     // Toggle "My Submissions" button when signed in
     const mySubsWrap = document.getElementById('mySubsButtonWrap');
+
+    // Profile snippet
+    const ps = document.getElementById('profileSnippet');
+    const psAvatar = document.getElementById('psAvatar');
+    const psName = document.getElementById('psName');
+    const psBio = document.getElementById('psBio');
+    const psTalents = document.getElementById('psTalents');
+
+    let currentUser = null;
+
+    async function loadProfileSnippet(uid) {
+      try {
+        const snap = await get(dbRef(db, `users/${uid}`));
+        const data = snap.exists() ? snap.val() : {};
+        psAvatar.src = data.profilePic || 'avatar1.jpg';
+        psName.textContent = data.displayName || 'Anonymous Explorer';
+        psBio.textContent = data.bio || 'No bio yet.';
+        psTalents.textContent = (data.talents ?? data.interests ?? 'Not added yet').toString() || 'Not added yet';
+        ps.style.display = 'block';
+      } catch (err) {
+        console.error('Profile snippet error:', err);
+      }
+    }
+
     onAuthStateChanged(auth, (user) => {
-      if (mySubsWrap) {
-        mySubsWrap.style.display = user ? 'flex' : 'none';
+      currentUser = user;
+
+      // Admin-only toggle
+      const isAdmin = user?.uid === 'SBu5uRcZgTVQGN7MKuaOBnjNg7C2';
+      [usersPage, talentPage].forEach(el => { if (el) el.classList.toggle('hidden', !isAdmin); });
+
+      // My submissions visibility
+      if (mySubsWrap) mySubsWrap.style.display = user ? 'flex' : 'none';
+
+      if (user) {
+        loadProfileSnippet(user.uid);
+      } else {
+        ps.style.display = 'none';
+      }
+    });
+
+    // Center FAB behavior: go to user profile if logged in, else stay here
+    const cardFab = document.getElementById('cardFab');
+    cardFab?.addEventListener('click', (e) => {
+      if (currentUser) {
+        e.preventDefault();
+        window.location.href = `user-profile.html?uid=${encodeURIComponent(currentUser.uid)}`;
       }
     });
   </script>
@@ -365,13 +431,11 @@
   <script>
     const FD_TOTAL_CARDS = 10;
 
-    // Keep same trio for a whole SG day; new trio after midnight Asia/Singapore
     function fdSingaporeYYYYMMDD() {
       const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Singapore', year: 'numeric', month: '2-digit', day: '2-digit' });
-      return fmt.format(new Date()).replaceAll('-', ''); // "YYYYMMDD"
+      return fmt.format(new Date()).replaceAll('-', '');
     }
 
-    // Deterministic PRNG (Mulberry32)
     function fdMulberry32(seed) {
       return function() {
         let t = seed += 0x6D2B79F5;
@@ -409,10 +473,8 @@
             </div>
           </div>
         `;
-        // Flip for fun, then navigate
         card.addEventListener('click', () => {
           card.classList.toggle('flipped');
-          // Small delay lets the user notice the flip; respect reduced motion
           const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           setTimeout(() => { window.location.href = 'challenges.html'; }, prefersReduced ? 0 : 220);
         });
@@ -424,9 +486,7 @@
     const fdDailyIds = fdPickDailyIds(FD_TOTAL_CARDS, 3, fdSeed);
     fdRenderDailyCards(fdDailyIds);
 
-    // Optional: re-render on orientation change to ensure perfect fit
     addEventListener('orientationchange', () => {
-      // no need to recompute ids; just re-render ensures size calc looks right
       fdRenderDailyCards(fdDailyIds);
     });
   </script>
