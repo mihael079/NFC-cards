@@ -1,0 +1,44 @@
+[
+  {
+    "id": "act-hack-biz",
+    "name": "Hack A Business",
+    "startDate": "2025-09-10",
+    "endDate": "2025-09-22",
+    "cover": "images/hack-business.jpg"
+  },
+  {
+    "id": "act-learning-space",
+    "name": "The Learning Space",
+    "startDate": "2025-09-05",
+    "endDate": "2025-10-05",
+    "cover": "images/learning-space.jpg"
+  },
+  {
+    "id": "act-johari",
+    "name": "Johari Space",
+    "startDate": "2025-09-01",
+    "endDate": "2025-09-14",
+    "cover": "images/johari.jpg"
+  },
+  {
+    "id": "act-divergence",
+    "name": "Divergence Series",
+    "startDate": "2025-09-18",
+    "endDate": "2025-10-02",
+    "cover": "images/divergence.jpg"
+  },
+  {
+    "id": "act-scan-biz",
+    "name": "Scan A Business",
+    "startDate": "2025-08-20",
+    "endDate": "2025-09-20",
+    "cover": "images/scan-business.jpg"
+  },
+  {
+    "id": "act-field-forge",
+    "name": "Field Forge",
+    "startDate": "2025-09-25",
+    "endDate": "2025-10-12",
+    "cover": "images/field-forge.jpg"
+  }
+]
