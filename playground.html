@@ -20,7 +20,6 @@
       --soft-shadow:0 10px 30px rgba(0,0,0,.10);
       --soft-2:0 6px 18px rgba(0,0,0,.08);
 
-      /* Chips */
       --chip-blue:#e3f2fd;
       --chip-green:#e7f6ea;
       --chip-orange:#fff3e0;
@@ -37,6 +36,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* Topbar */
     .topbar{
       position: sticky; top: 0; z-index: 5;
       background: linear-gradient(180deg, var(--gold), #ffc84d);
@@ -47,40 +47,79 @@
     }
     .topbar h1{margin:0; font-size:1.1rem; font-weight:900; letter-spacing:.2px}
     .topbar a{color:#3f2f2a; text-decoration:none; font-weight:800}
+
     .layout{max-width:1100px; margin:16px auto; padding:16px}
 
+    /* Hero / Intro */
     .hero{
       background: radial-gradient(120% 120% at 50% -10%, #fff3d4 0%, #ffe9b3 55%, var(--gold) 100%);
       border-radius:20px; padding:18px; box-shadow: var(--soft-shadow);
     }
-    .hero h2{margin:0 0 6px}
-    .stats{display:flex; gap:10px; flex-wrap:wrap}
+    .hero .title{
+      margin:0 0 8px;
+      font-weight:900;
+      font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+      color:#3f2f2a;
+      letter-spacing:.2px;
+    }
+    .hero .subtitle{
+      margin:0 0 14px;
+      color:#654c41;
+      font-size: clamp(.95rem, 2vw, 1.05rem);
+      line-height:1.45;
+    }
+    .hero .stats{display:flex; gap:10px; flex-wrap:wrap}
     .stat{
       background:#fff; border:1px solid var(--border); border-radius:12px; padding:8px 12px; box-shadow: var(--soft-2);
       font-weight:800; color:#4b5563; display:flex; align-items:center; gap:8px;
     }
 
+    /* Sections */
     .section{margin-top:18px}
     .section h3{margin:0 0 10px; font-size:1.05rem; font-weight:900; color:#3f2f2a}
+
+    /* Responsive grid */
     .grid{
       display:grid; gap:14px;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 
+    /* Card */
     .card{
       background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow: var(--soft-2);
       display:flex; flex-direction:column; min-height: 260px;
     }
+
+    /* Poster (image area) */
     .poster{
-      position:relative; height:140px; background:linear-gradient(135deg, #ffe7c1, #ffd78a);
-      display:grid; place-items:center; color:#3b2f2a;
+      position:relative;
+      width:100%;
+      aspect-ratio: 16 / 9;                 /* keeps a uniform, responsive height */
+      background:linear-gradient(135deg, #ffe7c1, #ffd78a);
+      overflow:hidden;
+      isolation:isolate;                     /* keeps overlay effects scoped */
     }
-    .poster img{width:100%; height:100%; object-fit:cover; display:block}
+    .poster img{
+      width:100%; height:100%; object-fit:cover; display:block;
+      transform: scale(1.001);               /* avoid hairline gaps on some devices */
+    }
+    .poster::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0) 55%);
+      pointer-events:none;
+      z-index: 1;
+    }
+
+    /* Status badge */
     .badge{
-      position:absolute; top:10px; left:10px;
+      position:absolute; top:10px; left:10px; z-index:2;
       background:#000000a0; color:#fff; font-weight:800; font-size:.75rem; padding:6px 8px; border-radius:999px;
-      display:flex; gap:6px; align-items:center;
+      display:flex; gap:6px; align-items:center; text-transform:capitalize;
+      backdrop-filter: blur(2px);
     }
+
+    /* Card content */
     .content{padding:12px 14px; display:flex; flex-direction:column; gap:8px; flex:1}
     .title{font-weight:900; font-size:1.02rem; color:#3f2f2a; margin:0}
     .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
@@ -92,6 +131,7 @@
     .chip.orange{background:var(--chip-orange); color:#8a3d00; border-color:#ffd6a6}
     .chip.blue{background:var(--chip-blue); color:#0b5394; border-color:#cfe4fb}
 
+    /* Buttons */
     .actions{display:flex; gap:8px; margin-top:auto}
     .btn{
       flex:1; min-height:40px; border-radius:12px; border:2px solid #00000012;
@@ -108,18 +148,33 @@
     .empty{
       background:var(--paper); border:1px dashed var(--border); color:#6b7280; padding:18px; text-align:center; border-radius:14px
     }
+
+    /* Phone-first polish */
+    @media (max-width: 420px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero .subtitle{ font-size: .95rem; }
+    }
   </style>
 </head>
 <body>
   <div class="topbar">
     <h1>Playground</h1>
-    <a href="index.html"><i class="fa-solid fa-cards-blank"></i> Back</a>
+    <a href="index.html" aria-label="Back to Home"><i class="fa-solid fa-cards-blank"></i> Back</a>
   </div>
 
   <div class="layout">
-    <div class="hero">
-      <h2>Choose. Focus. Grow.</h2>
-      <div class="stats">
+    <!-- Intro / Description -->
+    <div class="hero" role="region" aria-label="Playground introduction">
+      <h2 class="title">Playground</h2>
+      <p class="subtitle">
+        Listing all Programs/ Activities/ Events.. available for different customer segment<br>
+        Life is a playground, and inside it are countless experiences waiting for you to explore.
+        Challenges, missions, activities — each one is a chance to experiment, to step outside your
+        comfort zone, to try and to discover.<br>
+        Here, you are free to explore, to stumble, to rise — because every attempt is a building block.
+      </p>
+
+      <div class="stats" aria-label="Your activity stats">
         <div id="statSelected" class="stat"><i class="fa-solid fa-hashtag"></i><span>Selected: 0 / 3</span></div>
         <div id="statOngoing" class="stat"><i class="fa-solid fa-play"></i><span>Ongoing: 0</span></div>
         <div id="statCompleted" class="stat"><i class="fa-solid fa-flag-checkered"></i><span>Completed: 0</span></div>
@@ -153,7 +208,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
-    import { getDatabase, ref as dbRef, get, set, update, remove, onValue } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
+    import { getDatabase, ref as dbRef, get, set, update, onValue } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js';
 
     // --- Firebase init ---
     const firebaseConfig = {
@@ -198,70 +253,74 @@
     let selected = new Set();
     let completed = new Set();
 
-    // --- Helpers ---
-    const parseISO = (s) => new Date(s + 'T00:00:00'); // treat as local day start
-    const today = () => {
-      // Asia/Singapore date (YYYY-MM-DD) -> Date
+    // --- Time helpers (Asia/Singapore) ---
+    const parseISO = (s) => new Date(s + 'T00:00:00'); // local day start
+    const todaySG = () => {
       const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Singapore', year:'numeric', month:'2-digit', day:'2-digit' });
-      const ymd = fmt.format(new Date()); // e.g. 2025-09-16
-      return parseISO(ymd);
+      return parseISO(fmt.format(new Date()));
     };
 
-    function statusFor(activity, userCompleted) {
-      const now = today();
-      const start = parseISO(activity.startDate);
-      const end = parseISO(activity.endDate);
-      if (userCompleted) return 'completed';
+    function globalStatus(a) {
+      const now = todaySG();
+      const start = parseISO(a.startDate);
+      const end = parseISO(a.endDate);
       if (now >= end) return 'completed';
       if (now >= start && now < end) return 'ongoing';
       return 'open';
     }
 
-    function fmtRange(a) {
-      return `${a.startDate} → ${a.endDate}`;
-    }
+    const fmtRange = (a) => `${a.startDate} → ${a.endDate}`;
 
-    function cap(n, max) { return n > max ? max : n; }
-
-    // --- Firebase read/write ---
+    // --- User state ---
     async function loadUserState() {
       const selSnap = await get(dbRef(db, `users/${UID}/playground/selected`));
       const compSnap = await get(dbRef(db, `users/${UID}/playground/completed`));
-
-      selected = new Set(Object.keys(selSnap.val() || {}).filter(k => selSnap.val()[k]));
-      completed = new Set(Object.keys(compSnap.val() || {}).filter(k => compSnap.val()[k]));
+      selected = new Set(Object.keys(selSnap.val() || {}));
+      completed = new Set(Object.keys(compSnap.val() || {}));
     }
 
-    async function setSelected(activityId, value) {
-      if (value) {
-        if (selected.size >= 3 && !selected.has(activityId)) {
-          alert('You can only select up to 3 activities.');
-          return false;
-        }
-        await update(dbRef(db, `users/${UID}/playground/selected`), { [activityId]: true });
-        selected.add(activityId);
-      } else {
-        await update(dbRef(db, `users/${UID}/playground/selected`), { [activityId]: null });
-        selected.delete(activityId);
-        // Optional: do not auto-remove completed flag; leave history
+    // --- Writes with guard ---
+    async function joinActivity(activity) {
+      // fresh check to enforce cap
+      const selRef = dbRef(db, `users/${UID}/playground/selected`);
+      const snap = await get(selRef);
+      const cur = snap.val() || {};
+      const already = !!cur[activity.id];
+      const count = Object.keys(cur).length;
+
+      if (!already && count >= 3) {
+        alert('You can only select up to 3 activities.');
+        return false;
       }
+      await update(selRef, { [activity.id]: { joinedAt: Date.now(), name: activity.name } });
+      selected.add(activity.id);
       return true;
     }
 
-    async function setCompleted(activityId, value) {
-      if (value) {
-        await update(dbRef(db, `users/${UID}/playground/completed`), { [activityId]: true });
-        completed.add(activityId);
-      } else {
-        await update(dbRef(db, `users/${UID}/playground/completed`), { [activityId]: null });
-        completed.delete(activityId);
-      }
+    async function leaveActivity(activityId) {
+      await set(dbRef(db, `users/${UID}/playground/selected/${activityId}`), null);
+      selected.delete(activityId);
     }
 
-    // --- Rendering ---
+    async function markCompleted(activityId, auto=false) {
+      await set(dbRef(db, `users/${UID}/playground/completed/${activityId}`), { completedAt: Date.now(), auto });
+      completed.add(activityId);
+    }
+
+    async function applyAutoCompletions() {
+      const tasks = [];
+      for (const a of activities) {
+        if (globalStatus(a) === 'completed' && selected.has(a.id) && !completed.has(a.id)) {
+          tasks.push(markCompleted(a.id, true));
+        }
+      }
+      if (tasks.length) await Promise.allSettled(tasks);
+    }
+
+    // --- Card factory ---
     function card(a) {
+      const gStatus = globalStatus(a);
       const userCompleted = completed.has(a.id);
-      const st = statusFor(a, userCompleted);
       const isSelected = selected.has(a.id);
 
       const card = document.createElement('div');
@@ -271,16 +330,24 @@
       poster.className = 'poster';
       if (a.cover) {
         const img = document.createElement('img');
-        img.src = a.cover;
+        img.src = a.cover;           // supports full URLs or local paths
         img.alt = a.name;
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
         poster.appendChild(img);
       } else {
-        poster.innerHTML = `<i class="fa-solid fa-shapes" style="font-size:28px;"></i>`;
+        // fallback icon
+        const fallback = document.createElement('div');
+        fallback.style.display = 'grid';
+        fallback.style.placeItems = 'center';
+        fallback.style.height = '100%';
+        fallback.innerHTML = '<i class="fa-solid fa-shapes" style="font-size:28px; color:#3b2f2a;"></i>';
+        poster.appendChild(fallback);
       }
 
       const b = document.createElement('div');
       b.className = 'badge';
-      b.innerHTML = `<i class="fa-solid ${st==='completed'?'fa-flag-checkered':(st==='ongoing'?'fa-play':'fa-unlock')}"></i> ${st}`;
+      b.innerHTML = `<i class="fa-solid ${gStatus==='completed'?'fa-flag-checkered':(gStatus==='ongoing'?'fa-play':'fa-unlock')}"></i> ${userCompleted ? 'completed' : gStatus}`;
       poster.appendChild(b);
 
       const content = document.createElement('div');
@@ -296,29 +363,23 @@
       d.className = 'chip';
       d.textContent = fmtRange(a);
       const stChip = document.createElement('span');
-      stChip.className = 'chip ' + (st==='completed'?'green':(st==='ongoing'?'blue':'orange'));
-      stChip.textContent = st;
+      stChip.className = 'chip ' + (userCompleted || gStatus==='completed' ? 'green' : (gStatus==='ongoing' ? 'blue' : 'orange'));
+      stChip.textContent = userCompleted ? 'completed' : gStatus;
       meta.appendChild(d);
       meta.appendChild(stChip);
 
       const actions = document.createElement('div');
       actions.className = 'actions';
 
-      // Buttons logic:
-      // Join: visible when not selected and status is not completed; disabled if already have 3 selections
-      // Leave: visible when selected
-      // Complete: visible when selected and not auto-completed & not user-completed
       const btnJoin = document.createElement('button');
       btnJoin.className = 'btn join';
       btnJoin.innerHTML = '<i class="fa-solid fa-plus"></i> Join';
-      btnJoin.style.display = (!isSelected && st!=='completed') ? 'inline-flex' : 'none';
-      if (!isSelected && st!=='completed' && selected.size >= 3) {
-        btnJoin.classList.add('disabled');
-        btnJoin.disabled = true;
-        btnJoin.title = 'Maximum 3 selected';
+      btnJoin.style.display = (!isSelected && gStatus!=='completed') ? 'inline-flex' : 'none';
+      if (!isSelected && gStatus!=='completed' && selected.size >= 3) {
+        btnJoin.classList.add('disabled'); btnJoin.disabled = true; btnJoin.title = 'Maximum 3 selected';
       }
       btnJoin.addEventListener('click', async () => {
-        const ok = await setSelected(a.id, true);
+        const ok = await joinActivity(a);
         if (ok) renderAll();
       });
 
@@ -327,19 +388,17 @@
       btnLeave.innerHTML = '<i class="fa-solid fa-xmark"></i> Leave';
       btnLeave.style.display = isSelected ? 'inline-flex' : 'none';
       btnLeave.addEventListener('click', async () => {
-        await setSelected(a.id, false);
+        await leaveActivity(a.id);
         renderAll();
       });
 
-      const autoCompleted = (statusFor(a, false) === 'completed'); // completed by date (ignoring per-user flag)
-      const alreadyCompleted = userCompleted || autoCompleted;
-
+      const canCompleteNow = isSelected && !userCompleted && (gStatus !== 'completed');
       const btnComplete = document.createElement('button');
       btnComplete.className = 'btn complete';
       btnComplete.innerHTML = '<i class="fa-solid fa-check"></i> Complete';
-      btnComplete.style.display = (isSelected && !alreadyCompleted) ? 'inline-flex' : 'none';
+      btnComplete.style.display = canCompleteNow ? 'inline-flex' : 'none';
       btnComplete.addEventListener('click', async () => {
-        await setCompleted(a.id, true);
+        await markCompleted(a.id, false);
         renderAll();
       });
 
@@ -356,29 +415,27 @@
       return card;
     }
 
+    // --- Render ---
     function renderAll() {
-      // Partition by status (per-user)
       const ongoing = [];
       const done = [];
       const open = [];
 
       for (const a of activities) {
-        const st = statusFor(a, completed.has(a.id));
-        if (st === 'completed') {
-          // Only show in completed if the user had selected it OR it auto-completed globally?
-          // We’ll show completed if user selected it OR date completed. Keeps history and clarity.
+        const gStatus = globalStatus(a);
+        const userCompleted = completed.has(a.id);
+
+        if (gStatus === 'completed' || userCompleted) {
           done.push(a);
-        } else if (st === 'ongoing') {
-          // Ongoing only meaningful if selected
+        } else if (gStatus === 'ongoing') {
           if (selected.has(a.id)) ongoing.push(a);
           else open.push(a);
         } else {
-          // open
           open.push(a);
         }
       }
 
-      // Ongoing: show max 3
+      // Ongoing (max 3 shown)
       ongoingGrid.innerHTML = '';
       ongoing.slice(0,3).forEach(a => ongoingGrid.appendChild(card(a)));
       ongoingEmpty.style.display = ongoing.slice(0,3).length ? 'none' : 'block';
@@ -394,29 +451,47 @@
       openEmpty.style.display = open.length ? 'none' : 'block';
 
       // Stats
+      const ongoingShown = Math.min(ongoing.length, 3);
       statSelected.textContent = `Selected: ${selected.size} / 3`;
-      statOngoing.textContent = `Ongoing: ${ongoing.length > 3 ? 3 : ongoing.length}`;
+      statOngoing.textContent = `Ongoing: ${ongoingShown}`;
       statCompleted.textContent = `Completed: ${done.length}`;
       statOpen.textContent = `Open: ${open.length}`;
     }
 
+    // --- Boot ---
     async function bootstrap() {
       // Load JSON list
-      const res = await fetch('activities.json', { cache: 'no-store' });
-      activities = await res.json();
+      let res;
+      try {
+        res = await fetch('activities.json', { cache: 'no-store' });
+      } catch (e) {
+        console.error('Failed to load activities.json', e);
+      }
+      activities = (res && res.ok) ? await res.json() : [];
 
       // Load user state
       await loadUserState();
 
-      // Live updates (optional) – if you want instant sync across tabs:
+      // Auto-complete joined activities whose end date has passed
+      await (async () => {
+        const tasks = [];
+        for (const a of activities) {
+          if (globalStatus(a) === 'completed' && selected.has(a.id) && !completed.has(a.id)) {
+            tasks.push(markCompleted(a.id, true));
+          }
+        }
+        if (tasks.length) await Promise.allSettled(tasks);
+      })();
+
+      // Live updates
       onValue(dbRef(db, `users/${UID}/playground/selected`), (snap) => {
         const v = snap.val() || {};
-        selected = new Set(Object.keys(v).filter(k => v[k]));
+        selected = new Set(Object.keys(v));
         renderAll();
       });
       onValue(dbRef(db, `users/${UID}/playground/completed`), (snap) => {
         const v = snap.val() || {};
-        completed = new Set(Object.keys(v).filter(k => v[k]));
+        completed = new Set(Object.keys(v));
         renderAll();
       });
 
