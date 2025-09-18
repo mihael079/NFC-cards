@@ -17,6 +17,8 @@
       --cream:#fff8e1;
       --paper:#fffdf5;
       --border:#efe7da;
+      --ring: 0 0 0 4px rgba(255,190,60,.25);
+
       --soft-shadow:0 10px 30px rgba(0,0,0,.10);
       --soft-2:0 6px 18px rgba(0,0,0,.08);
 
@@ -24,6 +26,7 @@
       --chip-green:#e7f6ea;
       --chip-orange:#fff3e0;
       --chip-gray:#f3f4f6;
+      --chip-red:#ffe4e6;
     }
 
     *{box-sizing:border-box}
@@ -52,19 +55,22 @@
 
     /* Hero / Intro */
     .hero{
-      background: radial-gradient(120% 120% at 50% -10%, #fff3d4 0%, #ffe9b3 55%, var(--gold) 100%);
-      border-radius:20px; padding:18px; box-shadow: var(--soft-shadow);
+      background:
+        radial-gradient(100% 120% at 20% -30%, rgba(255,255,255,.65) 0%, rgba(255,255,255,.0) 60%),
+        radial-gradient(120% 120% at 50% -10%, #fff3d4 0%, #ffe9b3 55%, var(--gold) 100%);
+      border-radius:22px; padding:18px; box-shadow: var(--soft-shadow);
+      border:1px solid #ffe7b4;
     }
     .hero .title{
       margin:0 0 8px;
       font-weight:900;
-      font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+      font-size: clamp(1.25rem, 2.8vw, 1.9rem);
       color:#3f2f2a;
       letter-spacing:.2px;
     }
     .hero .subtitle{
       margin:0 0 14px;
-      color:#654c41;
+      color:#6a5248;
       font-size: clamp(.95rem, 2vw, 1.05rem);
       line-height:1.45;
     }
@@ -75,8 +81,12 @@
     }
 
     /* Sections */
-    .section{margin-top:18px}
-    .section h3{margin:0 0 10px; font-size:1.05rem; font-weight:900; color:#3f2f2a}
+    .section{margin-top:20px}
+    .section h3{
+      margin:0 0 12px; font-size:1.05rem; font-weight:900; color:#3f2f2a; letter-spacing:.2px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .section h3 .sec-ico{font-size:1rem; opacity:.8}
 
     /* Responsive grid */
     .grid{
@@ -88,25 +98,27 @@
     .card{
       background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow: var(--soft-2);
       display:flex; flex-direction:column; min-height: 260px;
+      transition: transform .08s ease, box-shadow .2s ease;
     }
+    .card:hover{ transform: translateY(-2px); box-shadow: 0 16px 28px rgba(0,0,0,.12); }
 
     /* Poster (image area) */
     .poster{
       position:relative;
       width:100%;
-      aspect-ratio: 16 / 9;                 /* keeps a uniform, responsive height */
+      aspect-ratio: 16 / 9;                 /* uniform, responsive */
       background:linear-gradient(135deg, #ffe7c1, #ffd78a);
       overflow:hidden;
-      isolation:isolate;                     /* keeps overlay effects scoped */
+      isolation:isolate;
     }
     .poster img{
       width:100%; height:100%; object-fit:cover; display:block;
-      transform: scale(1.001);               /* avoid hairline gaps on some devices */
+      transform: scale(1.001);
     }
     .poster::after{
       content:"";
       position:absolute; inset:0;
-      background: linear-gradient(to top, rgba(0,0,0,.25), rgba(0,0,0,0) 55%);
+      background: linear-gradient(to top, rgba(0,0,0,.28), rgba(0,0,0,0) 60%);
       pointer-events:none;
       z-index: 1;
     }
@@ -121,15 +133,16 @@
 
     /* Card content */
     .content{padding:12px 14px; display:flex; flex-direction:column; gap:8px; flex:1}
-    .title{font-weight:900; font-size:1.02rem; color:#3f2f2a; margin:0}
+    .title{font-weight:900; font-size:1.02rem; color:#2e241f; margin:0}
     .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
     .chip{
-      font-size:.8rem; font-weight:800; padding:6px 8px; border-radius:999px;
+      font-size:.78rem; font-weight:800; padding:6px 8px; border-radius:999px;
       background:var(--chip-gray); color:#374151; border:1px solid #e5e7eb;
     }
     .chip.green{background:var(--chip-green); color:#14532d; border-color:#cde7d4}
     .chip.orange{background:var(--chip-orange); color:#8a3d00; border-color:#ffd6a6}
     .chip.blue{background:var(--chip-blue); color:#0b5394; border-color:#cfe4fb}
+    .chip.red{background:var(--chip-red); color:#7f1d1d; border-color:#fecaca}
 
     /* Buttons */
     .actions{display:flex; gap:8px; margin-top:auto}
@@ -150,7 +163,7 @@
     }
 
     /* Phone-first polish */
-    @media (max-width: 420px){
+    @media (max-width: 480px){
       .grid{ grid-template-columns: 1fr; }
       .hero .subtitle{ font-size: .95rem; }
     }
@@ -178,27 +191,35 @@
         <div id="statSelected" class="stat"><i class="fa-solid fa-hashtag"></i><span>Selected: 0 / 3</span></div>
         <div id="statOngoing" class="stat"><i class="fa-solid fa-play"></i><span>Ongoing: 0</span></div>
         <div id="statCompleted" class="stat"><i class="fa-solid fa-flag-checkered"></i><span>Completed: 0</span></div>
+        <div id="statMissed" class="stat"><i class="fa-solid fa-circle-xmark"></i><span>Missed: 0</span></div>
         <div id="statOpen" class="stat"><i class="fa-solid fa-unlock"></i><span>Open: 0</span></div>
       </div>
     </div>
 
     <!-- Ongoing -->
     <section class="section" aria-labelledby="ongoing-title">
-      <h3 id="ongoing-title">Ongoing (max 3)</h3>
+      <h3 id="ongoing-title"><i class="sec-ico fa-solid fa-play"></i> Ongoing (max 3)</h3>
       <div id="ongoingGrid" class="grid"></div>
       <div id="ongoingEmpty" class="empty" style="display:none;">No ongoing activities right now.</div>
     </section>
 
-    <!-- Completed -->
+    <!-- Completed (user-completed only) -->
     <section class="section" aria-labelledby="completed-title">
-      <h3 id="completed-title">Completed</h3>
+      <h3 id="completed-title"><i class="sec-ico fa-solid fa-flag-checkered"></i> Completed</h3>
       <div id="completedGrid" class="grid"></div>
       <div id="completedEmpty" class="empty" style="display:none;">Nothing completed yet — keep going!</div>
     </section>
 
+    <!-- Missed (time over, not completed) -->
+    <section class="section" aria-labelledby="missed-title">
+      <h3 id="missed-title"><i class="sec-ico fa-solid fa-circle-xmark"></i> Missed</h3>
+      <div id="missedGrid" class="grid"></div>
+      <div id="missedEmpty" class="empty" style="display:none;">No missed activities — nice!</div>
+    </section>
+
     <!-- Open -->
     <section class="section" aria-labelledby="open-title">
-      <h3 id="open-title">Open Activities</h3>
+      <h3 id="open-title"><i class="sec-ico fa-solid fa-unlock"></i> Open Activities</h3>
       <div id="openGrid" class="grid"></div>
       <div id="openEmpty" class="empty" style="display:none;">No open activities at the moment.</div>
     </section>
@@ -238,20 +259,24 @@
     // --- DOM targets ---
     const ongoingGrid = document.getElementById('ongoingGrid');
     const completedGrid = document.getElementById('completedGrid');
+    const missedGrid = document.getElementById('missedGrid');
     const openGrid = document.getElementById('openGrid');
+
     const ongoingEmpty = document.getElementById('ongoingEmpty');
     const completedEmpty = document.getElementById('completedEmpty');
+    const missedEmpty = document.getElementById('missedEmpty');
     const openEmpty = document.getElementById('openEmpty');
 
     const statSelected = document.getElementById('statSelected').querySelector('span');
     const statOngoing = document.getElementById('statOngoing').querySelector('span');
     const statCompleted = document.getElementById('statCompleted').querySelector('span');
+    const statMissed = document.getElementById('statMissed').querySelector('span');
     const statOpen = document.getElementById('statOpen').querySelector('span');
 
     // --- State ---
     let activities = [];
-    let selected = new Set();
-    let completed = new Set();
+    let selected = new Set();   // ids user joined
+    let completed = new Set();  // ids user completed
 
     // --- Time helpers (Asia/Singapore) ---
     const parseISO = (s) => new Date(s + 'T00:00:00'); // local day start
@@ -260,11 +285,13 @@
       return parseISO(fmt.format(new Date()));
     };
 
-    function globalStatus(a) {
+    // Global timing (independent of user)
+    // returns 'open' | 'ongoing' | 'over'
+    function globalTiming(a) {
       const now = todaySG();
       const start = parseISO(a.startDate);
       const end = parseISO(a.endDate);
-      if (now >= end) return 'completed';
+      if (now >= end) return 'over';
       if (now >= start && now < end) return 'ongoing';
       return 'open';
     }
@@ -281,7 +308,7 @@
 
     // --- Writes with guard ---
     async function joinActivity(activity) {
-      // fresh check to enforce cap
+      // cap: 3 (fresh check)
       const selRef = dbRef(db, `users/${UID}/playground/selected`);
       const snap = await get(selRef);
       const cur = snap.val() || {};
@@ -292,6 +319,12 @@
         alert('You can only select up to 3 activities.');
         return false;
       }
+      // cannot join if time is already over
+      if (globalTiming(activity) === 'over') {
+        alert('This activity has ended.');
+        return false;
+      }
+
       await update(selRef, { [activity.id]: { joinedAt: Date.now(), name: activity.name } });
       selected.add(activity.id);
       return true;
@@ -302,52 +335,62 @@
       selected.delete(activityId);
     }
 
-    async function markCompleted(activityId, auto=false) {
-      await set(dbRef(db, `users/${UID}/playground/completed/${activityId}`), { completedAt: Date.now(), auto });
-      completed.add(activityId);
-    }
-
-    async function applyAutoCompletions() {
-      const tasks = [];
-      for (const a of activities) {
-        if (globalStatus(a) === 'completed' && selected.has(a.id) && !completed.has(a.id)) {
-          tasks.push(markCompleted(a.id, true));
-        }
+    async function markCompleted(activityId) {
+      // Only allow manual completion while ongoing (not after over)
+      const a = activities.find(x => x.id === activityId);
+      if (!a) return;
+      if (globalTiming(a) !== 'ongoing') {
+        alert('You can only complete while the activity is ongoing.');
+        return;
       }
-      if (tasks.length) await Promise.allSettled(tasks);
+      await set(dbRef(db, `users/${UID}/playground/completed/${activityId}`), {
+        completedAt: Date.now(), auto: false
+      });
+      completed.add(activityId);
     }
 
     // --- Card factory ---
     function card(a) {
-      const gStatus = globalStatus(a);
-      const userCompleted = completed.has(a.id);
+      const timing = globalTiming(a);                 // 'open' | 'ongoing' | 'over'
       const isSelected = selected.has(a.id);
+      const isCompleted = completed.has(a.id);
 
-      const card = document.createElement('div');
-      card.className = 'card';
+      // Badge label + chip color
+      let badgeIcon = 'fa-unlock';
+      let badgeText = 'open';
+      let chipClass = 'orange';
+
+      if (isCompleted) {
+        badgeIcon = 'fa-flag-checkered';
+        badgeText = 'completed';
+        chipClass = 'green';
+      } else if (timing === 'ongoing') {
+        badgeIcon = 'fa-play';
+        badgeText = isSelected ? 'in progress' : 'ongoing';
+        chipClass = 'blue';
+      } else if (timing === 'over') {
+        badgeIcon = 'fa-circle-xmark';
+        badgeText = 'missed';
+        chipClass = 'red';
+      }
+
+      const el = document.createElement('div');
+      el.className = 'card';
 
       const poster = document.createElement('div');
       poster.className = 'poster';
       if (a.cover) {
         const img = document.createElement('img');
-        img.src = a.cover;           // supports full URLs or local paths
+        img.src = a.cover;           // supports URLs or local paths
         img.alt = a.name;
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
         poster.appendChild(img);
-      } else {
-        // fallback icon
-        const fallback = document.createElement('div');
-        fallback.style.display = 'grid';
-        fallback.style.placeItems = 'center';
-        fallback.style.height = '100%';
-        fallback.innerHTML = '<i class="fa-solid fa-shapes" style="font-size:28px; color:#3b2f2a;"></i>';
-        poster.appendChild(fallback);
       }
 
       const b = document.createElement('div');
       b.className = 'badge';
-      b.innerHTML = `<i class="fa-solid ${gStatus==='completed'?'fa-flag-checkered':(gStatus==='ongoing'?'fa-play':'fa-unlock')}"></i> ${userCompleted ? 'completed' : gStatus}`;
+      b.innerHTML = `<i class="fa-solid ${badgeIcon}"></i> ${badgeText}`;
       poster.appendChild(b);
 
       const content = document.createElement('div');
@@ -363,19 +406,20 @@
       d.className = 'chip';
       d.textContent = fmtRange(a);
       const stChip = document.createElement('span');
-      stChip.className = 'chip ' + (userCompleted || gStatus==='completed' ? 'green' : (gStatus==='ongoing' ? 'blue' : 'orange'));
-      stChip.textContent = userCompleted ? 'completed' : gStatus;
+      stChip.className = `chip ${chipClass}`;
+      stChip.textContent = isCompleted ? 'completed' : (timing === 'over' ? 'missed' : (timing === 'ongoing' ? (isSelected ? 'in progress' : 'ongoing') : 'open'));
       meta.appendChild(d);
       meta.appendChild(stChip);
 
       const actions = document.createElement('div');
       actions.className = 'actions';
 
+      // Join (only if not selected, not completed, and not over)
       const btnJoin = document.createElement('button');
       btnJoin.className = 'btn join';
       btnJoin.innerHTML = '<i class="fa-solid fa-plus"></i> Join';
-      btnJoin.style.display = (!isSelected && gStatus!=='completed') ? 'inline-flex' : 'none';
-      if (!isSelected && gStatus!=='completed' && selected.size >= 3) {
+      btnJoin.style.display = (!isSelected && !isCompleted && timing !== 'over') ? 'inline-flex' : 'none';
+      if (!isSelected && timing !== 'over' && selected.size >= 3) {
         btnJoin.classList.add('disabled'); btnJoin.disabled = true; btnJoin.title = 'Maximum 3 selected';
       }
       btnJoin.addEventListener('click', async () => {
@@ -383,22 +427,23 @@
         if (ok) renderAll();
       });
 
+      // Leave (only if selected and not completed)
       const btnLeave = document.createElement('button');
       btnLeave.className = 'btn leave';
       btnLeave.innerHTML = '<i class="fa-solid fa-xmark"></i> Leave';
-      btnLeave.style.display = isSelected ? 'inline-flex' : 'none';
+      btnLeave.style.display = (isSelected && !isCompleted) ? 'inline-flex' : 'none';
       btnLeave.addEventListener('click', async () => {
         await leaveActivity(a.id);
         renderAll();
       });
 
-      const canCompleteNow = isSelected && !userCompleted && (gStatus !== 'completed');
+      // Complete (only if selected, not completed, and timing is ongoing)
       const btnComplete = document.createElement('button');
       btnComplete.className = 'btn complete';
       btnComplete.innerHTML = '<i class="fa-solid fa-check"></i> Complete';
-      btnComplete.style.display = canCompleteNow ? 'inline-flex' : 'none';
+      btnComplete.style.display = (isSelected && !isCompleted && timing === 'ongoing') ? 'inline-flex' : 'none';
       btnComplete.addEventListener('click', async () => {
-        await markCompleted(a.id, false);
+        await markCompleted(a.id);
         renderAll();
       });
 
@@ -410,27 +455,33 @@
       content.appendChild(meta);
       content.appendChild(actions);
 
-      card.appendChild(poster);
-      card.appendChild(content);
-      return card;
+      el.appendChild(poster);
+      el.appendChild(content);
+      return el;
     }
 
     // --- Render ---
     function renderAll() {
       const ongoing = [];
       const done = [];
+      const missed = [];
       const open = [];
 
       for (const a of activities) {
-        const gStatus = globalStatus(a);
-        const userCompleted = completed.has(a.id);
+        const timing = globalTiming(a);     // 'open' | 'ongoing' | 'over'
+        const isSelected = selected.has(a.id);
+        const isCompleted = completed.has(a.id);
 
-        if (gStatus === 'completed' || userCompleted) {
+        if (isCompleted) {
           done.push(a);
-        } else if (gStatus === 'ongoing') {
-          if (selected.has(a.id)) ongoing.push(a);
-          else open.push(a);
+        } else if (timing === 'over') {
+          // time ended & user didn't complete -> missed
+          missed.push(a);
+        } else if (timing === 'ongoing') {
+          // show in ongoing only if user has joined; otherwise it's available under open
+          if (isSelected) ongoing.push(a); else open.push(a);
         } else {
+          // timing === 'open'
           open.push(a);
         }
       }
@@ -440,10 +491,15 @@
       ongoing.slice(0,3).forEach(a => ongoingGrid.appendChild(card(a)));
       ongoingEmpty.style.display = ongoing.slice(0,3).length ? 'none' : 'block';
 
-      // Completed
+      // Completed (user-completed only)
       completedGrid.innerHTML = '';
       done.forEach(a => completedGrid.appendChild(card(a)));
       completedEmpty.style.display = done.length ? 'none' : 'block';
+
+      // Missed (ended & not completed)
+      missedGrid.innerHTML = '';
+      missed.forEach(a => missedGrid.appendChild(card(a)));
+      missedEmpty.style.display = missed.length ? 'none' : 'block';
 
       // Open
       openGrid.innerHTML = '';
@@ -455,6 +511,7 @@
       statSelected.textContent = `Selected: ${selected.size} / 3`;
       statOngoing.textContent = `Ongoing: ${ongoingShown}`;
       statCompleted.textContent = `Completed: ${done.length}`;
+      statMissed.textContent = `Missed: ${missed.length}`;
       statOpen.textContent = `Open: ${open.length}`;
     }
 
@@ -471,17 +528,6 @@
 
       // Load user state
       await loadUserState();
-
-      // Auto-complete joined activities whose end date has passed
-      await (async () => {
-        const tasks = [];
-        for (const a of activities) {
-          if (globalStatus(a) === 'completed' && selected.has(a.id) && !completed.has(a.id)) {
-            tasks.push(markCompleted(a.id, true));
-          }
-        }
-        if (tasks.length) await Promise.allSettled(tasks);
-      })();
 
       // Live updates
       onValue(dbRef(db, `users/${UID}/playground/selected`), (snap) => {
